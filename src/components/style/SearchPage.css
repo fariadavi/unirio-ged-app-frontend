@@ -1,0 +1,4 @@
+.container > div > div {
+    transition: max-height .3s ease-out;
+    margin-top: 4em;
+}

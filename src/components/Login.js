@@ -1,55 +1,42 @@
 import React, { useContext } from 'react'
+import { Container } from 'react-bootstrap'
 import GoogleLogin from 'react-google-login'
-import { setToken, removeToken, isAuthenticated } from '../services/auth.js'
 import rq from '../services/api.js'
-import { UserContext } from '../contexts/UserContext.js'
+import { AuthContext } from '../contexts/AuthContext'
 
 export default function Login() {
-    const { user, setUser } = useContext(UserContext)
+    const { setToken } = useContext(AuthContext);
 
-    const handleLogin = async googleData => {
-        const res = await rq('/api/auth/google/login', {
+    const handleLoginSuccess = googleData =>
+        rq('/api/auth/google/login', {
             method: "POST",
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
             body: googleData.tokenId
-        });
+        }).then(res => res.ok ? res.text() : handleLoginFail())
+        .then(token => token ? setToken(token) : null);
 
-        setToken(await res.text());
-
-        setUser({
-            "id": 4,
-            "firstName": "Davi",
-            "surname": "Faria",
-            "email": "davifaria@edu.unirio.br",
-            "permissions": null,
-            "department": {
-                "id": 1,
-                "name": "TESTE2",
-                "acronym": "DIA"
-            }
-        });
-    }
-
-    const handleLogout = () => {
-        removeToken();
-
-        setUser(null);
+    const handleLoginFail = () => {
+        // TODO handle failure show error msg to user
+        console.log('login failed');
     }
 
     return (
-        <div className="d-flex flex-column align-item justify-content-center">
-            <h1>UNIRIO GED App</h1>
-            <div className="d-flex align-item justify-content-center">
-                {isAuthenticated()
-                    ? <button onClick={handleLogout}>logout</button>
-                    : <GoogleLogin
+        <Container
+            className="d-flex align-item justify-content-center"
+            style={{ minHeight: "100vh" }}
+        >
+            <div className="d-flex flex-column align-item justify-content-center">
+                <h1>UNIRIO GED App</h1>
+                <div className="d-flex align-item justify-content-center">
+                    <GoogleLogin
                         clientId={process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID}
                         buttonText="Sign in with Google"
-                        onSuccess={handleLogin}
-                        // onFailure={handleLogin}
+                        onSuccess={handleLoginSuccess}
+                        onFailure={handleLoginFail}
                         cookiePolicy={'single_host_origin'}
-                    />}
+                    />
+                </div>
             </div>
-        </div>
+        </Container>
     )
 }
