@@ -1,13 +1,12 @@
-import React, { useContext } from 'react'
+import React from 'react'
+import { hasLocalToken } from '../services/auth'
 import { Redirect, Route } from 'react-router-dom';
-import { AuthContext } from '../contexts/AuthContext'
 
 export default function PrivateRoute({ component, ...options }) {
-    const { user } = useContext(AuthContext);
-    console.log(user);
+    let hasToken = hasLocalToken();
     return (
-        <Route {...options} component={user ? component : ''}>
-            {user ? '' : <Redirect to="/login" />}
+        <Route {...options} component={hasToken ? component : ''}>
+            {hasToken ? '' : <Redirect to="/login" />}
         </Route>
     );
 }

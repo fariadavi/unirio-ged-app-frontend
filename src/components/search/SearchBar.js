@@ -1,11 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Button, Form, InputGroup } from 'react-bootstrap'
 
 export default function SearchBar({ isSearching, onSearch }) {
+    const [input, setInput] = useState('');
 
     const handleSubmit = e => {
         e.preventDefault();
-        onSearch(true);
+        setInput(input.trim());
+        onSearch(input);
     }
 
     const onKeyPress = e => {
@@ -14,7 +16,7 @@ export default function SearchBar({ isSearching, onSearch }) {
     }
 
     return (
-        <Form 
+        <Form
             onSubmit={handleSubmit}
             style={{ width: "100%", maxWidth: "600px" }}>
             <Form.Group>
@@ -26,8 +28,10 @@ export default function SearchBar({ isSearching, onSearch }) {
                     </InputGroup.Prepend>
                     <Form.Control
                         disabled={isSearching}
-                        onKeyPress={!isSearching ? onKeyPress : null} 
-                        type="text"/>
+                        onChange={e => setInput(e.target.value)}
+                        onKeyPress={!isSearching ? onKeyPress : null}
+                        value={input}
+                        type="text" />
                 </InputGroup>
                 <InputGroup className="d-flex align-item justify-content-center">
                     <Button

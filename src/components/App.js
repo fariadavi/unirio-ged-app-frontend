@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
+import rq from '../services/api';
+import { AuthContext } from '../contexts/AuthContext'
+import { hasLocalToken, getLocalToken, setLocalToken, removeLocalToken } from '../services/auth'
 import { BrowserRouter as Router, Redirect, Route } from 'react-router-dom';
 import PrivateRoute from './PrivateRoute'
 import Login from './Login'
 import Home from './Home'
-import { AuthContext } from '../contexts/AuthContext'
-import { hasLocalToken, getLocalToken, setLocalToken, removeLocalToken } from '../services/auth.js'
-import rq from '../services/api';
 
 export default function App() {
 	const [token, setToken] = useState(getLocalToken());

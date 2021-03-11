@@ -1,4 +1,4 @@
-.container > div > div {
+div.searchBox {
     transition: max-height .3s ease-out;
     margin-top: 4em;
 }

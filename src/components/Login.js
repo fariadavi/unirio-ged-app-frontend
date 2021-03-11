@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
-import { Container } from 'react-bootstrap'
-import GoogleLogin from 'react-google-login'
 import rq from '../services/api.js'
+import GoogleLogin from 'react-google-login'
+import { Container } from 'react-bootstrap'
 import { AuthContext } from '../contexts/AuthContext'
 
 export default function Login() {

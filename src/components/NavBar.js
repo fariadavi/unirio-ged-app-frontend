@@ -1,15 +1,13 @@
 import React, { useContext } from 'react'
-import { Link, useRouteMatch } from 'react-router-dom';
-import { Navbar, Nav } from 'react-bootstrap'
 import { AuthContext } from '../contexts/AuthContext'
-import './style/NavBar.css'
+import { Navbar, Nav, NavDropdown } from 'react-bootstrap'
+import { Link } from 'react-router-dom';
+import '../style/NavBar.css'
 
 export default function NavBar() {
     const { user, setToken } = useContext(AuthContext);
 
     const handleLogout = () => setToken(null);
-
-    let match = useRouteMatch();
 
     return (
         <Navbar fixed="top" bg="dark" variant="dark" expand="sm">
@@ -17,8 +15,12 @@ export default function NavBar() {
                 <Link to="/">UNIRIO GED App</Link>
             </Navbar.Brand>
             <Nav className="mr-auto">
-                <Link to="/categories" className="nav-link">Categories</Link>
-                <Link to="/users" className="nav-link">Users</Link>
+                <Link to="/documents/" className="nav-link">Add Document</Link>
+                <Link to="/" className="nav-link">Search Documents</Link>
+                <NavDropdown title="Management" id="collasible-nav-dropdown">
+                    <Link to="/categories" className="dropdown-item">Categories</Link>
+                    <Link to="/users" className="dropdown-item">Users</Link>
+                </NavDropdown>
             </Nav>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
