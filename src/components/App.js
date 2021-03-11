@@ -13,13 +13,12 @@ export default function App() {
 
 	const loginUser = () =>
 		rq('/users/loggedUserInfo', { method: "GET" })
-			.then(res => { if (res.ok) return res.json() })
-			.then(userData => setUser(userData));
+			.then(res => { if (res.ok) { return res.json() } else if (res.status === 401) { removeLocalToken() } })
+			.then(userData => { if (userData) setUser(userData) });
 
 	const logoutUser = () => setUser(null);
 
 	useEffect(() => {
-		console.log('token')
 		let hasToken = hasLocalToken();
 
 		if (token && !hasToken) //logging in
@@ -32,7 +31,7 @@ export default function App() {
 		console.log(`hasToken: ${hasLocalToken()} \ntoken: ${token} \nuser: ${JSON.stringify(user)}`)
 
 		if (token && !user)
-			loginUser();
+			loginUser(); 
 		else if (!token && user)
 			logoutUser();
 	}, [token, user]);
@@ -43,9 +42,6 @@ export default function App() {
 				<Route path="/login">
   					{user ? <Redirect to="/" /> : <Login />}
 				</Route>
-				<PrivateRoute exact path="/" component={Home} />
-				<PrivateRoute path="/users" component={Home} />
-				<PrivateRoute path="/categories" component={Home} />
 				<PrivateRoute path="*" component={Home} />
 			</AuthContext.Provider>
 		</Router>
