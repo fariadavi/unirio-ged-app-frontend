@@ -3,6 +3,26 @@
 }
 
 .navbar-dark .navbar-brand a:hover {
-    color: #fff;
     text-decoration: none;
+}
+
+.navbar a, .navbar span {
+    user-select: none;
+}
+
+.navbar-nav .nav-link span {
+    padding: 0 .5em;
+}
+
+.navbar-collapse .dropdown-toggle::after {
+    content: none !important;
+}
+
+.menu-user-box:hover {
+    color: rgba(255,255,255,.5) !important;
+}
+
+.navbar-collapse .dropdown-menu {
+    left: auto;
+    right: 0;
 }

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import rq from '../services/api';
 import { AuthContext } from '../contexts/AuthContext'
 import { hasLocalToken, getLocalToken, setLocalToken, removeLocalToken } from '../services/auth'
-import { BrowserRouter as Router, Redirect, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Redirect, Route } from 'react-router-dom'
 import PrivateRoute from './PrivateRoute'
 import Login from './Login'
 import Home from './Home'
@@ -28,8 +28,6 @@ export default function App() {
 	}, [token]);
 
 	useEffect(() => {
-		console.log(`hasToken: ${hasLocalToken()} \ntoken: ${token} \nuser: ${JSON.stringify(user)}`)
-
 		if (token && !user)
 			loginUser(); 
 		else if (!token && user)
@@ -38,7 +36,7 @@ export default function App() {
 
 	return (
 		<Router>
-			<AuthContext.Provider value={{ user, setToken }}>
+			<AuthContext.Provider value={{ user, setUser, setToken }}>
 				<Route path="/login">
   					{user ? <Redirect to="/" /> : <Login />}
 				</Route>
