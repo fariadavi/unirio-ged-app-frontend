@@ -4,7 +4,7 @@ import { AuthContext } from '../contexts/AuthContext'
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faExchangeAlt, faUser, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
+import { faCogs, faExchangeAlt, faFileAlt, faHouseUser, faKey, faLanguage, faPlusCircle, faSearch, faStream, faUser, faUserPlus, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
 import '../style/NavBar.css'
 
 export default function NavBar() {
@@ -29,13 +29,43 @@ export default function NavBar() {
                 <Link to="/">UNIRIO GED App</Link>
             </Navbar.Brand>
             <Nav className="mr-auto">
-                <Link to="/documents/" className="nav-link">Add Document</Link>
-                <Link to="/" className="nav-link">Search Documents</Link>
-                <NavDropdown title="Management" id="collasible-nav-dropdown">
-                    <Link to="/categories" className="dropdown-item">Categories</Link>
-                    <Link to="/departments" className="dropdown-item">Departments</Link>
-                    <Link to="/users" className="dropdown-item">Invite New Users</Link>
-                    <Link to="/permissions" className="dropdown-item">User Permissions</Link>
+                <NavDropdown title={
+                    <>
+                        <FontAwesomeIcon icon={faFileAlt} />
+                        <span>Document</span>
+                    </>
+                }>
+                    <Link to="/documents/" className="dropdown-item">
+                        <FontAwesomeIcon className="icon" icon={faPlusCircle} />
+                        Add New Document
+                    </Link>
+                    <Link to="/" className="dropdown-item">
+                        <FontAwesomeIcon className="icon" icon={faSearch} />
+                        Search Documents
+                    </Link>
+                </NavDropdown>
+                <NavDropdown title={
+                    <>
+                        <FontAwesomeIcon icon={faCogs} />
+                        <span>Management</span>
+                    </>
+                }>
+                    <Link to="/categories" className="dropdown-item">
+                        <FontAwesomeIcon className="icon" icon={faStream} />
+                        Categories
+                    </Link>
+                    <Link to="/departments" className="dropdown-item">
+                        <FontAwesomeIcon className="icon" icon={faHouseUser} />                        
+                        Departments
+                    </Link>
+                    <Link to="/users" className="dropdown-item">
+                        <FontAwesomeIcon className="icon" icon={faUserPlus} />
+                        Invite New Users
+                    </Link>
+                    <Link to="/permissions" className="dropdown-item">
+                        <FontAwesomeIcon className="icon" icon={faKey} />
+                        User Permissions
+                    </Link>
                 </NavDropdown>
             </Nav>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -47,7 +77,7 @@ export default function NavBar() {
                     </div>
                 </Nav>
                 <Nav>
-                    <NavDropdown title={
+                    <NavDropdown title={ 
                         <>
                             <span>{`Department: ${user?.currentDepartment?.acronym}`}</span>
                             <FontAwesomeIcon icon={faExchangeAlt} />

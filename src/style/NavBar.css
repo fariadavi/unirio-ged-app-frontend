@@ -26,3 +26,8 @@
     left: auto;
     right: 0;
 }
+
+.dropdown-menu .dropdown-item .icon {
+    margin-right: .5rem;
+    width: 1rem;
+}
