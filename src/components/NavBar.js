@@ -1,5 +1,6 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import rq from '../services/api'
+import { getUserLanguage, setUserLanguage } from '../services/lang'
 import { AuthContext } from '../contexts/AuthContext'
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
@@ -9,6 +10,13 @@ import '../style/NavBar.css'
 
 export default function NavBar() {
     const { user, setUser, setToken } = useContext(AuthContext);
+    const [ language, setLanguage ] = useState(getUserLanguage());
+    const languageList = [
+        { name: 'English', code: 'en-US', imageUrl: 'http://purecatamphetamine.github.io/country-flag-icons/3x2/US.svg' , altText: 'English - United States' },
+        { name: 'Portuguese', code: 'pt-BR', imageUrl: 'http://purecatamphetamine.github.io/country-flag-icons/3x2/BR.svg' , altText: 'Brazilian Portuguese' }
+    ]
+
+    useEffect(() => setUserLanguage(language || navigator.language || navigator.userLanguage), [language])
 
     const handleLogout = () => setToken(null);
 
@@ -22,6 +30,8 @@ export default function NavBar() {
             }).then(newUser => { if (newUser) { setUser(newUser); window.location.reload(); } });
         }
     };
+
+    const handleSwitchLanguage = lang => { if (lang !== language) setLanguage(lang) };
 
     return (
         <Navbar fixed="top" bg="dark" variant="dark" expand="sm">
@@ -78,6 +88,21 @@ export default function NavBar() {
                 </Nav>
                 <Nav>
                     <NavDropdown title={ 
+                        <>
+                            <span>Language</span>
+                            <FontAwesomeIcon icon={faLanguage} />
+                        </>
+                     }>
+                        { languageList.map((lang, index) =>
+                            <NavDropdown.Item key={index} onClick={() => { handleSwitchLanguage(lang.code) }} className={`${language === lang.code ? 'active' : '' }`}>
+                                <img className="icon flag" alt={lang.altText} src={lang.imageUrl}/>
+                                <span>{lang.name}</span>
+                            </NavDropdown.Item>
+                        )}
+                    </NavDropdown>
+                </Nav>
+                <Nav>
+                    <NavDropdown title={
                         <>
                             <span>{`Department: ${user?.currentDepartment?.acronym}`}</span>
                             <FontAwesomeIcon icon={faExchangeAlt} />

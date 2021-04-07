@@ -31,3 +31,7 @@
     margin-right: .5rem;
     width: 1rem;
 }
+
+.dropdown-menu .dropdown-item .icon.flag {
+    width: 1.5rem;
+}
