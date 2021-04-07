@@ -1,8 +1,0 @@
-#docsTable {
-    max-height: 0;
-    overflow: hidden;
-}
-
-#docsTable.active {
-    max-height: 50vh;
-}

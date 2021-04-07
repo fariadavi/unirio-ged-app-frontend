@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import { Button, Form, InputGroup } from 'react-bootstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCircleNotch, faSearch } from '@fortawesome/free-solid-svg-icons'
 
 export default function SearchBar({ isSearching, onSearch }) {
     const [input, setInput] = useState('');
@@ -23,7 +25,7 @@ export default function SearchBar({ isSearching, onSearch }) {
                 <InputGroup>
                     <InputGroup.Prepend>
                         <InputGroup.Text id="inputGroupPrepend">
-                            search-icon
+                            <FontAwesomeIcon icon={faSearch} />
                         </InputGroup.Text>
                     </InputGroup.Prepend>
                     <Form.Control
@@ -39,7 +41,9 @@ export default function SearchBar({ isSearching, onSearch }) {
                         style={{ marginTop: "1em" }}
                         variant="primary"
                         type="submit">
-                        {!isSearching ? 'Search Documents' : 'loading-icon'}
+                        {!isSearching 
+                            ? 'Search Documents' 
+                            : <FontAwesomeIcon icon={faCircleNotch} className="faSpin" />}
                     </Button>
                 </InputGroup>
             </Form.Group>

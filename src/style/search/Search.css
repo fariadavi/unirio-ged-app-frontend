@@ -1,4 +1,26 @@
 div.searchBox {
-    transition: max-height .3s ease-out;
+    transition: max-height .5s ease-out;
     margin-top: 4em;
+}
+
+#docsTable {
+    max-height: 0;
+    overflow: hidden;
+}
+
+#docsTable.active {
+    max-height: 50vh;
+}
+
+.faSpin {
+    animation: spin infinite .8s linear;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
