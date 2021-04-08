@@ -13,10 +13,7 @@ export default function NavBar() {
     const { t, i18n } = useTranslation();
     const { user, setUser, setToken } = useContext(AuthContext);
     const [ language, setLanguage ] = useState(getUserLanguage());
-    const languageList = [
-        { code: 'en-US', imageUrl: 'http://purecatamphetamine.github.io/country-flag-icons/3x2/US.svg' },
-        { code: 'pt-BR', imageUrl: 'http://purecatamphetamine.github.io/country-flag-icons/3x2/BR.svg' }
-    ]
+    const languageList = Object.keys(i18n.store.data)
 
     useEffect(() => {
         i18n.changeLanguage(language)
@@ -99,9 +96,9 @@ export default function NavBar() {
                         </>
                      }>
                         { languageList.map((lang, index) =>
-                            <NavDropdown.Item key={index} onClick={() => { handleSwitchLanguage(lang.code) }} className={`${language === lang.code ? 'active' : '' }`}>
-                                <img className="icon flag" alt={t(`language.${lang.code}.fullName`)} src={lang.imageUrl}/>
-                                <span>{t(`language.${lang.code}.shortName`)}</span>
+                            <NavDropdown.Item key={index} onClick={() => { handleSwitchLanguage(lang) }} className={`${language === lang ? 'active' : '' }`}>
+                                <img className="icon flag" alt={t(`language.${lang}.fullName`)} src={`/images/${lang}.svg`}/>
+                                <span>{t(`language.${lang}.shortName`)}</span>
                             </NavDropdown.Item>
                         )}
                     </NavDropdown>
