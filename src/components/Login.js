@@ -1,10 +1,12 @@
 import React, { useContext } from 'react'
+import { useTranslation } from 'react-i18next'
 import rq from '../services/api.js'
 import GoogleLogin from 'react-google-login'
 import { Container } from 'react-bootstrap'
 import { AuthContext } from '../contexts/AuthContext'
 
 export default function Login() {
+    const { t } = useTranslation();
     const { setToken } = useContext(AuthContext);
 
     const handleLoginSuccess = googleData =>
@@ -30,7 +32,7 @@ export default function Login() {
                 <div className="d-flex align-item justify-content-center">
                     <GoogleLogin
                         clientId={process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID}
-                        buttonText="Sign in with Google"
+                        buttonText={t('loginWithGoogle.buttonText')}
                         onSuccess={handleLoginSuccess}
                         onFailure={handleLoginFail}
                         cookiePolicy={'single_host_origin'}

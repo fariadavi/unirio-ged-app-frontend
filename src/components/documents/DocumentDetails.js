@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import rq from '../../services/api'
 import { AuthContext } from '../../contexts/AuthContext'
 import { Button, Col, Form } from 'react-bootstrap'
@@ -6,6 +7,12 @@ import { Redirect, Route, Switch, useParams, useRouteMatch } from 'react-router-
 import '../../style/documents/DocumentDetails.css'
 
 const DocumentForm = () => {
+    const { t } = useTranslation();
+    const { docId } = useParams();
+    const { user } = useContext(AuthContext);
+    const [ redirect, setRedirect ] = useState(null);
+    const [ categories, setCategories ] = useState([]);
+    const [ validation, setValidation ] = useState({});
     const initialDocumentValues = {
         title: '',
         summary: '',
@@ -14,12 +21,6 @@ const DocumentForm = () => {
         content: '',
         date: new Date().toISOString().split('T')[0]
     }
-
-    const { docId } = useParams();
-    const { user } = useContext(AuthContext);
-    const [ redirect, setRedirect ] = useState(null);
-    const [ categories, setCategories ] = useState([]);
-    const [ validation, setValidation ] = useState({});
     const [ document, setDocument ] = useState(initialDocumentValues);
 
     useEffect(() => {
@@ -33,8 +34,8 @@ const DocumentForm = () => {
     useEffect(() => {
         rq('/categories', { method: 'GET' })
         .then(res => { if (res.ok) return res.json() })
-        .then(cats => setCategories(cats.length ? cats : [{ id: 0, name: 'No categories on current department' }]));
-    }, [])
+        .then(cats => setCategories(cats.length ? cats : [{ id: 0, name: t('document.form.category.zeroOptions') }]));
+    }, [t])
 
     useEffect(() => { if (redirect) setRedirect(null) }, [redirect])
 
@@ -45,15 +46,15 @@ const DocumentForm = () => {
         switch (name) {
             case 'fileName':
                 if (!value.match(/^.*?\.(doc|docx|docm|eml|epub|odf|odt|pdf|rtf|rtx|txt|text)$/g))
-                    fieldValidation = 'File selected does not have a valid type'
+                    fieldValidation = 'invalidFileType'
                 break
             case 'title':
                 if (!value.length)
-                    fieldValidation = 'Title is required'
+                    fieldValidation = 'emptyTitle'
                 break
             case 'category':
                 if (!(value > 0))
-                    fieldValidation = 'You must select a category'
+                    fieldValidation = 'categoryNotSelected'
                 break
             default:
                 break
@@ -115,66 +116,66 @@ const DocumentForm = () => {
         redirect
         ? <Redirect to={redirect} />
         : <Form id="docForm" noValidate onSubmit={handleSubmit}>
-            <h1>{docId ? 'EDIT DOCUMENT' : 'ADD NEW DOCUMENT'}</h1>
+            <h1>{t(`document.form.${docId ? 'edit' : 'add'}.title`)}</h1>
             <Form.Row>
                 <Form.Group as={Col} controlId="docForm.title">
-                    <Form.Label>Title</Form.Label>
+                    <Form.Label>{t('document.form.title')}</Form.Label>
                     <Form.Control 
                         type="text" name="title" required 
                         onChange={handleDocChange} 
                         isInvalid={validation.title}
                         value={document.title} />
-                        <Form.Control.Feedback type="invalid">{validation.title}</Form.Control.Feedback>
+                        <Form.Control.Feedback type="invalid">{t(`document.form.validation.${validation.title}`)}</Form.Control.Feedback>
                 </Form.Group>
             </Form.Row>
             <Form.Row>
                 <Form.Group as={Col} controlId="docForm.summary">
-                    <Form.Label>Summary</Form.Label>
+                    <Form.Label>{t('document.form.summary')}</Form.Label>
                     <Form.Control as="textarea" rows={3} name="summary" onChange={handleDocChange} value={document.summary}/>
                     <Form.Text className="text-muted">
-                        A brief description of the document being uploaded.
+                        {t('document.form.summary.mutedText')}
                     </Form.Text>
                 </Form.Group>
             </Form.Row>
             <Form.Row>
                 <Form.Group as={Col} controlId="docForm.category">
-                    <Form.Label>Category</Form.Label>
+                    <Form.Label>{t('document.form.category')}</Form.Label>
                     <Form.Control as="select" name="category" required 
                         onChange={handleDocChange} 
                         isInvalid={validation.category}
                         value={document.category}>
-                        <option style={{display: 'none'}}>Choose...</option>
+                        <option style={{display: 'none'}}>{t('document.form.category.choose')}</option>
                         {categories.map(item => (
                             <option key={item.id} value={item.id}>{item.name}</option>
                         ))}
                     </Form.Control>
-                    <Form.Control.Feedback type="invalid">{validation.category}</Form.Control.Feedback>
+                    <Form.Control.Feedback type="invalid">{t(`document.form.validation.${validation.category}`)}</Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group as={Col} controlId="docForm.date">
-                    <Form.Label>Document Date</Form.Label>
+                    <Form.Label>{t('document.form.date')}</Form.Label>
                     <Form.Control type="date" name="date" onChange={handleDocChange} value={document.date}/>
                 </Form.Group>
             </Form.Row>
             <Form.Row>
                 <Form.Group as={Col} controlId="docForm.fileName">
-                    <Form.Label>File</Form.Label>
+                    <Form.Label>{t('document.form.file')}</Form.Label>
                     <Form.File id="doc" custom>
                         <Form.File.Input 
                             name="uploadFile" onChange={handleDocChange} required
                             isInvalid={validation.fileName} />
-                        <Form.File.Label data-browse="Choose file">
-                            {document.fileName || 'No file selected'}
+                        <Form.File.Label data-browse={t('document.form.file.choose')}>
+                            {document.fileName || t('document.form.file.placeholder')}
                         </Form.File.Label>
-                        <Form.Control.Feedback type="invalid">{validation.fileName}</Form.Control.Feedback>
+                        <Form.Control.Feedback type="invalid">{t(`document.form.validation.${validation.fileName}`)}</Form.Control.Feedback>
                     </Form.File>
                 </Form.Group>
             </Form.Row>
             <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                 <Button variant="danger" onClick={handleDelete} style={{ display: docId ? 'block' : 'none' }}>
-                    Delete
+                    {t('document.form.deleteButton')}
                 </Button>
                 <Button variant="primary" type="submit" style={{ marginLeft: '6px' }} disabled={!Object.values(validation).every(i => i === false)} >
-                    { docId ? 'Update' : 'Submit' }
+                    {t(`document.form.${docId ? 'updateButton' : 'submitButton'}`)}
                 </Button>
             </div>
         </Form>

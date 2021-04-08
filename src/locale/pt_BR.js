@@ -1,32 +1,42 @@
 const ptBR = {
-    language: {
-        title: 'Linguagem',
-        'en-US': {
-            shortName: 'Inglês',
-            fullName: 'Inglês Americano'
-        },
-        'pt-BR': {
-            shortName: 'Português',
-            fullName: 'Português Brasileiro'
-        }
-    },
-    document: {
-        name: 'Documento',
-        add: 'Adicionar Novo Documento',
-        search: 'Pesquisar Documentos'
-    },
-    management: {
-        name: 'Gerenciar',
-        categories: 'Categorias',
-        departments: 'Departmentos',
-        users: {
-            name: 'Usuários',
-            invite: 'Convidar Novo Usuário',
-            permissions: 'Permissões de Usuário'
-        }
-    },
-    department: 'Departmento',
-    logout: 'Sair'
+    'language': 'Linguagem',
+    'language.en-US.shortName': 'Inglês',
+    'language.en-US.fullName': 'Inglês Americano',
+    'language.pt-BR.shortName': 'Português',
+    'language.pt-BR.fullName': 'Português Brasileiro',
+    'document': 'Documento',
+    'document_plural': 'Documentos',
+    'document.add': 'Adicionar',
+    'document.search': 'Pesquisar',
+    'document.form.add.title': 'Novo Documento',
+    'document.form.edit.title': 'Editar Documento',
+    'document.form.title': 'Título',
+    'document.form.summary': 'Resumo',
+    'document.form.summary.mutedText': 'Uma breve descrição do documento sendo enviado.',
+    'document.form.category': '$t(category)',
+    'document.form.category.choose': 'Escolha...',
+    'document.form.category.zeroOptions': 'Nenhuma categoria no departamento atual.',
+    'document.form.date': 'Data do Documento',
+    'document.form.file': 'Arquivo',
+    'document.form.file.choose': 'Escolha o arquivo',
+    'document.form.file.placeholder': 'Nenhum arquivo selecionado',
+    'document.form.deleteButton': 'Excluir',
+    'document.form.updateButton': 'Atualizar',
+    'document.form.submitButton': 'Enviar',
+    'document.form.validation.invalidFileType': 'O tipo de arquivo enviado não é válido',
+    'document.form.validation.emptyTitle': 'Titulo é obrigatório',
+    'document.form.validation.categoryNotSelected': 'Deve selecionar uma categoria',
+    'management': 'Gerenciamento',
+    'category': 'Categoria',
+    'category_plural': 'Categorias',
+    'department': 'Departmento',
+    'department_plural': 'Departmentos',
+    'user': 'Usuário',
+    'users_plural': 'Usuários',
+    'user.invite': 'Convidar Novo Usuário',
+    'user.permissions': 'Permissões de Usuário',
+    'logout': 'Sair',
+    'loginWithGoogle.buttonText': 'Entre com Google'
 }
 
 export default ptBR;

@@ -47,7 +47,7 @@ export default function NavBar() {
                 <NavDropdown title={
                     <>
                         <FontAwesomeIcon icon={faFileAlt} />
-                        <span>{t('document.name')}</span>
+                        <span>{t('document')}</span>
                     </>
                 }>
                     <Link to="/documents/" className="dropdown-item">
@@ -62,24 +62,24 @@ export default function NavBar() {
                 <NavDropdown title={
                     <>
                         <FontAwesomeIcon icon={faCogs} />
-                        <span>{t('management.name')}</span>
+                        <span>{t('management')}</span>
                     </>
                 }>
                     <Link to="/categories" className="dropdown-item">
                         <FontAwesomeIcon className="icon" icon={faStream} />
-                        {t('management.categories')}
+                        {t('category_plural')}
                     </Link>
                     <Link to="/departments" className="dropdown-item">
                         <FontAwesomeIcon className="icon" icon={faHouseUser} />                        
-                        {t('management.departments')}
+                        {t('department_plural')}
                     </Link>
                     <Link to="/users" className="dropdown-item">
                         <FontAwesomeIcon className="icon" icon={faUserPlus} />
-                        {t('management.users.invite')}
+                        {t('user.invite')}
                     </Link>
                     <Link to="/permissions" className="dropdown-item">
                         <FontAwesomeIcon className="icon" icon={faKey} />
-                        {t('management.users.permissions')}
+                        {t('user.permissions')}
                     </Link>
                 </NavDropdown>
             </Nav>
@@ -94,7 +94,7 @@ export default function NavBar() {
                 <Nav>
                     <NavDropdown title={ 
                         <>
-                            <span>{t('language.title')}</span>
+                            <span>{t('language')}</span>
                             <FontAwesomeIcon icon={faLanguage} />
                         </>
                      }>
