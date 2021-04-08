@@ -106,6 +106,7 @@ const DocumentForm = () => {
             if (!res.ok) return
             console.log(`Document '${docId}' deleted`)
             setDocument(initialDocumentValues)
+            setValidation({})
             setRedirect('/documents')
         });
     }
@@ -113,8 +114,47 @@ const DocumentForm = () => {
     return (
         redirect
         ? <Redirect to={redirect} />
-        : <Form noValidate onSubmit={handleSubmit}>
+        : <Form id="docForm" noValidate onSubmit={handleSubmit}>
             <h1>{docId ? 'EDIT DOCUMENT' : 'ADD NEW DOCUMENT'}</h1>
+            <Form.Row>
+                <Form.Group as={Col} controlId="docForm.title">
+                    <Form.Label>Title</Form.Label>
+                    <Form.Control 
+                        type="text" name="title" required 
+                        onChange={handleDocChange} 
+                        isInvalid={validation.title}
+                        value={document.title} />
+                        <Form.Control.Feedback type="invalid">{validation.title}</Form.Control.Feedback>
+                </Form.Group>
+            </Form.Row>
+            <Form.Row>
+                <Form.Group as={Col} controlId="docForm.summary">
+                    <Form.Label>Summary</Form.Label>
+                    <Form.Control as="textarea" rows={3} name="summary" onChange={handleDocChange} value={document.summary}/>
+                    <Form.Text className="text-muted">
+                        A brief description of the document being uploaded.
+                    </Form.Text>
+                </Form.Group>
+            </Form.Row>
+            <Form.Row>
+                <Form.Group as={Col} controlId="docForm.category">
+                    <Form.Label>Category</Form.Label>
+                    <Form.Control as="select" name="category" required 
+                        onChange={handleDocChange} 
+                        isInvalid={validation.category}
+                        value={document.category}>
+                        <option style={{display: 'none'}}>Choose...</option>
+                        {categories.map(item => (
+                            <option key={item.id} value={item.id}>{item.name}</option>
+                        ))}
+                    </Form.Control>
+                    <Form.Control.Feedback type="invalid">{validation.category}</Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group as={Col} controlId="docForm.date">
+                    <Form.Label>Document Date</Form.Label>
+                    <Form.Control type="date" name="date" onChange={handleDocChange} value={document.date}/>
+                </Form.Group>
+            </Form.Row>
             <Form.Row>
                 <Form.Group as={Col} controlId="docForm.fileName">
                     <Form.Label>File</Form.Label>
@@ -129,54 +169,13 @@ const DocumentForm = () => {
                     </Form.File>
                 </Form.Group>
             </Form.Row>
-            <div id="docFormBody" className={ document.id || (document.fileName && !validation.fileName) ? 'active' : '' }>
-                <Form.Row>
-                    <Form.Group as={Col} controlId="docForm.title">
-                        <Form.Label>Title</Form.Label>
-                        <Form.Control 
-                            type="text" name="title" required 
-                            onChange={handleDocChange} 
-                            isInvalid={validation.title}
-                            value={document.title} />
-                            <Form.Control.Feedback type="invalid">{validation.title}</Form.Control.Feedback>
-                    </Form.Group>
-                </Form.Row>
-                <Form.Row>
-                    <Form.Group as={Col} controlId="docForm.category">
-                        <Form.Label>Category</Form.Label>
-                        <Form.Control as="select" name="category" required 
-                            onChange={handleDocChange} 
-                            isInvalid={validation.category}
-                            value={document.category}>
-                            <option style={{display: 'none'}}>Choose...</option>
-                            {categories.map(item => (
-                                <option key={item.id} value={item.id}>{item.name}</option>
-                            ))}
-                        </Form.Control>
-                        <Form.Control.Feedback type="invalid">{validation.category}</Form.Control.Feedback>
-                    </Form.Group>
-                    <Form.Group as={Col} controlId="docForm.date">
-                        <Form.Label>Document Date</Form.Label>
-                        <Form.Control type="date" name="date" onChange={handleDocChange} value={document.date}/>
-                    </Form.Group>
-                </Form.Row>
-                <Form.Row>
-                    <Form.Group as={Col} controlId="docForm.summary">
-                        <Form.Label>Summary</Form.Label>
-                        <Form.Control as="textarea" rows={3} name="summary" onChange={handleDocChange} value={document.summary}/>
-                        <Form.Text className="text-muted">
-                            A brief description of the document being uploaded.
-                        </Form.Text>
-                    </Form.Group>
-                </Form.Row>
-                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                    <Button variant="danger" onClick={handleDelete} style={{ display: docId ? 'block' : 'none' }}>
-                        Delete
-                    </Button>
-                    <Button variant="primary" type="submit" style={{ marginLeft: '6px' }} disabled={!Object.values(validation).every(i => i === false)} >
-                        { docId ? 'Update' : 'Submit' }
-                    </Button>
-                </div>
+            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <Button variant="danger" onClick={handleDelete} style={{ display: docId ? 'block' : 'none' }}>
+                    Delete
+                </Button>
+                <Button variant="primary" type="submit" style={{ marginLeft: '6px' }} disabled={!Object.values(validation).every(i => i === false)} >
+                    { docId ? 'Update' : 'Submit' }
+                </Button>
             </div>
         </Form>
     )

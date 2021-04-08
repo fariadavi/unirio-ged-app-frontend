@@ -1,15 +1,11 @@
-form h1 {
+#docForm {
+    margin: auto;
+    width: 100%;
+    max-width: 50rem;
+}
+
+#docForm h1 {
     margin-bottom: 2rem; 
-}
-
-#docFormBody {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height .3s ease-out;
-}
-
-#docFormBody.active {
-    max-height: 50vh;
 }
 
 select.form-control.is-invalid, 
