@@ -1,22 +1,27 @@
 import React, { useContext, useEffect, useState } from 'react'
-import rq from '../services/api'
-import { getUserLanguage, setUserLanguage } from '../services/lang'
+import { useTranslation } from 'react-i18next'
 import { AuthContext } from '../contexts/AuthContext'
-import { Navbar, Nav, NavDropdown } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
+import rq from '../services/api'
+import { Navbar, Nav, NavDropdown } from 'react-bootstrap'
+import { getUserLanguage, setUserLanguage } from '../services/lang'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCogs, faExchangeAlt, faFileAlt, faHouseUser, faKey, faLanguage, faPlusCircle, faSearch, faStream, faUser, faUserPlus, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
 import '../style/NavBar.css'
 
 export default function NavBar() {
+    const { t, i18n } = useTranslation();
     const { user, setUser, setToken } = useContext(AuthContext);
     const [ language, setLanguage ] = useState(getUserLanguage());
     const languageList = [
-        { name: 'English', code: 'en-US', imageUrl: 'http://purecatamphetamine.github.io/country-flag-icons/3x2/US.svg' , altText: 'English - United States' },
-        { name: 'Portuguese', code: 'pt-BR', imageUrl: 'http://purecatamphetamine.github.io/country-flag-icons/3x2/BR.svg' , altText: 'Brazilian Portuguese' }
+        { code: 'en-US', imageUrl: 'http://purecatamphetamine.github.io/country-flag-icons/3x2/US.svg' },
+        { code: 'pt-BR', imageUrl: 'http://purecatamphetamine.github.io/country-flag-icons/3x2/BR.svg' }
     ]
 
-    useEffect(() => setUserLanguage(language || navigator.language || navigator.userLanguage), [language])
+    useEffect(() => {
+        i18n.changeLanguage(language)
+        setUserLanguage(language || navigator.language || navigator.userLanguage)
+    }, [i18n, language])
 
     const handleLogout = () => setToken(null);
 
@@ -31,7 +36,7 @@ export default function NavBar() {
         }
     };
 
-    const handleSwitchLanguage = lang => { if (lang !== language) setLanguage(lang) };
+    const handleSwitchLanguage = langCode => { if (langCode !== language) setLanguage(langCode) };
 
     return (
         <Navbar fixed="top" bg="dark" variant="dark" expand="sm">
@@ -42,39 +47,39 @@ export default function NavBar() {
                 <NavDropdown title={
                     <>
                         <FontAwesomeIcon icon={faFileAlt} />
-                        <span>Document</span>
+                        <span>{t('document.name')}</span>
                     </>
                 }>
                     <Link to="/documents/" className="dropdown-item">
                         <FontAwesomeIcon className="icon" icon={faPlusCircle} />
-                        Add New Document
+                        {t('document.add')}
                     </Link>
                     <Link to="/" className="dropdown-item">
                         <FontAwesomeIcon className="icon" icon={faSearch} />
-                        Search Documents
+                        {t('document.search')}
                     </Link>
                 </NavDropdown>
                 <NavDropdown title={
                     <>
                         <FontAwesomeIcon icon={faCogs} />
-                        <span>Management</span>
+                        <span>{t('management.name')}</span>
                     </>
                 }>
                     <Link to="/categories" className="dropdown-item">
                         <FontAwesomeIcon className="icon" icon={faStream} />
-                        Categories
+                        {t('management.categories')}
                     </Link>
                     <Link to="/departments" className="dropdown-item">
                         <FontAwesomeIcon className="icon" icon={faHouseUser} />                        
-                        Departments
+                        {t('management.departments')}
                     </Link>
                     <Link to="/users" className="dropdown-item">
                         <FontAwesomeIcon className="icon" icon={faUserPlus} />
-                        Invite New Users
+                        {t('management.users.invite')}
                     </Link>
                     <Link to="/permissions" className="dropdown-item">
                         <FontAwesomeIcon className="icon" icon={faKey} />
-                        User Permissions
+                        {t('management.users.permissions')}
                     </Link>
                 </NavDropdown>
             </Nav>
@@ -89,14 +94,14 @@ export default function NavBar() {
                 <Nav>
                     <NavDropdown title={ 
                         <>
-                            <span>Language</span>
+                            <span>{t('language.title')}</span>
                             <FontAwesomeIcon icon={faLanguage} />
                         </>
                      }>
                         { languageList.map((lang, index) =>
                             <NavDropdown.Item key={index} onClick={() => { handleSwitchLanguage(lang.code) }} className={`${language === lang.code ? 'active' : '' }`}>
-                                <img className="icon flag" alt={lang.altText} src={lang.imageUrl}/>
-                                <span>{lang.name}</span>
+                                <img className="icon flag" alt={t(`language.${lang.code}.fullName`)} src={lang.imageUrl}/>
+                                <span>{t(`language.${lang.code}.shortName`)}</span>
                             </NavDropdown.Item>
                         )}
                     </NavDropdown>
@@ -104,7 +109,7 @@ export default function NavBar() {
                 <Nav>
                     <NavDropdown title={
                         <>
-                            <span>{`Department: ${user?.currentDepartment?.acronym}`}</span>
+                            <span>{`${t('department')}: ${user?.currentDepartment?.acronym}`}</span>
                             <FontAwesomeIcon icon={faExchangeAlt} />
                         </>
                     }>
@@ -117,7 +122,7 @@ export default function NavBar() {
                 </Nav>
                 <Nav>
                     <Nav.Link onClick={handleLogout}>
-                        <span>Logout</span>
+                        <span>{t('logout')}</span>
                         <FontAwesomeIcon icon={faSignOutAlt} />
                     </Nav.Link>
                 </Nav>
