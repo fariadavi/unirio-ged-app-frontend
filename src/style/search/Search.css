@@ -16,6 +16,126 @@ div.searchBox {
     animation: spin infinite .8s linear;
 }
 
+#docsTable .center {
+    display: flex;
+    justify-content: center;    
+    text-align: center;
+}
+
+#docsTable .actions > * {
+    height: 1.5rem;
+    width: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+#docsTable .actions .icon {
+    color: #343a40;
+}
+
+#docsTable .heightOverflow {
+    max-height: 100px;
+    overflow-y: scroll;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+    white-space: break-spaces;
+}
+
+#btnsGroup {
+    position: relative;
+}
+
+#btnsGroup .form-row {
+    background-color: #fff;
+    justify-content: space-evenly;
+}
+
+#btnsGroup .form-row .searchBtn {
+    z-index: 1;
+}
+
+#btnsGroup .form-row .searchBtn.btn-primary,
+.tablePagination .page-item.active .page-link {
+    background-color: #027bc2;
+    border-color: #027bc2;
+}
+
+.tablePagination .page-item .page-link {
+    color: #027bc2;
+}
+
+#btnsGroup .searchOptions {
+    opacity: 1;
+    max-height: 200px;
+    transition: max-height .5s ease-out, opacity .2s linear;
+}
+
+#btnsGroup .searchOptions.hide {
+    max-height: 0px;
+    opacity: 0;
+}
+
+#btnsGroup .searchOptions .form-row {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    width: 90%;
+    margin-bottom: 1rem;
+}
+
+#btnsGroup .searchOptions .form-row label {
+    margin: 6px .5rem 0;
+    white-space: nowrap;
+}
+
+#searchOptionsBtn {
+    color: #027bc2;
+    position: absolute;
+    left: 0;
+}
+
+#searchOptionsBtn:focus {
+    text-decoration: none;
+    box-shadow: none;
+}
+
+#searchOptionsBtn .append {
+    margin-left: .5em;
+    vertical-align: middle;
+}
+
+input[type=date] + .clear-input {
+    position: absolute;
+    line-height: 2.375rem;
+    vertical-align: middle;
+    right: 0;
+    opacity: 0;
+    transition: opacity .1s ease-out, right .1s ease-out;
+}
+
+input[type=date]:valid + .clear-input {
+    right: .5rem;
+    cursor: pointer;
+    opacity: 1;
+}
+
+input[type=date].form-control::-webkit-calendar-picker-indicator {
+    transition: margin .2s ease-out;
+    cursor: pointer;
+}
+
+input[type=date].form-control:valid::-webkit-calendar-picker-indicator {
+    margin-right: 1rem;
+}
+
+.dateFilter {
+    position: relative;
+    width: 100%;
+    display: inline-flex;
+}
+
 @keyframes spin {
     from {
         transform: rotate(0deg);

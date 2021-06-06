@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Redirect, Route } from 'react-router-dom'
 import PrivateRoute from './PrivateRoute'
 import Login from './Login'
 import Home from './Home'
+import '../style/App.css'
 
 export default function App() {
 	const [token, setToken] = useState(getLocalToken());
