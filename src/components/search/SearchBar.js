@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import rq from '../../services/api'
+import DatePicker from '../Utils/DatePicker'
 import { Button, Form, InputGroup } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleDown, faAngleUp, faCircleNotch, faSearch } from '@fortawesome/free-solid-svg-icons'
-import { faTimesCircle } from '@fortawesome/free-regular-svg-icons'
 
 export default function SearchBar({ isSearching, onSearch }) {
     const { t } = useTranslation();
@@ -45,7 +45,7 @@ export default function SearchBar({ isSearching, onSearch }) {
             let { text, ...optFilters } = filters;
             onSearch(text.trim(), optFilters);
         } else {
-            // TODO message user to fill at least one input
+            window.alert('fill at least one input')
         }
     }
 
@@ -91,28 +91,20 @@ export default function SearchBar({ isSearching, onSearch }) {
                         </Form.Control>
                     </Form.Row>
                     <Form.Row>
-                        <div className="dateFilter">
-                            <Form.Label>{t('searchBar.filters.date.from')}</Form.Label>
-                            <Form.Control type="date" name="minDate" required
-                                onChange={handleFilterChange}
-                                value={filters.minDate}
-                                max={filters.maxDate}
-                            />
-                            <span className="clear-input" onClick={() => setFilters({ ...filters, minDate: '' })}>
-                                <FontAwesomeIcon icon={faTimesCircle} />
-                            </span>
-                        </div>
-                        <div className="dateFilter">
-                            <Form.Label>{t('searchBar.filters.date.until')}</Form.Label>
-                            <Form.Control type="date" name="maxDate" required
-                                onChange={handleFilterChange}
-                                value={filters.maxDate}
-                                min={filters.minDate}
-                            />
-                            <span className="clear-input" onClick={() => setFilters({ ...filters, maxDate: '' })}>
-                                <FontAwesomeIcon icon={faTimesCircle} />
-                            </span>
-                        </div>
+                        <Form.Label>{t('searchBar.filters.date.from')}</Form.Label>
+                        <DatePicker name="minDate" required 
+                            onChange={handleFilterChange}
+                            onClear={() => setFilters({ ...filters, minDate: '' })}
+                            max={filters.maxDate}
+                            value={filters.minDate}
+                        />
+                        <Form.Label>{t('searchBar.filters.date.until')}</Form.Label>
+                        <DatePicker name="maxDate" required 
+                            onChange={handleFilterChange}
+                            onClear={() => setFilters({ ...filters, maxDate: '' })}
+                            min={filters.minDate}
+                            value={filters.maxDate}
+                        />
                     </Form.Row>
                     <Form.Row>
                         <Form.Check type="checkbox" name="myDocuments" custom

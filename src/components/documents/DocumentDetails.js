@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import rq from '../../services/api'
-import { getStatusBadge } from '../../components/badges/statusBadge'
+import DatePicker from '../Utils/DatePicker'
+import { getStatusBadge } from '../Utils/StatusBadge'
 import { AuthContext } from '../../contexts/AuthContext'
 import { Button, Col, Form } from 'react-bootstrap'
 import { Redirect, Route, Switch, useParams, useRouteMatch } from 'react-router-dom'
@@ -23,6 +24,14 @@ const DocumentForm = () => {
     }}, []);
     const [ document, setDocument ] = useState(initialDocumentValues);
 
+    useEffect(() => { if (redirect) setRedirect(null) }, [redirect])
+
+    useEffect(() => {
+        rq('/categories', { method: 'GET' })
+        .then(res => { if (res.ok) return res.json() })
+        .then(cats => setCategories(cats?.length ? cats : [{ id: 0, fullName: t('document.form.category.zeroOptions') }]));
+    }, [t])
+
     useEffect(() => {
         if (docId && docId !== document.id) {
             rq(`/documents/${docId}`, { method: 'GET' })
@@ -33,14 +42,6 @@ const DocumentForm = () => {
             setValidation({})
         }
     }, [docId, document.id, initialDocumentValues])
-
-    useEffect(() => {
-        rq('/categories', { method: 'GET' })
-        .then(res => { if (res.ok) return res.json() })
-        .then(cats => setCategories(cats?.length ? cats : [{ id: 0, fullName: t('document.form.category.zeroOptions') }]));
-    }, [t])
-
-    useEffect(() => { if (redirect) setRedirect(null) }, [redirect])
 
     const validateField = (name, value, localValidationObj) => {
         localValidationObj = localValidationObj || validation
@@ -200,7 +201,7 @@ const DocumentForm = () => {
                 </Form.Group>
                 <Form.Group as={Col} controlId="docForm.date">
                     <Form.Label>{t('document.date')}</Form.Label>
-                    <Form.Control type="date" name="date" onChange={handleDocChange} value={document.date}/>
+                    <DatePicker name="date" onChange={handleDocChange} value={document.date} onClear={() => handleDocChange({ target: { name: 'date', value: '' } })} />
                 </Form.Group>
             </Form.Row>
             <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
