@@ -48,7 +48,21 @@ const ptBR = {
     'searchBar.searchButton': 'Pesquisar documentos',
     'searchBar.moreFiltersButton': 'Mais filtros',
     'searchBar.lessFiltersButton': 'Menos filtros',
-    'searchBar.filters.registeredByMe': 'Apenas documentos cadastrados por mim'
+    'searchBar.filters.registeredByMe': 'Apenas documentos cadastrados por mim',
+    'search.noResultFound.message.p1': 'Nenhum resultado encontrado',
+    'search.noResultFound.message.p2': ' para ',
+    'search.noResultFound.message.p3': ' com os filtros especificados.',
+    'search.noResultFound.searchTips.title': 'Sugestões:',
+    'search.noResultFound.searchTips.item1': 'Certifique-se de que todas as palavras estão escritas corretamente.',
+    'search.noResultFound.searchTips.item2': 'Tente usar outras/menos palavras-chave.',
+    'search.noResultFound.searchTips.item3': 'Certifique-se de que todas os filtros opcionais estão preenchidos corretamente.',
+    'search.noResultFound.searchTips.item4': 'Tente remover os filtros e readicioná-los gradualmente.',
+    'search.error': 'Houve um erro realizando a busca desejada. Por favor, tente novamente mais tarde.',
+    'pageNotFound.title': '404',
+    'pageNotFound.subtitle': 'Oops! Parece que essa página não existe...',
+    'pageNotFound.message': 'O link que você possui está errado ou esta página se refere a um conteúdo que foi movido ou excluído.',
+    'pageNotFound.home': 'Página Inicial',
+    'pageNotFound.contactUs': 'Se você acredita que deveria haver algo aqui, entre em contato com os administradores do sistema.'
 }
 
 export default ptBR;

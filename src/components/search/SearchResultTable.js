@@ -43,7 +43,7 @@ export default function SearchResultTable({ documents, currentPage, numPages, de
     }
 
     return (
-        <>
+        <div className={`flex-column`} style={{ width: '100%' }}>
             <Table striped bordered hover>
                 <thead>
                     <tr>
@@ -86,6 +86,6 @@ export default function SearchResultTable({ documents, currentPage, numPages, de
                 </tbody>
             </Table>
             <SearchResultTablePagination numPages={numPages} activePage={currentPage} onSearch={onSearch} />
-        </>
+        </div>
     )
 }

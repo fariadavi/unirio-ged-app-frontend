@@ -1,0 +1,15 @@
+.pageNotFound h1 {
+    font-size: 10rem;
+}
+
+.pageNotFound h2 {
+    font-size: 3rem;
+}
+
+.pageNotFound p.message {
+    margin-top: 1rem;
+}
+
+.pageNotFound p.contactUs {
+    margin-top: 10rem;
+}
