@@ -5,7 +5,7 @@ import NavBar from './NavBar'
 import Search from './search/Search'
 import PageNotFound from './invalid/PageNotFound';
 import Categories from './categories/Categories'
-import UserPermissions from './permissions/UserPermissions'
+import Users from './permissions/Users'
 import DocumentDetails from './documents/DocumentDetails';
 
 export default function Home() {
@@ -16,7 +16,7 @@ export default function Home() {
                 <Route exact path="/" component={Search} />
                 <Route path="/documents" component={DocumentDetails} />
                 <Route path="/categories" component={Categories} />
-                <Route path="/users" component={UserPermissions} />
+                <Route path="/users" component={Users} />
                 <Route path="*" component={PageNotFound} />
             </Switch>
         </Container>
