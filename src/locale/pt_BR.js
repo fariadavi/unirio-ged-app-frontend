@@ -61,7 +61,7 @@ const ptBR = {
     'pageNotFound.title': '404',
     'pageNotFound.subtitle': 'Oops! Parece que essa página não existe...',
     'pageNotFound.message': 'O link que você possui está errado ou esta página se refere a um conteúdo que foi movido ou excluído.',
-    'pageNotFound.home': 'Página Inicial',
+    'pageNotFound.home': 'Clique aqui para voltar a página inicial',
     'pageNotFound.contactUs': 'Se você acredita que deveria haver algo aqui, entre em contato com os administradores do sistema.'
 }
 

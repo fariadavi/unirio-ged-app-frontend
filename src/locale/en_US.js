@@ -61,7 +61,7 @@ const enUS = {
     'pageNotFound.title': '404',
     'pageNotFound.subtitle': 'Oops! Seems like this webpage doesn\'t exist...',
     'pageNotFound.message': 'Either the link you have is broken or this page refers to a content that has been moved or deleted.',
-    'pageNotFound.home': 'Go Home',
+    'pageNotFound.home': 'Click here to go to the homepage',
     'pageNotFound.contactUs': 'If you believe that should be something here, please contact system administration.'
 }
 
