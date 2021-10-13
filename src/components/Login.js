@@ -1,26 +1,19 @@
 import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
-import rq from '../services/api.js'
 import GoogleLogin from 'react-google-login'
 import { Container } from 'react-bootstrap'
 import { AuthContext } from '../contexts/AuthContext'
+import { Redirect } from 'react-router-dom'
 
 export default function Login() {
     const { t } = useTranslation();
-    const { setToken } = useContext(AuthContext);
+    const { authLoading, authenticated, handleAuthentication, handleAuthenticationFail } = useContext(AuthContext);
 
-    const handleLoginSuccess = googleData =>
-        rq('/api/auth/google/login', {
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: googleData.tokenId
-        }).then(res => res.ok ? res.text() : handleLoginFail())
-        .then(token => token ? setToken(token) : null);
+    if (authLoading)
+        return <h1>Loading...</h1>; //TODO replace this with a spinner
 
-    const handleLoginFail = () => {
-        // TODO handle failure show error msg to user
-        console.log('login failed');
-    }
+    if (authenticated)
+        return (<Redirect to="/" />)
 
     return (
         <Container
@@ -33,8 +26,8 @@ export default function Login() {
                     <GoogleLogin
                         clientId={process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID}
                         buttonText={t('loginWithGoogle.buttonText')}
-                        onSuccess={handleLoginSuccess}
-                        onFailure={handleLoginFail}
+                        onSuccess={handleAuthentication}
+                        onFailure={handleAuthenticationFail}
                         cookiePolicy={'single_host_origin'}
                     />
                 </div>

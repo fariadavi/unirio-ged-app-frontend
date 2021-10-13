@@ -1,8 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { AuthContext } from '../contexts/AuthContext'
+import { UserContext } from '../contexts/UserContext'
 import { Link } from 'react-router-dom'
-import rq from '../services/api'
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap'
 import { getUserLanguage, setUserLanguage } from '../services/lang'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -11,7 +10,7 @@ import '../style/NavBar.css'
 
 export default function NavBar() {
     const { t, i18n } = useTranslation();
-    const { user, setUser, setToken } = useContext(AuthContext);
+    const { user, changeDepartment, logoutUser } = useContext(UserContext);
     const [ language, setLanguage ] = useState(getUserLanguage());
     const languageList = Object.keys(i18n.store.data)
 
@@ -19,19 +18,6 @@ export default function NavBar() {
         i18n.changeLanguage(language)
         setUserLanguage(language || navigator.language || navigator.userLanguage)
     }, [i18n, language])
-
-    const handleLogout = () => setToken(null);
-
-    const handleSwitchDepartment = deptId => {
-        if (deptId !== user?.currentDepartment?.id) {
-            rq(`/users/${user.id}`, {
-                method: "PATCH",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ currentDepartment: { id: deptId } })
-            }).then(res => { if (res.ok) return res.json() 
-            }).then(newUser => { if (newUser) { setUser(newUser); window.location.reload(); } });
-        }
-    };
 
     const handleSwitchLanguage = langCode => { if (langCode !== language) setLanguage(langCode) };
 
@@ -114,14 +100,14 @@ export default function NavBar() {
                         </>
                     }>
                         { (user ? user.departments : []).map(dept =>
-                            <NavDropdown.Item key={dept.id} onClick={() => { handleSwitchDepartment(dept.id) }} className={`${dept.id === user?.currentDepartment?.id ? 'active' : '' }`}>
+                            <NavDropdown.Item key={dept.id} onClick={() => { changeDepartment(dept.id) }} className={`${dept.id === user?.currentDepartment?.id ? 'active' : '' }`}>
                                 {`${dept.name} (${dept.acronym})`}
                             </NavDropdown.Item>
                         )}
                     </NavDropdown>
                 </Nav>
                 <Nav>
-                    <Nav.Link onClick={handleLogout}>
+                    <Nav.Link onClick={logoutUser}>
                         <span>{t('logout')}</span>
                         <FontAwesomeIcon icon={faSignOutAlt} />
                     </Nav.Link>
