@@ -50,7 +50,7 @@ function UserProvider({ children }) {
     }
 
     return (
-        <UserContext.Provider value={{ user, userLoading, setLoggedUserInfo, changeDepartment, logoutUser }}>
+        <UserContext.Provider value={{ user, userLoading, setLoggedUserInfo, department: user?.currentDepartment?.id, changeDepartment, logoutUser }}>
             {children}
         </UserContext.Provider>
     );

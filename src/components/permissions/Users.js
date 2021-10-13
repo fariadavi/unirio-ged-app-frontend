@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { AuthContext } from '../../contexts/AuthContext'
+import { UserContext } from '../../contexts/UserContext'
 import rq from '../../services/api'
 import { Route, Switch, useRouteMatch } from 'react-router-dom'
 import { Link } from 'react-router-dom'
@@ -11,17 +11,16 @@ import '../../style/search/Search.css'
 
 const UsersTable = () => {
     const { t } = useTranslation();
-    const { user } = useContext(AuthContext);
+    const { department } = useContext(UserContext);
     const [ users, setUsers ] = useState([]);
 
     useEffect(() => {
-        debugger
-        if (user?.currentDepartment?.id != null) {
-            rq(`/users/department/${user?.currentDepartment?.id}`, { method: 'GET' })
+        if (department != null) {
+            rq(`/users/department/${department}`, { method: 'GET' })
             .then(res => { if (res.ok) return res.json() })
             .then(u => setUsers(u?.length ? u : [{ id: 0, fullName: t('document.form.category.zeroOptions') }]));
         }
-    }, [t])
+    }, [department, t])
 
     return (
         <Table striped bordered hover>
