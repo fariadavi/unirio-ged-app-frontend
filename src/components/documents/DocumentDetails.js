@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import rq from '../../services/api'
 import DatePicker from '../Utils/DatePicker'
 import { getStatusBadge } from '../Utils/StatusBadge'
-import { AuthContext } from '../../contexts/AuthContext'
+import { UserContext } from '../../contexts/UserContext'
 import { Button, Col, Form } from 'react-bootstrap'
 import { Redirect, Route, Switch, useParams, useRouteMatch } from 'react-router-dom'
 import '../../style/documents/DocumentDetails.css'
@@ -11,7 +11,7 @@ import '../../style/documents/DocumentDetails.css'
 const DocumentForm = () => {
     const { t } = useTranslation();
     const { docId } = useParams();
-    const { user } = useContext(AuthContext);
+    const { user, department } = useContext(UserContext);
     const [ redirect, setRedirect ] = useState(null);
     const [ categories, setCategories ] = useState([]);
     const [ validation, setValidation ] = useState({});
@@ -107,7 +107,7 @@ const DocumentForm = () => {
         let { file, ...doc } = document;
         doc = { 
             ...doc, 
-            tenant: user.currentDepartment.acronym.toLowerCase(),
+            tenant: department.acronym.toLowerCase(),
             registeredBy: user.id, 
             registeredAt: new Date().toISOString() 
         };

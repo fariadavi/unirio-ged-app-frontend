@@ -10,7 +10,7 @@ import '../style/NavBar.css'
 
 export default function NavBar() {
     const { t, i18n } = useTranslation();
-    const { user, changeDepartment, logoutUser } = useContext(UserContext);
+    const { user, department, changeDepartment, logoutUser } = useContext(UserContext);
     const [ language, setLanguage ] = useState(getUserLanguage());
     const languageList = Object.keys(i18n.store.data)
 
@@ -95,7 +95,7 @@ export default function NavBar() {
                 <Nav>
                     <NavDropdown title={
                         <>
-                            <span>{`${t('department')}: ${user?.currentDepartment?.acronym}`}</span>
+                            <span>{`${t('department')}: ${department?.acronym}`}</span>
                             <FontAwesomeIcon icon={faExchangeAlt} />
                         </>
                     }>
