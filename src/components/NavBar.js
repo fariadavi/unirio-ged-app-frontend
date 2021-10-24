@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap'
 import { getUserLanguage, setUserLanguage } from '../services/lang'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCogs, faExchangeAlt, faFileAlt, faHouseUser, faKey, faLanguage, faPlusCircle, faSearch, faStream, faUser, faUserPlus, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
+import { faCogs, faExchangeAlt, faFileAlt, faHouseUser, faLanguage, faPlusCircle, faSearch, faStream, faUser, faUserCog, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
 import '../style/NavBar.css'
 
 export default function NavBar() {
@@ -60,12 +60,7 @@ export default function NavBar() {
                         {t('department_plural')}
                     </Link>
                     <Link to="/users" className="dropdown-item">
-                        <FontAwesomeIcon className="icon" icon={faUserPlus} />
-                        {t('user.invite')}
-                    </Link>
-                    <Link to="/permissions" className="dropdown-item">
-                        <FontAwesomeIcon className="icon" icon={faKey} />
-                        {t('user.permissions')}
+                        <FontAwesomeIcon className="icon" icon={faUserCog} />
                     </Link>
                 </NavDropdown>
             </Nav>
