@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import rq from '../services/api.js'
 import { AuthContext } from '../contexts/AuthContext'
 
@@ -9,21 +9,21 @@ function UserProvider({ children }) {
     const [user, setUser] = useState();
     const [userLoading, setUserLoading] = useState(false);
 
-    useEffect(() => {
-        if (!user && token)
-            setLoggedUserInfo();
-    }, [user, token]);
-
-    const setLoggedUserInfo = async () => {
+    const setLoggedUserInfo = useCallback(async () => {
         setUserLoading(true);
         
-        const res = await rq('/users/loggedUserInfo', { method: "GET" });
-        
-        if (res.ok)
+        try {
+            const res = await rq('/users/loggedUserInfo', { method: "GET" });
+            
+            if (!res.ok)
+                throw new Error(res.status);
+    
             setUser(await res.json());
-
-        setUserLoading(false);
-    }
+            setUserLoading(false);
+        } catch (err) {
+            handleAuthLogout();
+        }
+    }, [handleAuthLogout])
 
     const changeDepartment = async deptId => {
         setUserLoading(true);
@@ -49,8 +49,13 @@ function UserProvider({ children }) {
         setUserLoading(false);
     }
 
+    useEffect(() => {
+        if (!user && token)
+            setLoggedUserInfo();
+    }, [user, token, setLoggedUserInfo]);
+
     return (
-        <UserContext.Provider value={{ user, userLoading, setLoggedUserInfo, department: user?.currentDepartment?.id, changeDepartment, logoutUser }}>
+        <UserContext.Provider value={{ user, userLoading, setLoggedUserInfo, department: user?.currentDepartment, changeDepartment, logoutUser }}>
             {children}
         </UserContext.Provider>
     );

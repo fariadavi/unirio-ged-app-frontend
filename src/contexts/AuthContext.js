@@ -17,39 +17,31 @@ function AuthProvider({ children }) {
 		setAuthLoading(false);
 	}
 
-	const handleAuthenticationFail = () => {
-		setAuthLoading(true);
-
-		handleAuthLogout();
-
-		// TODO handle failure show error msg to user 
-		console.log('login failed');
-		
-		setAuthLoading(false);
-	}
-
 	const handleAuthentication = async googleData => {
 		setAuthLoading(true);
 		
-		const res = await rq('/api/auth/google/login', {
-			method: "POST",
-			headers: { "Content-Type": "application/x-www-form-urlencoded" },
-			body: googleData.tokenId
-		})
-
-		if (res.ok) {
+		try {
+			const res = await rq('/api/auth/google/login', {
+				method: "POST",
+				headers: { "Content-Type": "application/x-www-form-urlencoded" },
+				body: googleData.tokenId
+			})
+	
+			if (!res.ok)
+				throw new Error(res.status);
+			
 			const localToken = await res.text();
 			setLocalToken(localToken);
 			setToken(localToken);
-		} else {
-			handleAuthenticationFail();
+		} catch (err) {
+			handleAuthLogout();
 		}
 
 		setAuthLoading(false);
 	}
 
 	return (
-		<AuthContext.Provider value={{ authenticated: token !== null, token, authLoading, handleAuthentication, handleAuthenticationFail, handleAuthLogout }}>
+		<AuthContext.Provider value={{ authenticated: token !== null, token, authLoading, handleAuthentication, handleAuthLogout }}>
 			{children}
 		</AuthContext.Provider>
 	);

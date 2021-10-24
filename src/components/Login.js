@@ -7,7 +7,14 @@ import { Redirect } from 'react-router-dom'
 
 export default function Login() {
     const { t } = useTranslation();
-    const { authLoading, authenticated, handleAuthentication, handleAuthenticationFail } = useContext(AuthContext);
+    const { authLoading, authenticated, handleAuthentication, handleAuthLogout } = useContext(AuthContext);    
+
+	const handleAuthenticationFail = (err, details) => {
+		handleAuthLogout();
+
+		// TODO handle failure show error msg to user 
+		console.log('login failed');
+	}
 
     if (authLoading)
         return <h1>Loading...</h1>; //TODO replace this with a spinner
