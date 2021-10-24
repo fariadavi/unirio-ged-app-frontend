@@ -33,34 +33,35 @@ export default function NavBar() {
                 <NavDropdown title={
                     <>
                         <FontAwesomeIcon icon={faFileAlt} />
-                        <span>{t('document')}</span>
+                        <span>{t('navbar.documents')}</span>
                     </>
                 }>
                     <Link to="/documents/" className="dropdown-item">
                         <FontAwesomeIcon className="icon" icon={faPlusCircle} />
-                        {t('document.add')}
+                        {t('navbar.documents.add')}
                     </Link>
                     <Link to="/" className="dropdown-item">
                         <FontAwesomeIcon className="icon" icon={faSearch} />
-                        {t('document.search')}
+                        {t('navbar.documents.search')}
                     </Link>
                 </NavDropdown>
                 <NavDropdown title={
                     <>
                         <FontAwesomeIcon icon={faCogs} />
-                        <span>{t('management')}</span>
+                        <span>{t('navbar.management')}</span>
                     </>
                 }>
                     <Link to="/categories" className="dropdown-item">
                         <FontAwesomeIcon className="icon" icon={faStream} />
-                        {t('category_plural')}
+                        {t('navbar.management.category')}
                     </Link>
                     <Link to="/departments" className="dropdown-item">
                         <FontAwesomeIcon className="icon" icon={faHouseUser} />                        
-                        {t('department_plural')}
+                        {t('navbar.management.department')}
                     </Link>
                     <Link to="/users" className="dropdown-item">
                         <FontAwesomeIcon className="icon" icon={faUserCog} />
+                        {t('navbar.management.users')}
                     </Link>
                 </NavDropdown>
             </Nav>
@@ -75,14 +76,14 @@ export default function NavBar() {
                 <Nav>
                     <NavDropdown title={ 
                         <>
-                            <span>{t('language')}</span>
+                            <span>{t('navbar.language')}</span>
                             <FontAwesomeIcon icon={faLanguage} />
                         </>
                      }>
                         { languageList.map((lang, index) =>
                             <NavDropdown.Item key={index} onClick={() => { handleSwitchLanguage(lang) }} className={`${language === lang ? 'active' : '' }`}>
                                 <img className="icon flag" alt={t(`language.${lang}.fullName`)} src={`/unirio-ged-app-frontend/images/${lang}.svg`}/>
-                                <span>{t(`language.${lang}.shortName`)}</span>
+                                <span>{t(`navbar.language.${lang}.shortName`)}</span>
                             </NavDropdown.Item>
                         )}
                     </NavDropdown>
@@ -90,7 +91,7 @@ export default function NavBar() {
                 <Nav>
                     <NavDropdown title={
                         <>
-                            <span>{`${t('department')}: ${department?.acronym}`}</span>
+                            <span>{`${t('navbar.department')}: ${department?.acronym}`}</span>
                             <FontAwesomeIcon icon={faExchangeAlt} />
                         </>
                     }>
@@ -103,7 +104,7 @@ export default function NavBar() {
                 </Nav>
                 <Nav>
                     <Nav.Link onClick={logoutUser}>
-                        <span>{t('logout')}</span>
+                        <span>{t('navbar.logout')}</span>
                         <FontAwesomeIcon icon={faSignOutAlt} />
                     </Nav.Link>
                 </Nav>
