@@ -1,0 +1,49 @@
+#usersTable th {
+    border-top: 0px;
+}
+
+#usersTable .actions {
+    margin: 0 1rem;
+}
+
+#usersTable .center {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+#usersTable .spaced {
+    display: flex;
+    justify-content: space-evenly;    
+    text-align: center;
+}
+
+#usersTable .top-margin {
+    margin-top: .2rem;
+}
+
+#usersTable .filter.boolean-filter.center {
+    margin-left: .8rem;
+    margin-right: .8rem;
+}
+
+#usersTable .filter.boolean-filter.center > div:not(:last-child) {
+    margin-right: .8rem;
+}
+
+#usersTable .actions > span {
+    height: 1.5rem;
+    width: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+#usersTable .actions .icon {
+    color: #343a40;
+}
+
+#usersTable .check-input {
+    margin-top: .3rem;
+}
