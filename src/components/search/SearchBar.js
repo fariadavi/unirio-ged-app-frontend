@@ -68,7 +68,7 @@ export default function SearchBar({ isSearching, onSearch }) {
                         </InputGroup.Prepend>
                         <Form.Control
                             disabled={isSearching}
-                            onChange={e => setFilters({ ...filters, text: e.target.value })}
+                            onChange={e => setFilters({ ...filters, text: e.target.value.trimStart() })}
                             onKeyPress={!isSearching ? onKeyPress : null}
                             value={filters.text}
                             type="text" />
