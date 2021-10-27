@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import rq from '../../services/api'
 import DatePicker from '../Utils/DatePicker'
-import { Button, Form, InputGroup } from 'react-bootstrap'
+import { Button, Form, FormControl, InputGroup } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleDown, faAngleUp, faCircleNotch, faSearch } from '@fortawesome/free-solid-svg-icons'
 
@@ -55,85 +55,79 @@ export default function SearchBar({ isSearching, onSearch }) {
     }
 
     return (
-        <Form noValidate={true}
-            onSubmit={handleSubmit}
-            style={{ width: "100%", maxWidth: "900px" }}>
-            <Form.Group>
-                <Form.Row>
-                    <InputGroup>
-                        <InputGroup.Prepend>
-                            <InputGroup.Text id="inputGroupPrepend">
-                                <FontAwesomeIcon icon={faSearch} />
-                            </InputGroup.Text>
-                        </InputGroup.Prepend>
-                        <Form.Control
-                            disabled={isSearching}
-                            onChange={e => setFilters({ ...filters, text: e.target.value })}
-                            onKeyPress={!isSearching ? onKeyPress : null}
-                            value={filters.text}
-                            type="text" />
-                    </InputGroup>
-                </Form.Row>
+        <Form id ="search-bar-form" noValidate={true} onSubmit={handleSubmit}>
+            <Form.Group className="search-form-group text-input-group">
+                <InputGroup>
+                    <InputGroup.Text>
+                        <FontAwesomeIcon icon={faSearch} />
+                    </InputGroup.Text>
+                    <FormControl
+                        id="textInput" 
+                        disabled={isSearching}
+                        onChange={e => setFilters({ ...filters, text: e.target.value })}
+                        onKeyPress={!isSearching ? onKeyPress : null}
+                        value={filters.text}
+                        type="text" 
+                    />
+                </InputGroup>
             </Form.Group>
-            <Form.Group id="btnsGroup">
-                <Form.Row className={`searchOptions ${expandedOptions ? '' : 'hide'}`}>
-                    <Form.Row>
-                        <Form.Label>{t('searchBar.filters.category')}</Form.Label>
-                        <Form.Control as="select" name="category"
-                            onChange={handleFilterChange}
-                            value={filters.category}
-                        >
-                            <option style={{ display: 'none' }}>{t('document.form.category.choose')}</option>
-                            {categories[0]?.id === 0 ? <></> : <option value="-1">-- {t('none')} --</option>}
+            <Form.Group className={`search-form-group filters-group ${expandedOptions ? '' : 'hide'}`}>
+                <div className="custom-input-group category-filter">
+                    <Form.Label>{t('searchBar.filters.category')}</Form.Label>
+                    <Form.Select 
+                        name="category" 
+                        onChange={handleFilterChange}
+                        value={filters.category}>
+                        <option style={{ display: 'none' }}>{t('document.form.category.choose')}</option>
+                        {categories[0]?.id === 0 ? <></> : <option value="-1">-- {t('none')} --</option>}
                             {categories.map(item => (
-                                <option key={item.id} value={item.id}>{item.fullName}</option>
-                            ))}
-                        </Form.Control>
-                    </Form.Row>
-                    <Form.Row>
-                        <Form.Label>{t('searchBar.filters.date.from')}</Form.Label>
-                        <DatePicker name="minDate" required 
-                            onChange={handleFilterChange}
-                            onClear={() => setFilters({ ...filters, minDate: '' })}
-                            max={filters.maxDate}
-                            value={filters.minDate}
-                        />
-                        <Form.Label>{t('searchBar.filters.date.until')}</Form.Label>
-                        <DatePicker name="maxDate" required 
-                            onChange={handleFilterChange}
-                            onClear={() => setFilters({ ...filters, maxDate: '' })}
-                            min={filters.minDate}
-                            value={filters.maxDate}
-                        />
-                    </Form.Row>
-                    <Form.Row>
-                        <Form.Check type="checkbox" name="myDocuments" custom
-                            id="filterMyDocuments"
-                            onClick={handleFilterChange}
-                            label={t('searchBar.filters.registeredByMe')}
-                            value={filters.myDocuments}
-                        />
-                    </Form.Row>
-                </Form.Row>
-                <Form.Row>
+                            <option key={item.id} value={item.id}>{item.fullName}</option>
+                        ))}
+                    </Form.Select>
+                </div>
+                <div className="custom-input-group date-filter">
+                    <Form.Label>{t('searchBar.filters.date.from')}</Form.Label>
+                    <DatePicker name="minDate" required
+                        onChange={handleFilterChange}
+                        onClear={() => setFilters({ ...filters, minDate: '' })}
+                        max={filters.maxDate}
+                        value={filters.minDate}
+                    />
+                    <Form.Label>{t('searchBar.filters.date.until')}</Form.Label>
+                    <DatePicker name="maxDate" required
+                        onChange={handleFilterChange}
+                        onClear={() => setFilters({ ...filters, maxDate: '' })}
+                        min={filters.minDate}
+                        value={filters.maxDate}
+                    />
+                </div>
+                <div className="custom-input-group user-filter">
+                    <Form.Check type="checkbox" name="myDocuments" custom
+                        id="filterMyDocuments"
+                        onClick={handleFilterChange}
+                        label={t('searchBar.filters.registeredByMe')}
+                        value={filters.myDocuments}
+                    />
+                </div>
+            </Form.Group>
+            <Form.Group className="search-form-group search-actions-group">
+                <div class="search-filters-toggle-box">
                     <Button
-                        id="searchOptionsBtn"
-                        className="searchBtn"
                         onClick={() => setExpandedOptions(!expandedOptions)}
                         variant="link">
                         {t(`searchBar.${expandedOptions ? 'less' : 'more'}FiltersButton`)}
                         <FontAwesomeIcon className="append" icon={expandedOptions ? faAngleUp : faAngleDown} />
                     </Button>
-                    <Button
-                        className="searchBtn"
-                        disabled={isSearching}
-                        variant="primary"
-                        type="submit">
-                        {!isSearching
-                            ? t('searchBar.searchButton')
-                            : <FontAwesomeIcon icon={faCircleNotch} className="faSpin" />}
-                    </Button>
-                </Form.Row>
+                </div>
+                <Button
+                    className="search-btn"
+                    disabled={isSearching}
+                    variant="primary"
+                    type="submit">
+                    {!isSearching
+                        ? t('searchBar.searchButton')
+                        : <FontAwesomeIcon icon={faCircleNotch} className="faSpin" />}
+                </Button>
             </Form.Group>
         </Form>
     )

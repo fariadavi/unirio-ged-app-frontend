@@ -12,10 +12,6 @@ div.searchBox {
     max-height: 50vh;
 }
 
-.faSpin {
-    animation: spin infinite .8s linear;
-}
-
 #docsTable .center {
     display: flex;
     justify-content: center;    
@@ -43,65 +39,86 @@ div.searchBox {
     white-space: break-spaces;
 }
 
-#btnsGroup {
-    position: relative;
+/* SearchBar.js */
+
+.search-form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: .5rem;
 }
 
-#btnsGroup .form-row {
-    background-color: #fff;
+.text-input-group {
+    width: 50vw;
+}
+
+.filters-group {
+    max-height: 200px;
+    opacity: 1;
+    transition: max-height .25s ease-out, opacity .25s ease-out;
+}
+
+.filters-group.hide {
+    max-height: 0px;
+    opacity: 0;
+}
+
+.filters-group .category-filter select {
+    max-width: 80%;
+}
+
+.filters-group .custom-input-group {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: baseline;
+    margin: .25rem;
+    width: 100%;
+}
+
+.filters-group .custom-input-group label {
+    margin-right: .5rem;
+    white-space: nowrap;
+}
+
+.search-actions-group {
+    position: relative;
     justify-content: space-evenly;
 }
 
-#btnsGroup .form-row .searchBtn {
-    z-index: 1;
+.search-actions-group .search-btn {
+    z-index: 10;
 }
 
-#btnsGroup .form-row .searchBtn.btn-primary,
+.search-actions-group .search-btn.btn-primary,
 .tablePagination .page-item.active .page-link {
     background-color: #027bc2;
     border-color: #027bc2;
 }
 
-.tablePagination .page-item .page-link {
+.tablePagination .page-item .page-link,
+.search-actions-group .search-filters-toggle-box .btn.btn-link {
     color: #027bc2;
 }
 
-#btnsGroup .searchOptions {
-    opacity: 1;
-    max-height: 200px;
-    transition: max-height .5s ease-out, opacity .2s linear;
-}
-
-#btnsGroup .searchOptions.hide {
-    max-height: 0px;
-    opacity: 0;
-}
-
-#btnsGroup .searchOptions .form-row {
-    display: flex;
-    flex-wrap: nowrap;
-    flex-direction: row;
-    width: 90%;
-    margin-bottom: 1rem;
-}
-
-#btnsGroup .searchOptions .form-row label {
-    margin: 6px .5rem 0;
-    white-space: nowrap;
-}
-
-#searchOptionsBtn {
-    color: #027bc2;
+.search-filters-toggle-box {
+    background-color: #fff;
     position: absolute;
-    left: 0;
+    top: 0;
+    height: 100px;
+    width: 100%;
 }
 
-#searchOptionsBtn:focus {
+.search-filters-toggle-box .btn {
+    text-decoration: none;
+}
+
+.search-filters-toggle-box .btn:focus {
     text-decoration: none;
     box-shadow: none;
 }
 
-#searchOptionsBtn .append {
+.search-filters-toggle-box .btn .append {
     margin-left: .5em;
     vertical-align: middle;
 }
@@ -132,8 +149,13 @@ input[type=date].form-control:valid::-webkit-calendar-picker-indicator {
 
 .dateFilter {
     position: relative;
-    width: 100%;
     display: inline-flex;
+    margin-right: .5rem;
+    min-width: 220px;
+}
+
+.faSpin {
+    animation: spin infinite .8s linear;
 }
 
 @keyframes spin {
