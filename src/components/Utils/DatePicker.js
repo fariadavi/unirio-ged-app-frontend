@@ -1,18 +1,18 @@
 import React from 'react'
-import { Form } from 'react-bootstrap'
+import { FormControl } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimesCircle } from '@fortawesome/free-regular-svg-icons'
 
-export default function DatePicker({ name, min, max, value, onChange, onClear }) {
+export default function DatePicker({ name, min, max, value, onChange }) {
     return (
         <div className="dateFilter">
-            <Form.Control type="date" name={name} required
-                onChange={onChange}
+            <FormControl type="date" name={name} required
+                onChange={e => onChange(name, e.target.value)}
                 min={min}
                 max={max}
                 value={value}
             />
-            <span className="clear-input" onClick={onClear}>
+            <span className="clear-input" onClick={() => onChange(name, '')}>
                 <FontAwesomeIcon icon={faTimesCircle} />
             </span>
         </div>
