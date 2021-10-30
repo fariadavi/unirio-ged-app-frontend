@@ -1,168 +1,57 @@
-div.searchBox {
-    transition: max-height .5s ease-out;
-    margin-top: 4em;
+.search-page {
+    display: flex;
+    flex-direction: column-reverse;
+    min-height: calc(100vh - 56px);
+    width: 95%;
 }
 
-#docsTable {
-    max-height: 0;
+.search-page > div {
+    display: flex;
+    justify-content: center;
+    transition: flex-grow .25s ease-out;
+}
+
+.search-page .search-header {
+    align-items: flex-end;
+    flex-grow: 2;
+}
+
+.search-page .search-header h1 {
+    margin: 6rem 0 3rem;
+    user-select: none;
+}
+
+.search-page .search-bar {
+    flex-grow: 0;
+}
+
+.search-page .search-result {
     overflow: hidden;
+    flex-grow: 3;
+    margin-top: 4rem;
+    z-index: 1;
 }
 
-#docsTable.active {
-    max-height: 50vh;
+.search-page .search-result > div {
+    flex-grow: 1;
+    max-height: 0;
+    transition: max-height .5s ease-out;
 }
 
-#docsTable .center {
-    display: flex;
-    justify-content: center;    
-    text-align: center;
+.search-page .search-result.active {
+    overflow: visible;
 }
 
-#docsTable .actions > * {
-    height: 1.5rem;
-    width: 1.5rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
+.search-page .search-result.active > div {
+    max-height: 100vh;
 }
 
-#docsTable .actions .icon {
-    color: #343a40;
+.search-page .search-result.active ~ div.search-header {
+    flex-grow: 0;
 }
 
-#docsTable .heightOverflow {
-    max-height: 100px;
-    overflow-y: scroll;
-    text-overflow: ellipsis;
-    word-wrap: break-word;
-    white-space: break-spaces;
-}
-
-/* SearchBar.js */
-
-.search-form-group {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: .5rem;
-}
-
-.text-input-group {
-    width: 50vw;
-}
-
-.filters-group {
-    max-height: 200px;
-    opacity: 1;
-    transition: max-height .25s ease-out, opacity .25s ease-out;
-}
-
-.filters-group.hide {
-    max-height: 0px;
-    opacity: 0;
-}
-
-.filters-group .category-filter select {
-    max-width: 80%;
-}
-
-.filters-group .custom-input-group {
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: center;
-    align-items: baseline;
-    margin: .25rem;
+.no-result-message-box {
+    margin: auto;
+    max-width: 900px;
     width: 100%;
-}
-
-.filters-group .custom-input-group label {
-    margin-right: .5rem;
-    white-space: nowrap;
-}
-
-.search-actions-group {
-    position: relative;
-    justify-content: space-evenly;
-}
-
-.search-actions-group .search-btn {
-    z-index: 10;
-}
-
-.search-actions-group .search-btn.btn-primary,
-.tablePagination .page-item.active .page-link {
-    background-color: #027bc2;
-    border-color: #027bc2;
-}
-
-.tablePagination .page-item .page-link,
-.search-actions-group .search-filters-toggle-box .btn.btn-link {
-    color: #027bc2;
-}
-
-.search-filters-toggle-box {
-    background-color: #fff;
-    position: absolute;
-    top: 0;
-    height: 100px;
-    width: 100%;
-}
-
-.search-filters-toggle-box .btn {
-    text-decoration: none;
-}
-
-.search-filters-toggle-box .btn:focus {
-    text-decoration: none;
-    box-shadow: none;
-}
-
-.search-filters-toggle-box .btn .append {
-    margin-left: .5em;
-    vertical-align: middle;
-}
-
-input[type=date] + .clear-input {
-    position: absolute;
-    line-height: 2.375rem;
-    vertical-align: middle;
-    right: 0;
-    opacity: 0;
-    transition: opacity .1s ease-out, right .1s ease-out;
-}
-
-input[type=date]:valid + .clear-input {
-    right: .5rem;
-    cursor: pointer;
-    opacity: 1;
-}
-
-input[type=date].form-control::-webkit-calendar-picker-indicator {
-    transition: margin .2s ease-out;
-    cursor: pointer;
-}
-
-input[type=date].form-control:valid::-webkit-calendar-picker-indicator {
-    margin-right: 1rem;
-}
-
-.dateFilter {
-    position: relative;
-    display: inline-flex;
-    margin-right: .5rem;
-    min-width: 220px;
-}
-
-.faSpin {
-    animation: spin infinite .8s linear;
-}
-
-@keyframes spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
 }

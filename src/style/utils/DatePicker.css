@@ -1,0 +1,29 @@
+.custom-date-picker .date-wrapper {
+    position: relative;
+    min-width: 220px;
+}
+
+.custom-date-picker input[type="date"] + .clear-input {
+    position: absolute;
+    line-height: 2.375rem;
+    opacity: 0;
+    top: 0;
+    right: 2.6rem;
+    height: 1rem;
+    width: 1rem;
+    transition: opacity .1s ease-out;
+}
+
+.custom-date-picker input[type="date"]:valid + .clear-input {
+    cursor: pointer;
+    opacity: 1;
+}
+
+.custom-date-picker input[type=date]::-webkit-calendar-picker-indicator {
+    position: absolute;
+    cursor: pointer;
+    height: 1.1rem;
+    width: 1.1rem;
+    right: 0.75rem;
+    top: 0.5rem;
+}

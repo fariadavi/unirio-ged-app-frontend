@@ -1,5 +1,4 @@
 import React from 'react'
-import { Container } from 'react-bootstrap'
 import { Route, Switch } from 'react-router-dom';
 import NavBar from './NavBar'
 import Search from './search/Search'
@@ -10,7 +9,7 @@ import DocumentDetails from './documents/DocumentDetails';
 
 export default function Home() {
     return (
-        <Container className="d-flex flex-column align-item justify-content-center" style={{ minHeight: "100vh", minWidth: "95vw" }}>
+        <div className="home-container">
             <NavBar />
             <Switch>
                 <Route exact path="/" component={Search} />
@@ -19,6 +18,6 @@ export default function Home() {
                 <Route path="/users" component={UserPermissions} />
                 <Route path="*" component={PageNotFound} />
             </Switch>
-        </Container>
+        </div>
     )
 }

@@ -20,5 +20,5 @@ export const getStatusBadge = status => {
             break;
     }
 
-    return <Badge className="capitalize" variant={badgeVariant}>{status.toLowerCase()}</Badge>
+    return <Badge className="capitalize" bg={badgeVariant}>{status.toLowerCase()}</Badge>
 }

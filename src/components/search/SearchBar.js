@@ -1,12 +1,16 @@
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
+import { UserContext } from '../../contexts/UserContext'
 import { useTranslation } from 'react-i18next'
 import { Button, Form } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleDown, faAngleUp, faCircleNotch } from '@fortawesome/free-solid-svg-icons'
 import { CategoryFilter, MinMaxDateFilter, TextInputFilter, UserDocumentsFilter } from './SearchBarFilters'
+import '../../style/search/SearchBar.css'
 
 export default function SearchBar({ isSearching, onSearch }) {
     const { t } = useTranslation();
+    const { department } = useContext(UserContext);
+    const [expandedOptions, setExpandedOptions] = useState(false);
     const [filters, setFilters] = useState({
         text: '',
         minDate: '',
@@ -14,7 +18,6 @@ export default function SearchBar({ isSearching, onSearch }) {
         category: '',
         myDocuments: false
     });
-    const [expandedOptions, setExpandedOptions] = useState(false);
 
     const handleFilterChange = (key, value) => {
         if (key === 'category' && value === '-1')
@@ -23,7 +26,7 @@ export default function SearchBar({ isSearching, onSearch }) {
             value = value === 'false';
 
         setFilters({ ...filters, [key]: value });
-    }
+    };
 
     const validateFilters = filtersObj =>
         filtersObj.text.trim().length > 0 ||
@@ -45,11 +48,12 @@ export default function SearchBar({ isSearching, onSearch }) {
         }
     }
 
+    useEffect(() => setFilters(f => ({ ...f, category: 0 })), [department]);
+
     return (
-        <Form id="search-bar-form" noValidate={true} onSubmit={handleSubmit}>
+        <Form className="search-bar-form" noValidate={true} onSubmit={handleSubmit}>
             <Form.Group className="search-form-group text-input-group">
                 <TextInputFilter
-                    disabled={isSearching}
                     value={filters.text}
                     onChange={handleFilterChange}
                     onSubmit={handleSubmit}
@@ -81,14 +85,15 @@ export default function SearchBar({ isSearching, onSearch }) {
             <Form.Group className="search-form-group search-actions-group">
                 <div className="search-filters-toggle-box">
                     <Button
+                        className="color-blue"
                         onClick={() => setExpandedOptions(!expandedOptions)}
                         variant="link">
-                        {t(`searchBar.${expandedOptions ? 'less' : 'more'}FiltersButton`)}
+                        {`${t(`searchBar.${expandedOptions ? 'less' : 'more'}FiltersButton`)} (${Object.entries(filters).filter(([key, value]) => key !== 'text' && value).length})`}
                         <FontAwesomeIcon className="append" icon={expandedOptions ? faAngleUp : faAngleDown} />
                     </Button>
                 </div>
                 <Button
-                    className="search-btn"
+                    className="search-btn border-color-blue bg-color-blue"
                     disabled={isSearching}
                     variant="primary"
                     type="submit">
