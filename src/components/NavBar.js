@@ -40,6 +40,10 @@ export default function NavBar() {
                         <FontAwesomeIcon className="icon" icon={faPlusCircle} />
                         {t('document.add')}
                     </Link>
+                    <Link to="/documents2/" className="dropdown-item">
+                        <FontAwesomeIcon className="icon" icon={faPlusCircle} />
+                        {t('document.add')}2
+                    </Link>
                     <Link to="/" className="dropdown-item">
                         <FontAwesomeIcon className="icon" icon={faSearch} />
                         {t('document.search')}

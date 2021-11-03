@@ -1,7 +1,6 @@
 .search-page {
     display: flex;
     flex-direction: column-reverse;
-    min-height: calc(100vh - 56px);
     width: 95%;
 }
 

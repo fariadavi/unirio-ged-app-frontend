@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimesCircle } from '@fortawesome/free-regular-svg-icons'
 import '../../style/utils/Select.css'
 
-const Select = ({ className, name, label, placeholder, value, onChange, options, textProperty, idProperty }) => {
+const Select = ({ className, name, label, placeholder, value, onChange, options, textProperty, idProperty, required, isValid, isInvalid, children }) => {
     const { t } = useTranslation();
 
     return (
@@ -13,11 +13,13 @@ const Select = ({ className, name, label, placeholder, value, onChange, options,
             {label ? <Form.Label>{label}</Form.Label> : ''}
             <div className="select-wrapper">
                 <Form.Select
-                    required
+                    required={required}
                     name={name}
                     onChange={e => onChange(name, e.target.value)}
+                    isValid={isValid}
+                    isInvalid={isInvalid}
                     value={value}>
-                    <option style={{ display: 'none' }}>
+                    <option key={0} style={{ display: 'none' }}>
                         {placeholder}
                     </option>
                     {options.length
@@ -31,10 +33,11 @@ const Select = ({ className, name, label, placeholder, value, onChange, options,
                         : <option key={0} value={0}>{t('document.form.category.zeroOptions')}</option>
                     }
                 </Form.Select>
-                <input type="checkbox" className="select-has-value" checked={value && value > 0} />
+                <input type="checkbox" className="select-has-value" checked={value && value > 0} readOnly />
                 <span className="clear-input" onClick={() => onChange(name, 0)}>
                     <FontAwesomeIcon icon={faTimesCircle} />
                 </span>
+                {children}
             </div>
         </div>
     )
