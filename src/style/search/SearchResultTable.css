@@ -1,0 +1,71 @@
+.docs-table {
+    overflow-x: auto;
+    flex-direction: column;
+    display: flex;
+    width: 100%;
+}
+
+.docs-table .center {
+    text-align: center;
+}
+
+.docs-table td p {
+    margin: 0;
+    max-width: 100%;
+}
+    
+.docs-table .truncated td p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.docs-table td.actions {
+    width: 10rem;
+}
+
+.docs-table td.title {
+    max-width: calc(40vw - 22rem);
+}
+
+.docs-table td.summary {
+    max-width: calc(40vw - 22rem);
+}
+
+.docs-table td.category {
+    max-width: calc(40vw - 22rem);
+}
+
+.docs-table td.date {
+    width: 7rem;
+}
+
+.docs-table td.status {
+    max-width: 7em;
+}
+
+.docs-table td.user {
+    max-width: 8em;
+}
+
+.docs-table td.actions span,
+.docs-table td.actions a {
+    height: 1.5rem;
+    width: 1.5rem;
+    display: inline-block;
+    text-align: center;
+    cursor: pointer;
+}
+
+.docs-table td.actions .icon {
+    color: #343a40;
+}
+
+.tablePagination .page-item.active .page-link {
+    background-color: #027bc2;
+    border-color: #027bc2;
+}
+
+.tablePagination .page-item .page-link {
+    color: #027bc2;
+}

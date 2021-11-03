@@ -1,0 +1,76 @@
+.search-bar-form {
+    width: 60vw;
+}
+
+.search-form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: .5rem;
+}
+
+.filters-group {
+    max-height: 8rem;
+    opacity: 1;
+    transition: max-height .25s ease-out, opacity .25s ease-out;
+}
+
+.filters-group.hide {
+    max-height: 0px;
+    opacity: 0;
+}
+
+.filters-group .category-filter {
+    max-width: 70%;
+}
+
+.filters-group .custom-input-group {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: baseline;
+    margin: .25rem;
+    width: 100%;
+}
+
+.filters-group .custom-input-group label {
+    margin-right: .5rem;
+    white-space: nowrap;
+}
+
+.filters-group .custom-input-group.date-filter .date-wrapper {
+    display: inline-flex;
+    margin-right: .5rem;
+}
+
+.search-actions-group {
+    position: relative;
+    justify-content: space-evenly;
+}
+
+.search-actions-group .search-btn {
+    z-index: 10;
+    min-width: 12rem;
+}
+
+.search-filters-toggle-box {
+    background-color: #fff;
+    position: absolute;
+    top: 0;
+    height: 100px;
+    width: 100%;
+}
+
+.search-filters-toggle-box .btn {
+    text-decoration: none;
+}
+
+.search-filters-toggle-box .btn:focus {
+    text-decoration: none;
+    box-shadow: none;
+}
+
+.search-filters-toggle-box .btn .append {
+    margin-left: .5em;
+    vertical-align: middle;
+}

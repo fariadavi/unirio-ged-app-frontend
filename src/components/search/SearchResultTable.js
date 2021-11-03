@@ -7,9 +7,10 @@ import { Link } from 'react-router-dom'
 import { Table } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faDownload, faEdit, faFilePdf, faFileAlt, faTrash } from '@fortawesome/free-solid-svg-icons'
-import '../../style/search/Search.css'
+import { faCaretSquareDown, faCaretSquareUp } from '@fortawesome/free-regular-svg-icons'
+import '../../style/search/SearchResultTable.css'
 
-export default function SearchResultTable({ documents, currentPage, numPages, deleteDocument, onSearch }) {
+export default function SearchResultTable({ documents, currentPage, numPages, deleteDocument, onSearch, expandResult }) {
     const { t } = useTranslation();
 
     const getFileIcon = mediaType => {
@@ -43,24 +44,27 @@ export default function SearchResultTable({ documents, currentPage, numPages, de
     }
 
     return (
-        <div className={`flex-column`} style={{ width: '100%' }}>
+        <div className="docs-table">
             <Table striped bordered hover>
                 <thead>
                     <tr>
                         <th><div className="center">{t('table.actions')}</div></th>
-                        <th width="15%"><div className="center">{t('document.title')}</div></th>
-                        <th width="50%"><div className="center">{t('document.summary')}</div></th>
-                        <th width="15%"><div className="center">{t('document.category')}</div></th>
+                        <th><div className="center">{t('document.title')}</div></th>
+                        <th><div className="center">{t('document.summary')}</div></th>
+                        <th><div className="center">{t('document.category')}</div></th>
                         <th><div className="center">{t('document.date')}</div></th>
                         <th><div className="center">{t('document.status')}</div></th>
                         <th><div className="center">{t('document.registeredBy')}</div></th>
                     </tr>
                 </thead>
                 <tbody>
-                    {documents.map((item, index) => (
-                        <tr key={item.id}>
-                            <td>
-                                <div className="actions center">
+                    {documents.map(item => (
+                        <tr key={item.id} className={item['expand'] ? '' : 'truncated'}>
+                            <td className="actions">
+                                <div className="center">
+                                    <span onClick={() => expandResult(item.id)}>
+                                        <FontAwesomeIcon className="icon" icon={item['expand'] ? faCaretSquareUp : faCaretSquareDown} />
+                                    </span>
                                     <span onClick={() => getDocumentFile(item.id, item.fileName, false)}>
                                         <FontAwesomeIcon className="icon" icon={getFileIcon(item.mediaType)} />
                                     </span>
@@ -75,12 +79,13 @@ export default function SearchResultTable({ documents, currentPage, numPages, de
                                     </span>
                                 </div>
                             </td>
-                            <td><div>{item.title}</div></td>
-                            <td><div className="heightOverflow">{item.summary}</div></td>
-                            <td><div className="center">{item.fullCategoryHierarchy}</div></td>
-                            <td><div className="center">{item.formattedDate}</div></td>
-                            <td><div className="center">{getStatusBadge(item.status)}</div></td>
-                            <td><div className="center">{item.registeredBy}</div></td>
+                            <td className="title"><p>{item.title}</p></td>
+                            <td className="summary"><p>{item.summary}</p>
+                            </td>
+                            <td className="category"><p className="center">{item.fullCategoryHierarchy}</p></td>
+                            <td className="date"><p className="center">{item.formattedDate}</p></td>
+                            <td className="status"><p className="center">{getStatusBadge(item.status)}</p></td>
+                            <td className="user"><p className="center">{item.registeredBy}</p></td>
                         </tr>
                     ))}
                 </tbody>

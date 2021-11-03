@@ -2,19 +2,22 @@ import React from 'react'
 import { Form } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimesCircle } from '@fortawesome/free-regular-svg-icons'
+import '../../style/utils/DatePicker.css'
 
-export default function DatePicker({ name, min, max, value, onChange, onClear }) {
-    return (
-        <div className="dateFilter">
+const DatePicker = ({ className, name, label, min, max, value, onChange }) =>
+    <div className={`custom-date-picker ${className}`}>
+        {label ? <Form.Label>{label}</Form.Label> : ''}
+        <div className="date-wrapper">
             <Form.Control type="date" name={name} required
-                onChange={onChange}
+                onChange={e => onChange(name, e.target.value)}
                 min={min}
                 max={max}
                 value={value}
             />
-            <span className="clear-input" onClick={onClear}>
+            <span className="clear-input" onClick={() => onChange(name, '')}>
                 <FontAwesomeIcon icon={faTimesCircle} />
             </span>
         </div>
-    )
-}
+    </div>
+
+export default DatePicker;

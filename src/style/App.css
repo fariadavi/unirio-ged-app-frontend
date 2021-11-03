@@ -1,3 +1,34 @@
+body {
+    overflow-y: scroll;
+}
+
 .capitalize {
     text-transform: capitalize;
+}
+
+.faSpin {
+    animation: spin infinite .8s linear;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Colors */
+
+.bg-color-blue {
+    background-color: #027bc2 !important;
+}
+
+.border-color-blue {
+    border-color: #027bc2 !important;
+}
+
+.color-blue {
+    color: #027bc2 !important;
 }

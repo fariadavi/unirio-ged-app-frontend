@@ -1,3 +1,8 @@
+.navbar + * {
+    margin: 56px auto 0;
+    min-height: calc(100vh - 56px);
+}
+
 .navbar-dark .navbar-brand a {
     color: #fff;
 }
