@@ -9,9 +9,11 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons'
 
 export const TextInputFilter = ({ disabled, value, onChange, onSubmit }) =>
     <InputGroup>
-        <InputGroup.Text>
-            <FontAwesomeIcon icon={faSearch} />
-        </InputGroup.Text>
+        <InputGroup.Prepend>
+            <InputGroup.Text id="inputGroupPrepend">
+                <FontAwesomeIcon icon={faSearch} />
+            </InputGroup.Text>
+        </InputGroup.Prepend>
         <Form.Control
             id="textInput"
             disabled={disabled}

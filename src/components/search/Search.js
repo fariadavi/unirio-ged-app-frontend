@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { UserContext } from '../../contexts/UserContext'
 import { useTranslation } from 'react-i18next'
 import rq from '../../services/api'
@@ -9,6 +9,7 @@ import '../../style/search/Search.css'
 
 export default function Search() {
     const { t } = useTranslation();
+    const tableRef = useRef(null);
     const { department } = useContext(UserContext);
     const [isSearching, setSearching] = useState(false);
     const [isSearchSuccess, setSearchSuccess] = useState(false);
@@ -16,7 +17,7 @@ export default function Search() {
     const [currentQuery, setCurrentQuery] = useState('');
     const [currentQueryString, setCurrentQueryString] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-    const [pageSize] = useState(2);
+    const [pageSize] = useState(10);
     const [totalResults, setTotalResults] = useState(0);
 
     const searchDocs = (queryString, filters) => {
@@ -33,7 +34,17 @@ export default function Search() {
 
         rq(url, { method: "GET" }
         ).then(res => { if (res.ok) { setCurrentQuery(url); return res.json() } else { window.alert('Error searching documents') } }
-        ).then(result => { if (result) { setCurrentPage(result.page || 0); setTotalResults(result.totalHits || 0); setDocs(result.results || []); setSearchSuccess(true); } }
+        ).then(result => {
+            if (result) {
+                setCurrentPage(result.page || 0);
+                setTotalResults(result.totalHits || 0);
+                setDocs(result.results || []);
+                setSearchSuccess(true);
+
+                if (result.totalHits)
+                    tableRef.current.scrollIntoView({ block: 'start', behavior: 'smooth' });
+            }
+        }
         ).catch(err => { setSearchSuccess(false); window.alert(t('search.error')); }
         ).finally(() => setSearching(false));
     }
@@ -43,7 +54,17 @@ export default function Search() {
 
         rq(`${currentQuery}&page=${page}&pageSize=${pageSize}`, { method: "GET" }
         ).then(res => { if (res.ok) { return res.json() } else { window.alert('Error searching documents') } }
-        ).then(result => { if (result) { setCurrentPage(result.page || 0); setTotalResults(result.totalHits || 0); setDocs(result.results || []); setSearchSuccess(true); } }
+        ).then(result => {
+            if (result) {
+                setCurrentPage(result.page || 0);
+                setTotalResults(result.totalHits || 0);
+                setDocs(result.results || []);
+                setSearchSuccess(true);
+
+                if (result.totalHits)
+                    tableRef.current.scrollIntoView({ block: 'start', behavior: 'smooth' });
+            }
+        }
         ).catch(err => { setSearchSuccess(false); window.alert(t('search.error')); }
         ).finally(() => setSearching(false));
     }
@@ -72,7 +93,15 @@ export default function Search() {
             <div className={`search-result ${isSearchSuccess ? 'active' : ''}`}>
                 <div>
                     {isSearchSuccess && docs.length
-                        ? <SearchResultTable documents={docs} currentPage={currentPage} numPages={Math.ceil(totalResults / pageSize)} deleteDocument={handleDelete} onSearch={searchPage} expandResult={expandResult} />
+                        ? <SearchResultTable
+                            refProp={tableRef}
+                            documents={docs}
+                            currentPage={currentPage}
+                            numPages={Math.ceil(totalResults / pageSize)}
+                            deleteDocument={handleDelete}
+                            onSearch={searchPage}
+                            expandResult={expandResult}
+                        />
                         : isSearchSuccess && !docs.length
                             ? <NoResultMessage currentQueryString={currentQueryString} />
                             : ''

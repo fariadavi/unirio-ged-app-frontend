@@ -10,7 +10,7 @@ import { faDownload, faEdit, faFilePdf, faFileAlt, faTrash } from '@fortawesome/
 import { faCaretSquareDown, faCaretSquareUp } from '@fortawesome/free-regular-svg-icons'
 import '../../style/search/SearchResultTable.css'
 
-export default function SearchResultTable({ documents, currentPage, numPages, deleteDocument, onSearch, expandResult }) {
+export default function SearchResultTable({ refProp, documents, currentPage, numPages, deleteDocument, onSearch, expandResult }) {
     const { t } = useTranslation();
 
     const getFileIcon = mediaType => {
@@ -44,7 +44,7 @@ export default function SearchResultTable({ documents, currentPage, numPages, de
     }
 
     return (
-        <div className="docs-table">
+        <div ref={refProp} className="docs-table">
             <Table striped bordered hover>
                 <thead>
                     <tr>
