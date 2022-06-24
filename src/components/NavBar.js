@@ -25,7 +25,7 @@ export default function NavBar() {
         <Navbar fixed="top" bg="dark" variant="dark" expand="sm">
             <Navbar.Brand>
                 <Link to="/">
-                    <img height='28px' alt='' src='/images/logo_unirio.svg'  style={{ margin: '-6px 6px 0 0' }}/>
+                    <img height='28px' alt='' src='/unirio-ged-app-frontend/images/logo_unirio.svg'  style={{ margin: '-6px 6px 0 0' }}/>
                     UNIRIO GED App 
                 </Link>
             </Navbar.Brand>
@@ -86,7 +86,7 @@ export default function NavBar() {
                      }>
                         { languageList.map((lang, index) =>
                             <NavDropdown.Item key={index} onClick={() => { handleSwitchLanguage(lang) }} className={`${language === lang ? 'active' : '' }`}>
-                                <img className="icon flag" alt={t(`language.${lang}.fullName`)} src={`/images/${lang}.svg`}/>
+                                <img className="icon flag" alt={t(`language.${lang}.fullName`)} src={`/unirio-ged-app-frontend/images/${lang}.svg`}/>
                                 <span>{t(`language.${lang}.shortName`)}</span>
                             </NavDropdown.Item>
                         )}
