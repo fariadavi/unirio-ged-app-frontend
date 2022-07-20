@@ -88,24 +88,49 @@ const enUS = {
     'user.name': 'User Name',
     'user.email': 'Email',
 
+    // user management
+    'user.management.title': 'Manage Users',
+    'user.management.invite.title': 'Invite User',
+    'user.management.department-permissions.title': 'Manage Department Permissions',
+    'user.management.system-permissions.title': 'Manage System Permissions',
+    
+    // user invite
+    'user.management.invite.placeholder': 'Enter user mail',
+    'user.management.invite.validation.invalidEmailFormat': 'Invalid email format',
+    'user.management.invite.validation.invalidDomain': 'Email must belong to @uniriotec.br or @edu.unirio.br',
+    'user.management.invite.button': 'Send Invite',
+
     // user table
-    'user.table.title': 'Manage Users',
+    'user.table.headers.status': 'Status',
     'user.table.headers.username': '$t(user.name)',
     'user.table.headers.email': '$t(user.email)',
-    'user.table.headers.permission.1': 'Search documents',
-    'user.table.headers.permission.2': 'Add documents',
-    'user.table.headers.permission.3': 'Edit other users\' documents',
-    'user.table.headers.permission.4': 'Delete other users\' documents',
-    'user.table.headers.permission.5': 'Invite users',
-    'user.table.headers.permission.6': 'Manage user permissions',
-    'user.table.headers.permission.7': 'Manage categories',
+    'user.table.headers.permission.search_docs': 'Search documents',
+    'user.table.headers.permission.add_docs': 'Add documents',
+    'user.table.headers.permission.edit_docs_others': 'Edit other users\' documents',
+    'user.table.headers.permission.delete_docs_others': 'Delete other users\' documents',
+    'user.table.headers.permission.invite_users': 'Invite users',
+    'user.table.headers.permission.manage_categories': 'Manage categories',
+    'user.table.headers.permission.manage_dept_perm': 'Manage department permissions',
+    'user.table.headers.permission.manage_system_perm': 'Manage system permissions',
+    'user.table.headers.permission.manage_departments': 'Manage departments',
     'user.table.filters.text.username': 'Filter by user name',
     'user.table.filters.text.email': 'Filter by email',
     'user.table.filters.boolean.y': '$t(yes)',
     'user.table.filters.boolean.n': '$t(no)',
-
-    // ?
-    'user.invite': 'Invite new user',
+    'user.table.filters.status.y': 'Active',
+    'user.table.filters.status.n': 'Pending',
+    'user.table.headers.buttons.invite': 'Invite user',
+    'user.table.headers.buttons.filter': 'Filter users',
+    'user.table.headers.buttons.permissions.batch_edit': 'Edit users permissions in batch',
+    'user.table.headers.buttons.permissions.batch_edit.confirm': 'Confirm',
+    'user.table.headers.buttons.permissions.batch_edit.cancel': 'Cancel',
+    'user.table.filters.buttons.clear': 'Clear all filters',
+    'user.table.data.status.y': 'Active',
+    'user.table.data.status.n': 'Pending',
+    'user.table.data.buttons.permissions.edit': 'Edit user permissions',
+    'user.table.data.buttons.permissions.edit.confirm': 'Confirm',
+    'user.table.data.buttons.permissions.edit.cancel': 'Cancel',
+    'user.table.data.buttons.user.delete': 'Remove user from this department',
 }
 
 export default enUS;

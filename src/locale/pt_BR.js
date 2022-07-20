@@ -88,24 +88,49 @@ const ptBR = {
     'user.name': 'Nome de usuário',
     'user.email': 'Email',
 
+    // user management
+    'user.management.title': 'Gerenciar Usuários',
+    'user.management.invite.title': 'Convidar Usuário',
+    'user.management.department-permissions.title': 'Gerenciar Permissões de Departamento',
+    'user.management.system-permissions.title': 'Gerenciar Permissões de Sistema',
+    
+    // user invite
+    'user.management.invite.placeholder': 'Entre com o email do usuário',
+    'user.management.invite.validation.invalidEmailFormat': 'Email com formato inválido',
+    'user.management.invite.validation.invalidDomain': 'Email deve pertencer às organizações @uniriotec.br ou @edu.unirio.br',
+    'user.management.invite.button': 'Enviar convite',
+
     // user table
-    'user.table.title': 'Gerenciar Usuários',
+    'user.table.headers.status': 'Status',
     'user.table.headers.username': '$t(user.name)',
     'user.table.headers.email': '$t(user.email)',
-    'user.table.headers.permission.1': 'Procurar documentos',
-    'user.table.headers.permission.2': 'Adicionar documentos',
-    'user.table.headers.permission.3': 'Editar documentos de outros usuários',
-    'user.table.headers.permission.4': 'Excluir documentos de outros usuários',
-    'user.table.headers.permission.5': 'Convidar usuários',
-    'user.table.headers.permission.6': 'Gerenciar permissões de usuários',
-    'user.table.headers.permission.7': 'Gerenciar categorias',
+    'user.table.headers.permission.search_docs': 'Procurar documentos',
+    'user.table.headers.permission.add_docs': 'Adicionar documentos',
+    'user.table.headers.permission.edit_docs_others': 'Editar documentos de outros usuários',
+    'user.table.headers.permission.delete_docs_others': 'Excluir documentos de outros usuários',
+    'user.table.headers.permission.invite_users': 'Convidar usuários',
+    'user.table.headers.permission.manage_categories': 'Gerenciar categorias',
+    'user.table.headers.permission.manage_dept_perm': 'Gerenciar permissões de departamento',
+    'user.table.headers.permission.manage_system_perm': 'Gerenciar permissões de sistema',
+    'user.table.headers.permission.manage_departments': 'Gerenciar departamentos',
     'user.table.filters.text.username': 'Filtrar por nome de usuário',
     'user.table.filters.text.email': 'Filtrar por email',
     'user.table.filters.boolean.y': '$t(yes)',
     'user.table.filters.boolean.n': '$t(no)',
-
-    // ?
-    'user.invite': 'Convidar novo usuário',
+    'user.table.filters.status.y': 'Ativo',
+    'user.table.filters.status.n': 'Pendente',
+    'user.table.headers.buttons.invite': 'Convidar usuário',
+    'user.table.headers.buttons.filter': 'Filtrar usuários',
+    'user.table.headers.buttons.permissions.batch_edit': 'Editar permissões dos usuários',
+    'user.table.headers.buttons.permissions.batch_edit.confirm': 'Confirmar',
+    'user.table.headers.buttons.permissions.batch_edit.cancel': 'Cancelar',
+    'user.table.filters.buttons.clear': 'Limpar todos os filtros',
+    'user.table.data.status.y': 'Ativo',
+    'user.table.data.status.n': 'Pendente',
+    'user.table.data.buttons.permissions.edit': 'Editar permissões do usuário',
+    'user.table.data.buttons.permissions.edit.confirm': 'Confirmar',
+    'user.table.data.buttons.permissions.edit.cancel': 'Cancelar',
+    'user.table.data.buttons.user.delete': 'Remover usuário deste departamento',
 }
 
 export default ptBR;
