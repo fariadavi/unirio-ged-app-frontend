@@ -4,7 +4,7 @@ import NavBar from './NavBar'
 import Search from './search/Search'
 import PageNotFound from './invalid/PageNotFound';
 import Categories from './categories/Categories'
-import Users from './permissions/Users'
+import Users from './users/Users'
 import DocumentDetails from './documents/DocumentDetails'
 
 export default function Home() {
