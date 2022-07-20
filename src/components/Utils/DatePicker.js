@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimesCircle } from '@fortawesome/free-regular-svg-icons'
 import '../../style/utils/DatePicker.css'
 
-const DatePicker = ({ className, name, label, min, max, value, onChange }) =>
+const DatePicker = ({ className = '', name, label, min, max, value, onChange }) =>
     <div className={`custom-date-picker ${className}`}>
         {label ? <Form.Label>{label}</Form.Label> : ''}
         <div className="date-wrapper">

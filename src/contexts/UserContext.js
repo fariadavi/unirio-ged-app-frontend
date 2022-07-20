@@ -1,6 +1,6 @@
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
-import rq from '../services/api.js'
-import { AuthContext } from '../contexts/AuthContext'
+import rq from '../services/api.js';
+import { AuthContext } from '../contexts/AuthContext';
 
 const UserContext = createContext();
 

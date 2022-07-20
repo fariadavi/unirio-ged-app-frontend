@@ -12,7 +12,7 @@ import '../style/NavBar.css'
 export default function NavBar() {
     const { t, i18n } = useTranslation();
     const { user, department, changeDepartment, logoutUser } = useContext(UserContext);
-    const [ language, setLanguage ] = useState(getUserLanguage());
+    const [language, setLanguage] = useState(getUserLanguage());
     const languageList = Object.keys(i18n.store.data)
 
     useEffect(() => {
@@ -26,7 +26,7 @@ export default function NavBar() {
         <Navbar fixed="top" bg="dark" variant="dark" expand="sm">
             <Navbar.Brand>
                 <Link to="/">
-                    <img height='28px' alt='' src='/unirio-ged-app-frontend/images/logo_unirio.svg'  style={{ margin: '-6px 6px 0 0' }}/>
+                    <img height='28px' alt='' src='/unirio-ged-app-frontend/images/logo_unirio.svg' style={{ margin: '-6px 6px 0 0' }} />
                     UNIRIO GED App 
                 </Link>
             </Navbar.Brand>
@@ -82,9 +82,9 @@ export default function NavBar() {
                             <FontAwesomeIcon icon={faLanguage} />
                         </>
                      }>
-                        { languageList.map((lang, index) =>
-                            <NavDropdown.Item key={index} onClick={() => { handleSwitchLanguage(lang) }} className={`${language === lang ? 'active' : '' }`}>
-                                <img className="icon flag" alt={t(`language.${lang}.fullName`)} src={`/unirio-ged-app-frontend/images/${lang}.svg`}/>
+                        {languageList.map((lang, index) =>
+                            <NavDropdown.Item key={index} onClick={() => { handleSwitchLanguage(lang) }} className={`${language === lang ? 'active' : ''}`}>
+                                <img className="icon flag" alt={t(`language.${lang}.fullName`)} src={`/unirio-ged-app-frontend/images/${lang}.svg`} />
                                 <span>{t(`navbar.language.${lang}.shortName`)}</span>
                             </NavDropdown.Item>
                         )}
@@ -97,8 +97,8 @@ export default function NavBar() {
                             <FontAwesomeIcon icon={faExchangeAlt} />
                         </>
                     }>
-                        { (user ? user.departments : []).map(dept =>
-                            <NavDropdown.Item key={dept.id} onClick={() => { changeDepartment(dept.id) }} className={`${dept.id === user?.currentDepartment?.id ? 'active' : '' }`}>
+                        {(user ? user.departments : []).map(dept =>
+                            <NavDropdown.Item key={dept.id} onClick={() => { changeDepartment(dept.id) }} className={`${dept.id === user?.currentDepartment?.id ? 'active' : ''}`}>
                                 {`${dept.name} (${dept.acronym})`}
                             </NavDropdown.Item>
                         )}
