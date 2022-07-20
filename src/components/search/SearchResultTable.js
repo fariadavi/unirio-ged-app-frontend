@@ -1,8 +1,8 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import rq from '../../services/api'
-import SearchResultTablePagination from './SearchResultTablePagination'
-import { getStatusBadge } from '../Utils/StatusBadge'
+import TablePagination from '../utils/TablePagination'
+import { getStatusBadge } from '../utils/StatusBadge'
 import { Link } from 'react-router-dom'
 import { Table } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -90,7 +90,7 @@ export default function SearchResultTable({ refProp, documents, currentPage, num
                     ))}
                 </tbody>
             </Table>
-            <SearchResultTablePagination numPages={numPages} activePage={currentPage} onSearch={onSearch} />
+            <TablePagination numPages={numPages} activePage={currentPage} onSearch={onSearch} />
         </div>
     )
 }

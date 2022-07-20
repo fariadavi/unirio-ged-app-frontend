@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Pagination } from 'react-bootstrap'
 
-export default function SearchResultTablePagination({ numPages, activePage, onSearch }) {
+export default function TablePagination({ numPages, activePage, onSearch }) {
     const [paginationItems, setPaginationItems] = useState([]);
 
     useEffect(() => {

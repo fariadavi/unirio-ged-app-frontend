@@ -1,8 +1,6 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { UserContext } from '../../contexts/UserContext'
-import rq from '../../services/api'
-import DatePicker from '../Utils/DatePicker'
-import Select from '../Utils/Select'
+import React from 'react'
+import DatePicker from '../utils/DatePicker'
+import CategorySelect from '../utils/CategorySelect'
 import { Form, InputGroup } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
@@ -24,26 +22,15 @@ export const TextInputFilter = ({ disabled, value, onChange, onSubmit }) =>
         />
     </InputGroup>
 
-export const CategoryFilter = ({ label, onChange, value, placeholder }) => {
-    const [categories, setCategories] = useState([]);
-    const { department } = useContext(UserContext);
-
-    useEffect(() => {
-        rq('/categories', { method: 'GET' })
-            .then(res => { if (res.ok) return res.json() })
-            .then(cats => setCategories(cats));
-    }, [department]);
-
-    return <Select
-        label={label}
-        className="custom-input-group category-filter"
-        placeholder={placeholder}
-        name="category"
-        onChange={onChange}
-        options={categories}
-        value={value}
-        textProperty="fullName"
-    />
+export const CategoryFilter = ({ label, onChange, value }) => {
+    return (
+        <CategorySelect
+            className="custom-input-group category-filter"
+            label={label}
+            onChange={onChange}
+            value={value}
+        />
+    )
 }
 
 export const MinMaxDateFilter = ({ labelFromDate, labelUntilDate, onChange, minDateValue, maxDateValue }) =>
