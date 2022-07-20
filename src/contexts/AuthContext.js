@@ -1,4 +1,4 @@
-import React, { createContext, useState } from 'react';
+import React, { useCallback, createContext, useState } from 'react';
 import { getLocalToken, setLocalToken, removeLocalToken } from '../services/auth'
 import rq from '../services/api.js'
 
@@ -8,14 +8,14 @@ function AuthProvider({ children }) {
     const [token, setToken] = useState(getLocalToken());
     const [authLoading, setAuthLoading] = useState(false);
 
-	const handleAuthLogout = () => {
+	const handleAuthLogout = useCallback(() => {
 		setAuthLoading(true);
 
 		setToken(null);
 		removeLocalToken();
 
 		setAuthLoading(false);
-	}
+	}, [])
 
 	const handleAuthentication = async googleData => {
 		setAuthLoading(true);

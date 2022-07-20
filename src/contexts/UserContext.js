@@ -58,8 +58,7 @@ function UserProvider({ children }) {
     useEffect(() => {
         if (!user && token)
             setLoggedUserInfo();
-        // eslint-disable-next-line
-    }, [user, token]);
+    }, [user, token, setLoggedUserInfo]);
 
     return (
         <UserContext.Provider value={{ user, department: user?.currentDepartment, userLoading, checkPermission, setLoggedUserInfo, changeDepartment, logoutUser }}>
