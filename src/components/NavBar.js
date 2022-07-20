@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { UserContext } from '../contexts/UserContext'
 import { Link } from 'react-router-dom'
+import ReactTooltip from 'react-tooltip';
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap'
 import { getUserLanguage, setUserLanguage } from '../services/lang'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -69,7 +70,8 @@ export default function NavBar() {
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="ml-auto">
                     <div className="nav-link menu-user-box">
-                        <span>{`${user?.firstName} ${user?.surname}`}</span>
+                        <span data-tip={user?.email}>{`${user?.firstName} ${user?.surname}`}</span>
+                        <ReactTooltip />
                         <FontAwesomeIcon icon={faUser} />
                     </div>
                 </Nav>
