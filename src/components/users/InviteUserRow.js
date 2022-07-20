@@ -3,7 +3,7 @@ import { UserManagementContext } from '../../contexts/UserManagementContext'
 import { Form } from 'react-bootstrap'
 import ReactTooltip from 'react-tooltip'
 import { useTranslation } from 'react-i18next'
-import { validateField } from '../utils/Validation'
+import { validateField } from '../util/Validation'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons'
 

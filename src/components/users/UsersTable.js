@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBan, faCheck, faCheckCircle, faEdit, faPen, faFilter, faQuestion, faTrash, faUserPlus } from '@fortawesome/free-solid-svg-icons'
 import InviteUserRow from './InviteUserRow'
 import UsersTableFilterRow from './UsersTableFilterRow'
-import TablePagination from '../utils/TablePagination'
+import TablePagination from '../util/TablePagination'
 import '../../style/users/UsersTable.css'
 
 const UsersTable = ({ permissions, disableDelete = false }) => {

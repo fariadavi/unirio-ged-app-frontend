@@ -1,6 +1,6 @@
 import React from 'react'
-import DatePicker from '../utils/DatePicker'
-import CategorySelect from '../utils/CategorySelect'
+import DatePicker from '../util/DatePicker'
+import CategorySelect from '../util/CategorySelect'
 import { Form, InputGroup } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
