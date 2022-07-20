@@ -1,27 +1,27 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { UserManagementProvider } from '../../contexts/UserManagementContext'
 import { useTranslation } from 'react-i18next'
 import rq from '../../services/api'
 import UsersTable from './UsersTable'
 import '../../style/users/Users.css'
 
-export default function Users() {
+export default function Users({ permissionType }) {
     const { t } = useTranslation();
-    const [deptPermissions, setDeptPermissions] = useState([]);
+    const [permissions, setPermissions] = useState([]);
 
-    const getPermissions = async () => {
-        const departmentPermissionsRes = await rq('/permissions/department', { method: 'GET' });
-        if (departmentPermissionsRes.ok)
-            setDeptPermissions(await departmentPermissionsRes.json());
-    }
+    const getPermissions = useCallback(async () => {
+        const res = await rq(`/permissions/${permissionType}`, { method: 'GET' });
+        if (res.ok)
+            setPermissions(await res.json());
+    }, [permissionType])
 
-    useEffect(() => getPermissions(), []);
+    useEffect(() => getPermissions(), [getPermissions]);
 
     return (
         <UserManagementProvider>
             <div className="manage-users">
                 <h1>{t('user.management.title')}</h1>
-                <UsersTable permissions={deptPermissions} disableDelete={true} />
+                <UsersTable permissions={permissions} disableDelete={true} />
             </div>
         </UserManagementProvider>
     )

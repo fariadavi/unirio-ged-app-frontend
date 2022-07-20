@@ -12,11 +12,24 @@ export default function Home() {
         <div className="home-container">
             <NavBar />
             <Switch>
-                <Route exact path="/" component={Search} />
-                <Route path="/documents" component={DocumentDetails} />
-                <Route path="/categories" component={Categories} />
-                <Route path="/users" component={Users} />
-                <Route path="*" component={PageNotFound} />
+                <Route exact path="/">
+                    <Search />
+                </Route>
+                <Route path="/documents">
+                    <DocumentDetails />
+                </Route>
+                <Route path="/categories">
+                    <Categories />
+                </Route>
+                <Route path="/users/department">
+                    <Users permissionType="department" />
+                </Route>
+                <Route path="/users/system">
+                    <Users permissionType="system" />
+                </Route>
+                <Route path="*">
+                    <PageNotFound />
+                </Route>
             </Switch>
         </div>
     )

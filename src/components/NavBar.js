@@ -52,29 +52,44 @@ export default function NavBar() {
                         }
                     </NavDropdown>
                 }
-                {checkPermission('MANAGE_CATEGORIES', 'MANAGE_DEPARTMENTS', 'INVITE_USERS', 'MANAGE_DEPT_PERM', 'MANAGE_SYSTEM_PERM')
+                {checkPermission('MANAGE_CATEGORIES', 'INVITE_USERS', 'MANAGE_DEPT_PERM')
                     && <NavDropdown title={
                         <>
                             <FontAwesomeIcon icon={faCogs} />
-                            <span>{t('navbar.management')}</span>
+                            <span>{t('navbar.department')}</span>
                         </>
                     }>
                         {checkPermission('MANAGE_CATEGORIES')
                             && <Link to="/categories" className="dropdown-item">
                                 <FontAwesomeIcon className="icon" icon={faStream} />
-                                {t('navbar.management.category')}
-                            </Link>
-                        }
-                        {checkPermission('MANAGE_DEPARTMENTS')
-                            && <Link to="/departments" className="dropdown-item">
-                                <FontAwesomeIcon className="icon" icon={faHouseUser} />
-                                {t('navbar.management.department')}
+                                {t('navbar.department.category')}
                             </Link>
                         }
                         {checkPermission('INVITE_USERS', 'MANAGE_DEPT_PERM')
-                            && <Link to="/users" className="dropdown-item">
+                            && <Link to="/users/department" className="dropdown-item">
                                 <FontAwesomeIcon className="icon" icon={faUserCog} />
-                                {t('navbar.management.users')}
+                                {t('navbar.department.users')}
+                            </Link>
+                        }
+                    </NavDropdown>
+                }
+                {checkPermission('MANAGE_DEPARTMENTS', 'MANAGE_SYSTEM_PERM')
+                    && <NavDropdown title={
+                        <>
+                            <FontAwesomeIcon icon={faCogs} />
+                            <span>{t('navbar.system')}</span>
+                        </>
+                    }>
+                        {checkPermission('MANAGE_DEPARTMENTS')
+                            && <Link to="/departments" className="dropdown-item">
+                                <FontAwesomeIcon className="icon" icon={faHouseUser} />
+                                {t('navbar.system.department')}
+                            </Link>
+                        }
+                        {checkPermission('MANAGE_SYSTEM_PERM')
+                            && <Link to="/users/system" className="dropdown-item">
+                                <FontAwesomeIcon className="icon" icon={faUserCog} />
+                                {t('navbar.system.users')}
                             </Link>
                         }
                     </NavDropdown>
