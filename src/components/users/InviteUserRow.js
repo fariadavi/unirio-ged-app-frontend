@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { UserManagementContext } from '../../contexts/UserManagementContext'
 import { Form } from 'react-bootstrap'
-import ReactTooltip from 'react-tooltip';
+import ReactTooltip from 'react-tooltip'
 import { useTranslation } from 'react-i18next'
 import { validateField } from '../utils/Validation'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'

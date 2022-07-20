@@ -3,7 +3,7 @@ import { UserContext } from '../../contexts/UserContext'
 import { UserManagementContext } from '../../contexts/UserManagementContext'
 import { useTranslation } from 'react-i18next'
 import rq from '../../services/api'
-import ReactTooltip from 'react-tooltip';
+import ReactTooltip from 'react-tooltip'
 import { Form, Table } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBan, faCheck, faCheckCircle, faEdit, faPen, faFilter, faQuestion, faTrash, faUserPlus } from '@fortawesome/free-solid-svg-icons'
