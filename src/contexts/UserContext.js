@@ -1,6 +1,6 @@
-import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
-import rq from '../services/api.js';
-import { AuthContext } from '../contexts/AuthContext';
+import React, { createContext, useCallback, useContext, useEffect, useState } from 'react'
+import rq from '../services/api.js'
+import { AuthContext } from '../contexts/AuthContext'
 
 const UserContext = createContext();
 
@@ -9,9 +9,11 @@ function UserProvider({ children }) {
     const [user, setUser] = useState();
     const [userLoading, setUserLoading] = useState(false);
 
+    const checkPermission = (...permissions) => permissions.some(p => user.permissions.includes(p));
+
     const setLoggedUserInfo = useCallback(async () => {
         setUserLoading(true);
-        
+
         try {
             const res = await rq('/users/loggedUserInfo', { method: "GET" });
             
@@ -19,7 +21,7 @@ function UserProvider({ children }) {
             
             if (!res.ok)
                 throw new Error(res.status);
-    
+
             setUser(await res.json());
         } catch (err) {
             handleAuthLogout();
@@ -60,7 +62,7 @@ function UserProvider({ children }) {
     }, [user, token]);
 
     return (
-        <UserContext.Provider value={{ user, department: user?.currentDepartment, userLoading, setLoggedUserInfo, changeDepartment, logoutUser }}>
+        <UserContext.Provider value={{ user, department: user?.currentDepartment, userLoading, checkPermission, setLoggedUserInfo, changeDepartment, logoutUser }}>
             {children}
         </UserContext.Provider>
     );

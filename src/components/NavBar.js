@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { UserContext } from '../contexts/UserContext'
 import { Link } from 'react-router-dom'
-import ReactTooltip from 'react-tooltip';
+import ReactTooltip from 'react-tooltip'
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap'
 import { getUserLanguage, setUserLanguage } from '../services/lang'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -11,7 +11,7 @@ import '../style/NavBar.css'
 
 export default function NavBar() {
     const { t, i18n } = useTranslation();
-    const { user, department, changeDepartment, logoutUser } = useContext(UserContext);
+    const { user, department, checkPermission, changeDepartment, logoutUser } = useContext(UserContext);
     const [language, setLanguage] = useState(getUserLanguage());
     const languageList = Object.keys(i18n.store.data)
 
@@ -27,44 +27,58 @@ export default function NavBar() {
             <Navbar.Brand>
                 <Link to="/">
                     <img height='28px' alt='' src='/unirio-ged-app-frontend/images/logo_unirio.svg' style={{ margin: '-6px 6px 0 0' }} />
-                    UNIRIO GED App 
+                    UNIRIO GED App
                 </Link>
             </Navbar.Brand>
             <Nav className="mr-auto">
-                <NavDropdown title={
-                    <>
-                        <FontAwesomeIcon icon={faFileAlt} />
-                        <span>{t('navbar.documents')}</span>
-                    </>
-                }>
-                    <Link to="/documents/" className="dropdown-item">
-                        <FontAwesomeIcon className="icon" icon={faPlusCircle} />
-                        {t('navbar.documents.add')}
-                    </Link>
-                    <Link to="/" className="dropdown-item">
-                        <FontAwesomeIcon className="icon" icon={faSearch} />
-                        {t('navbar.documents.search')}
-                    </Link>
-                </NavDropdown>
-                <NavDropdown title={
-                    <>
-                        <FontAwesomeIcon icon={faCogs} />
-                        <span>{t('navbar.management')}</span>
-                    </>
-                }>
-                    <Link to="/categories" className="dropdown-item">
-                        <FontAwesomeIcon className="icon" icon={faStream} />
-                        {t('navbar.management.category')}
-                    </Link>
-                    <Link to="/departments" className="dropdown-item">
-                        <FontAwesomeIcon className="icon" icon={faHouseUser} />                        
-                        {t('navbar.management.department')}
-                    </Link>
-                    <Link to="/users" className="dropdown-item">
-                        <FontAwesomeIcon className="icon" icon={faUserCog} />
-                        {t('navbar.management.users')}
-                    </Link>
-                </NavDropdown>
+                {checkPermission('ADD_DOCS', 'SEARCH_DOCS')
+                    && <NavDropdown title={
+                        <>
+                            <FontAwesomeIcon icon={faFileAlt} />
+                            <span>{t('navbar.documents')}</span>
+                        </>
+                    }>
+                        {checkPermission('ADD_DOCS')
+                            && <Link to="/documents/" className="dropdown-item">
+                                <FontAwesomeIcon className="icon" icon={faPlusCircle} />
+                                {t('navbar.documents.add')}
+                            </Link>
+                        }
+                        {checkPermission('SEARCH_DOCS')
+                            && <Link to="/" className="dropdown-item">
+                                <FontAwesomeIcon className="icon" icon={faSearch} />
+                                {t('navbar.documents.search')}
+                            </Link>
+                        }
+                    </NavDropdown>
+                }
+                {checkPermission('MANAGE_CATEGORIES', 'MANAGE_DEPARTMENTS', 'INVITE_USERS', 'MANAGE_DEPT_PERM', 'MANAGE_SYSTEM_PERM')
+                    && <NavDropdown title={
+                        <>
+                            <FontAwesomeIcon icon={faCogs} />
+                            <span>{t('navbar.management')}</span>
+                        </>
+                    }>
+                        {checkPermission('MANAGE_CATEGORIES')
+                            && <Link to="/categories" className="dropdown-item">
+                                <FontAwesomeIcon className="icon" icon={faStream} />
+                                {t('navbar.management.category')}
+                            </Link>
+                        }
+                        {checkPermission('MANAGE_DEPARTMENTS')
+                            && <Link to="/departments" className="dropdown-item">
+                                <FontAwesomeIcon className="icon" icon={faHouseUser} />
+                                {t('navbar.management.department')}
+                            </Link>
+                        }
+                        {checkPermission('INVITE_USERS', 'MANAGE_DEPT_PERM')
+                            && <Link to="/users" className="dropdown-item">
+                                <FontAwesomeIcon className="icon" icon={faUserCog} />
+                                {t('navbar.management.users')}
+                            </Link>
+                        }
+                    </NavDropdown>
+                }
             </Nav>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
@@ -76,12 +90,12 @@ export default function NavBar() {
                     </div>
                 </Nav>
                 <Nav>
-                    <NavDropdown title={ 
+                    <NavDropdown title={
                         <>
                             <span>{t('navbar.language')}</span>
                             <FontAwesomeIcon icon={faLanguage} />
                         </>
-                     }>
+                    }>
                         {languageList.map((lang, index) =>
                             <NavDropdown.Item key={index} onClick={() => { handleSwitchLanguage(lang) }} className={`${language === lang ? 'active' : ''}`}>
                                 <img className="icon flag" alt={t(`language.${lang}.fullName`)} src={`/unirio-ged-app-frontend/images/${lang}.svg`} />
