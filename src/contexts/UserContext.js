@@ -15,13 +15,15 @@ function UserProvider({ children }) {
         try {
             const res = await rq('/users/loggedUserInfo', { method: "GET" });
             
+            setUserLoading(false);
+            
             if (!res.ok)
                 throw new Error(res.status);
     
             setUser(await res.json());
-            setUserLoading(false);
         } catch (err) {
             handleAuthLogout();
+            throw new Error(err);
         }
     }, [handleAuthLogout])
 
@@ -34,10 +36,12 @@ function UserProvider({ children }) {
             body: JSON.stringify({ currentDepartment: { id: deptId } })
         });
 
-        if (res.ok)
-            setUser(await res.json());
-
         setUserLoading(false);
+
+        if (!res.ok)
+            throw new Error(res.status);
+        
+        setLoggedUserInfo();
     }
 
     const logoutUser = () => {
@@ -52,7 +56,8 @@ function UserProvider({ children }) {
     useEffect(() => {
         if (!user && token)
             setLoggedUserInfo();
-    }, [user, token, setLoggedUserInfo]);
+        // eslint-disable-next-line
+    }, [user, token]);
 
     return (
         <UserContext.Provider value={{ user, department: user?.currentDepartment, userLoading, setLoggedUserInfo, changeDepartment, logoutUser }}>
