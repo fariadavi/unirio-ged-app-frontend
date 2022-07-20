@@ -6,7 +6,7 @@ export default function PageNotFound() {
     const { t } = useTranslation();
 
     return (
-        <div className="pageNotFound">
+        <div className="page-not-found">
             <h1>{t('pageNotFound.title')}</h1>
             <h2>{t('pageNotFound.subtitle')}</h2>
 

@@ -1,15 +1,22 @@
-.pageNotFound h1 {
+.page-not-found {
+    margin-left: 2rem !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.page-not-found h1 {
     font-size: 10rem;
 }
 
-.pageNotFound h2 {
+.page-not-found h2 {
     font-size: 3rem;
 }
 
-.pageNotFound p.message {
+.page-not-found p.message {
     margin-top: 1rem;
 }
 
-.pageNotFound p.contactUs {
+.page-not-found p.contactUs {
     margin-top: 10rem;
 }

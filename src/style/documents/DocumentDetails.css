@@ -1,7 +1,6 @@
 #docForm {
-    margin: auto;
     width: 100%;
-    max-width: 50rem;
+    max-width: 80rem;
 }
 
 #docForm h1 {
@@ -11,4 +10,28 @@
 select.form-control.is-invalid, 
 .was-validated select.form-control:invalid {
     background-position: right calc(1em + .1875rem) center;
+}
+
+.document-details-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.document-form {
+    width: 70%;
+}
+
+.document-form > * {
+    margin-bottom: 1rem;
+}
+
+.document-form .buttons {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.document-form .buttons button:not(:last-child) {
+    margin-right: .5rem;
 }
