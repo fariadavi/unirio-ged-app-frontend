@@ -2,7 +2,8 @@ const ptBR = {
     // dictionary
     'yes': 'Sim',
     'no': 'Não',
-    'none': 'Nenhuma',
+    'none_male': 'Nenhum',
+    'none_female': 'Nenhuma',
     'document': 'Documento',
     'document_plural': 'Documentos',
     'category': 'Categoria',

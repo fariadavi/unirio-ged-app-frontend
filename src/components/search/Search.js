@@ -10,7 +10,8 @@ import '../../style/search/Search.css'
 export default function Search() {
     const { t } = useTranslation();
     const tableRef = useRef(null);
-    const { department } = useContext(UserContext);
+    const { checkPermission, department } = useContext(UserContext);
+    const [canSearchDocs] = useState(checkPermission('SEARCH_DOCS'));
     const [isSearching, setSearching] = useState(false);
     const [isSearchSuccess, setSearchSuccess] = useState(false);
     const [docs, setDocs] = useState([]);
@@ -91,25 +92,27 @@ export default function Search() {
     return (
         <div className="search-page">
             <div className={`search-result ${isSearchSuccess ? 'active' : ''}`}>
-                <div>
-                    {isSearchSuccess && docs.length
-                        ? <SearchResultTable
-                            refProp={tableRef}
-                            documents={docs}
-                            currentPage={currentPage}
-                            numPages={Math.ceil(totalResults / pageSize)}
-                            deleteDocument={handleDelete}
-                            onSearch={searchPage}
-                            expandResult={expandResult}
-                        />
-                        : isSearchSuccess && !docs.length
-                            ? <NoResultMessage currentQueryString={currentQueryString} />
-                            : ''
-                    }
-                </div>
+                {canSearchDocs &&
+                    <div>
+                        {isSearchSuccess && docs.length
+                            ? <SearchResultTable
+                                refProp={tableRef}
+                                documents={docs}
+                                currentPage={currentPage}
+                                numPages={Math.ceil(totalResults / pageSize)}
+                                deleteDocument={handleDelete}
+                                onSearch={searchPage}
+                                expandResult={expandResult}
+                            />
+                            : isSearchSuccess && !docs.length
+                                ? <NoResultMessage currentQueryString={currentQueryString} />
+                                : ''
+                        }
+                    </div>
+                }
             </div>
             <div className="search-bar">
-                <SearchBar isSearching={isSearching} onSearch={searchDocs} />
+                {canSearchDocs && <SearchBar isSearching={isSearching} onSearch={searchDocs} />}
             </div>
             <div className="search-header">
                 <h1>UNIRIO GED App</h1>

@@ -122,10 +122,10 @@ export default function NavBar() {
                 <Nav>
                     <NavDropdown title={
                         <>
-                            <span>{`${t('navbar.department')}: ${department?.acronym}`}</span>
+                            <span>{`${t('navbar.department')}: ${department?.acronym || t('none', { context: 'male' })}`}</span>
                             <FontAwesomeIcon icon={faExchangeAlt} />
                         </>
-                    }>
+                    } disabled={!user?.departments.length}>
                         {(user ? user.departments : []).map(dept =>
                             <NavDropdown.Item key={dept.id} onClick={() => { changeDepartment(dept.id) }} className={`${dept.id === user?.currentDepartment?.id ? 'active' : ''}`}>
                                 {`${dept.name} (${dept.acronym})`}

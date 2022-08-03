@@ -65,7 +65,7 @@ export default function SearchBar({ isSearching, onSearch }) {
                     onChange={handleFilterChange}
                     value={filters.category}
                     placeholder={t('document.form.category.choose')}
-                    unselectOptionLabel={t('none')}
+                    unselectOptionLabel={t('none', { context: 'female' })}
                 />
 
                 <MinMaxDateFilter
