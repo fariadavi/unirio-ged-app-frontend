@@ -8,13 +8,13 @@ import { Form, Table } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBan, faCheck, faCheckCircle, faEdit, faPen, faFilter, faQuestion, faTrash, faUserPlus } from '@fortawesome/free-solid-svg-icons'
 import InviteUserRow from './InviteUserRow'
-import UsersTableFilterRow from './UsersTableFilterRow'
+import UserPermissionsTableFilterRow from './UserPermissionsTableFilterRow'
 import TablePagination from '../util/TablePagination'
 import '../../style/users/UsersTable.css'
 
-const UsersTable = ({ permissions, disableDelete = false }) => {
+const UserPermissionsTable = ({ permissions, canInviteUsers, canEditPermissions, disableDelete = false }) => {
     const { t } = useTranslation();
-    const { checkPermission, department, user, setLoggedUserInfo } = useContext(UserContext);
+    const { department, user, setLoggedUserInfo } = useContext(UserContext);
     const { users, removeUser } = useContext(UserManagementContext);
     const [editingUsers, setEditingUsers] = useState([]);
     const [batchEditPermissions, setBatchEditPermissions] = useState(false);
@@ -156,7 +156,7 @@ const UsersTable = ({ permissions, disableDelete = false }) => {
                             <div className="actions spaced">
                                 {!batchEditPermissions
                                     ? (<>
-                                        {checkPermission('INVITE_USERS')
+                                        {canInviteUsers
                                             ? <span
                                                 className={`icon ${showInviteUserRow ? 'active' : ''}`}
                                                 data-for="inviteUserTooltip"
@@ -169,7 +169,7 @@ const UsersTable = ({ permissions, disableDelete = false }) => {
                                                 <ReactTooltip id="inviteUserTooltip" />
                                             </span>
                                             : <></>}
-                                        {checkPermission('MANAGE_DEPT_PERM')
+                                        {canEditPermissions
                                             ? <span
                                                 data-for="batchEditUserPermissionsTooltip"
                                                 data-tip={t('user.table.headers.buttons.permissions.batch_edit')}
@@ -219,7 +219,7 @@ const UsersTable = ({ permissions, disableDelete = false }) => {
                 </thead>
                 <tbody>
                     {showFilterRow
-                        ? <UsersTableFilterRow
+                        ? <UserPermissionsTableFilterRow
                             filterMap={filterMap}
                             filterUsers={filterUsers}
                             permissions={permissions}
@@ -270,7 +270,7 @@ const UsersTable = ({ permissions, disableDelete = false }) => {
                                             ? <></>
                                             : rowEditDisabled
                                                 ? (<>
-                                                    {checkPermission('MANAGE_DEPT_PERM')
+                                                    {canEditPermissions
                                                         ? (<span
                                                             data-for={`editUser${user.id}PermissionButtonTooltip`}
                                                             data-tip={t('user.table.data.buttons.permissions.edit')}
@@ -322,4 +322,4 @@ const UsersTable = ({ permissions, disableDelete = false }) => {
     )
 }
 
-export default UsersTable;
+export default UserPermissionsTable;

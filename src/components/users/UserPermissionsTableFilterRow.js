@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next'
 import ReactTooltip from 'react-tooltip'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
-import { UsersTableBooleanFilter, UsersTableTextFilter } from './UsersTableFilters'
+import { UsersTableBooleanFilter, UsersTableTextFilter } from './UserPermissionsTableFilters'
 
-const UsersTableFilterRow = ({ disabled, filterMap, filterUsers, permissions }) => {
+const UserPermissionsTableFilterRow = ({ disabled, filterMap, filterUsers, permissions }) => {
     const { t } = useTranslation();
 
     return (
@@ -65,4 +65,4 @@ const UsersTableFilterRow = ({ disabled, filterMap, filterUsers, permissions }) 
     )
 }
 
-export default UsersTableFilterRow;
+export default UserPermissionsTableFilterRow;
