@@ -1,23 +1,23 @@
 {
   "files": {
-    "main.css": "/unirio-ged-app-frontend/static/css/main.8c060a1f.chunk.css",
-    "main.js": "/unirio-ged-app-frontend/static/js/main.0e430ee4.chunk.js",
-    "main.js.map": "/unirio-ged-app-frontend/static/js/main.0e430ee4.chunk.js.map",
+    "main.css": "/unirio-ged-app-frontend/static/css/main.bbcd440d.chunk.css",
+    "main.js": "/unirio-ged-app-frontend/static/js/main.4b8d6649.chunk.js",
+    "main.js.map": "/unirio-ged-app-frontend/static/js/main.4b8d6649.chunk.js.map",
     "runtime-main.js": "/unirio-ged-app-frontend/static/js/runtime-main.90cdc58a.js",
     "runtime-main.js.map": "/unirio-ged-app-frontend/static/js/runtime-main.90cdc58a.js.map",
     "static/css/2.4c97ca4f.chunk.css": "/unirio-ged-app-frontend/static/css/2.4c97ca4f.chunk.css",
-    "static/js/2.8e9674c6.chunk.js": "/unirio-ged-app-frontend/static/js/2.8e9674c6.chunk.js",
-    "static/js/2.8e9674c6.chunk.js.map": "/unirio-ged-app-frontend/static/js/2.8e9674c6.chunk.js.map",
+    "static/js/2.80515f00.chunk.js": "/unirio-ged-app-frontend/static/js/2.80515f00.chunk.js",
+    "static/js/2.80515f00.chunk.js.map": "/unirio-ged-app-frontend/static/js/2.80515f00.chunk.js.map",
     "index.html": "/unirio-ged-app-frontend/index.html",
     "static/css/2.4c97ca4f.chunk.css.map": "/unirio-ged-app-frontend/static/css/2.4c97ca4f.chunk.css.map",
-    "static/css/main.8c060a1f.chunk.css.map": "/unirio-ged-app-frontend/static/css/main.8c060a1f.chunk.css.map",
-    "static/js/2.8e9674c6.chunk.js.LICENSE.txt": "/unirio-ged-app-frontend/static/js/2.8e9674c6.chunk.js.LICENSE.txt"
+    "static/css/main.bbcd440d.chunk.css.map": "/unirio-ged-app-frontend/static/css/main.bbcd440d.chunk.css.map",
+    "static/js/2.80515f00.chunk.js.LICENSE.txt": "/unirio-ged-app-frontend/static/js/2.80515f00.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.90cdc58a.js",
     "static/css/2.4c97ca4f.chunk.css",
-    "static/js/2.8e9674c6.chunk.js",
-    "static/css/main.8c060a1f.chunk.css",
-    "static/js/main.0e430ee4.chunk.js"
+    "static/js/2.80515f00.chunk.js",
+    "static/css/main.bbcd440d.chunk.css",
+    "static/js/main.4b8d6649.chunk.js"
   ]
 }
