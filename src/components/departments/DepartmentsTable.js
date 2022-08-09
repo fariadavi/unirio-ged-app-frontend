@@ -123,6 +123,7 @@ const DepartmentsTable = ({ canAddDept, canEditDept, canDeleteDept }) => {
             header: t('departments.table.headers.acronym'),
             filterable: true,
             requiredOnAdd: true,
+            sort: true,
             type: 'text',
             width: '150px'
         },

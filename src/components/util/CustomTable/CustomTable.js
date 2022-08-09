@@ -13,7 +13,13 @@ const CustomTable = ({ actions = { filter: {} }, columns = {}, data = [], domain
     const [editingRows, setEditingRows] = useState({});
     const [filteredRowIds, setFilteredRowIds] = useState([]);
     const [filterMap, setFilterMap] = useState({});
+    const [sortProperty, setSortProperty] = useState();
     const [currentPage, setCurrentPage] = useState(1);
+
+    useEffect(() => {
+        const columnToSortBy = Object.entries(columns).find(([key, value]) => value.sort)
+        if (columnToSortBy) setSortProperty(columnToSortBy[0])
+    }, [columns])
 
     useEffect(() => {
         if (!data.length)
@@ -197,7 +203,18 @@ const CustomTable = ({ actions = { filter: {} }, columns = {}, data = [], domain
                     />}
                 {data
                     .filter(dataRow => !filteredRowIds.includes(dataRow.id))
-                    .sort((a, b) => a.id - b.id)
+                    .sort((a, b) => {
+                        switch (columns?.[sortProperty]?.type) {
+                            case 'boolean':
+                                return (a[sortProperty] === b[sortProperty]) ? 0 : a[sortProperty] ? -1 : 1;
+                            case 'text':
+                                return a[sortProperty].localeCompare(b[sortProperty]);
+                            case 'number':
+                                return a[sortProperty] - b[sortProperty]
+                            default:
+                                return a.id - b.id
+                        }
+                    })
                     .slice(
                         (currentPage - 1) * pageSize,
                         (currentPage * pageSize) < (data.length - filteredRowIds.length)
