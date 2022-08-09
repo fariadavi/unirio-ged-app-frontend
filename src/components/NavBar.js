@@ -126,9 +126,13 @@ export default function NavBar() {
                             <FontAwesomeIcon icon={faExchangeAlt} />
                         </>
                     } disabled={!user?.departments.length}>
-                        {(user ? user.departments : []).map(dept =>
-                            <NavDropdown.Item key={dept.id} onClick={() => { changeDepartment(dept.id) }} className={`${dept.id === user?.currentDepartment?.id ? 'active' : ''}`}>
-                                {`${dept.name} (${dept.acronym})`}
+                        {(user?.departments?.sort((a, b) => a.acronym.localeCompare(b.acronym)) || []).map(dept =>
+                            <NavDropdown.Item key={dept.id}
+                                onClick={() => { changeDepartment(dept.id) }}
+                                className={`${dept.id === user?.currentDepartment?.id ? 'active' : ''}`}
+                            >
+                                <span className='small-column'>{dept.acronym}</span>
+                                <span>{dept.name}</span>
                             </NavDropdown.Item>
                         )}
                     </NavDropdown>
