@@ -101,7 +101,8 @@ const DepartmentsTable = ({ canAddDept, canEditDept, canDeleteDept }) => {
         delete: {
             disabled: !canDeleteDept,
             callbackFn: removeDepartment
-        }
+        },
+        filter: {}
     }
 
     const columns = {

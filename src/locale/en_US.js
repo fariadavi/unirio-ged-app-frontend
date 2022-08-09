@@ -146,7 +146,7 @@ const enUS = {
 
     //system management
     //departments page
-    'departments.page.header': 'Manage Departments',
+    'departments.page.header': 'Departments',
 
     //departments table
     'departments.table.headers.acronym': 'Acronym',
