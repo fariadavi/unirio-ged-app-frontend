@@ -58,6 +58,14 @@ table.customTable .center {
     text-align: center;
 }
 
+table.customTable .sort-header {
+    cursor: pointer;
+}
+
+table.customTable .sort-header > span {
+    padding: 0 .25rem;
+}
+
 table.customTable .text-bottom {
     display: flex;
     align-items: flex-end;

@@ -4,6 +4,8 @@ import { CustomTableHeaderActions, CustomTableBodyActions } from './CustomTableA
 import { CustomTableAddRow, CustomTableFilterRow } from './CustomTableExtraRows'
 import { CustomTableDataField } from './CustomTableDataField'
 import TablePagination from '../TablePagination'
+import { Icon } from '../CustomIcon'
+import { faSortAlphaDown, faSortAlphaDownAlt, faSortAmountDown, faSortAmountDownAlt } from '@fortawesome/free-solid-svg-icons'
 import '../../../style/utils/CustomTable.css'
 
 const CustomTable = ({ actions = { filter: {} }, columns = {}, data = [], domain, pageSize = 10 }) => {
@@ -14,6 +16,7 @@ const CustomTable = ({ actions = { filter: {} }, columns = {}, data = [], domain
     const [filteredRowIds, setFilteredRowIds] = useState([]);
     const [filterMap, setFilterMap] = useState({});
     const [sortProperty, setSortProperty] = useState();
+    const [sortDirection, setSortDirection] = useState('ASC');
     const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
@@ -150,6 +153,21 @@ const CustomTable = ({ actions = { filter: {} }, columns = {}, data = [], domain
             : {}
     )
 
+    const getSortIcon = type =>
+        type === 'text'
+            ? sortDirection === 'ASC'
+                ? faSortAlphaDown
+                : faSortAlphaDownAlt
+            : sortDirection === 'ASC'
+                ? faSortAmountDown
+                : faSortAmountDownAlt
+
+    const toggleSortByColumn = key =>
+        setSortDirection(key === sortProperty
+            ? sortDirection === 'DESC' ? 'ASC' : 'DESC'
+            : () => { setSortProperty(key); return 'ASC' }
+        )
+
     return (<>
         <Table className="customTable" striped size="sm">
             <thead>
@@ -157,7 +175,13 @@ const CustomTable = ({ actions = { filter: {} }, columns = {}, data = [], domain
                     {Object.entries(columns).map(([key, config]) =>
                         <th key={key} width={config.width}>
                             <div className={config.class}>
-                                {config.header}
+                                <span
+                                    className='sort-header'
+                                    onClick={() => toggleSortByColumn(key)}
+                                >
+                                    {config.header}
+                                    {key === sortProperty && <Icon icon={getSortIcon(config.type)} />}
+                                </span>
                             </div>
                         </th>
                     )}
@@ -206,13 +230,22 @@ const CustomTable = ({ actions = { filter: {} }, columns = {}, data = [], domain
                     .sort((a, b) => {
                         switch (columns?.[sortProperty]?.type) {
                             case 'boolean':
-                                return (a[sortProperty] === b[sortProperty]) ? 0 : a[sortProperty] ? -1 : 1;
+                                return (a[sortProperty] === b[sortProperty])
+                                    ? 0 : a[sortProperty]
+                                        ? sortDirection === 'ASC' ? -1 : 1
+                                        : sortDirection === 'ASC' ? 1 : -1;
                             case 'text':
-                                return a[sortProperty].localeCompare(b[sortProperty]);
+                                return sortDirection === 'ASC'
+                                    ? a[sortProperty].localeCompare(b[sortProperty])
+                                    : b[sortProperty].localeCompare(a[sortProperty]);
                             case 'number':
-                                return a[sortProperty] - b[sortProperty]
+                                return sortDirection === 'ASC'
+                                    ? a[sortProperty] - b[sortProperty]
+                                    : b[sortProperty] - a[sortProperty]
                             default:
-                                return a.id - b.id
+                                return sortDirection === 'ASC'
+                                    ? a.id - b.id
+                                    : b.id - a.id
                         }
                     })
                     .slice(
