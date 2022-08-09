@@ -15,7 +15,7 @@ import { faChevronRight, faEdit } from '@fortawesome/free-solid-svg-icons'
 const DepartmentsTable = ({ canAddDept, canEditDept, canDeleteDept }) => {
     const { t } = useTranslation();
     const [departments, setDepartments] = useState([]);
-    const { department } = useContext(UserContext);
+    const { department, setLoggedUserInfo } = useContext(UserContext);
 
     const loadDepartments = useCallback(async () => {
         const res = await getDepartments();
@@ -29,10 +29,13 @@ const DepartmentsTable = ({ canAddDept, canEditDept, canDeleteDept }) => {
             departmentData.name?.trim()
         );
 
-        if (res.ok) await loadDepartments();
+        if (res.ok) {
+            await loadDepartments();
+            setLoggedUserInfo();
+        }
 
         return res.ok;
-    }, [loadDepartments])
+    }, [loadDepartments, setLoggedUserInfo])
 
     const editDepartment = useCallback(async (departmentId, departmentData) => {
         const res = await updateDepartment(
@@ -41,10 +44,13 @@ const DepartmentsTable = ({ canAddDept, canEditDept, canDeleteDept }) => {
             departmentData.name?.trim()
         );
 
-        if (res.ok) await loadDepartments();
+        if (res.ok) {
+            await loadDepartments();
+            setLoggedUserInfo();
+        }
 
         return res.ok;
-    }, [loadDepartments])
+    }, [loadDepartments, setLoggedUserInfo])
 
     const batchEditDepartments = useCallback(async editedDepartmentEntries => {
         const res = await batchUpdateDepartments(
@@ -57,18 +63,24 @@ const DepartmentsTable = ({ canAddDept, canEditDept, canDeleteDept }) => {
                     }
                 }));
 
-        if (res.ok) await loadDepartments();
+        if (res.ok) {
+            await loadDepartments();
+            setLoggedUserInfo();
+        }
 
         return res.ok;
-    }, [loadDepartments])
+    }, [loadDepartments, setLoggedUserInfo])
 
     const removeDepartment = useCallback(async departmentId => {
         const res = await deleteDepartment(departmentId);
 
-        if (res.ok) await loadDepartments();
+        if (res.ok) {
+            await loadDepartments();
+            setLoggedUserInfo();
+        }
 
         return res.ok;
-    }, [loadDepartments])
+    }, [loadDepartments, setLoggedUserInfo])
 
     useEffect(() => loadDepartments(), [loadDepartments])
 
@@ -112,7 +124,7 @@ const DepartmentsTable = ({ canAddDept, canEditDept, canDeleteDept }) => {
             filterable: true,
             requiredOnAdd: true,
             type: 'text',
-            width: '100px'
+            width: '150px'
         },
         name: {
             header: t('departments.table.headers.name'),
