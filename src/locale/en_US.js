@@ -14,6 +14,17 @@ const enUS = {
 
     // utils
     'table.actions': 'Actions',
+    'customButtons.add.tooltip': 'Add',
+    'customButtons.edit.tooltip': 'Edit',
+    'customButtons.confirm.tooltip': 'Confirm',
+    'customButtons.cancel.tooltip': 'Cancel',
+    'customButtons.filter.tooltip': 'Filter',
+    'customButtons.delete.tooltip': 'Delete',
+    'customButtons.clear.tooltip': 'Clear',
+    'customTable.addRow.text.placeholder': 'Enter text',
+    'customTable.addRow.validation.mandatoryField': 'Mandatory field',
+    'customTable.filterRow.text.placeholder': 'Enter text to filter',
+    'customTable.filterRow.clearBtn.tooltip': 'Clear all filters',
 
     // login
     'loginWithGoogle.buttonText': 'Sign in with Google',
@@ -132,6 +143,17 @@ const enUS = {
     'user.table.data.buttons.permissions.edit.confirm': 'Confirm',
     'user.table.data.buttons.permissions.edit.cancel': 'Cancel',
     'user.table.data.buttons.user.delete': 'Remove user from this department',
+
+    //system management
+    //departments page
+    'departments.page.header': 'Manage Departments',
+
+    //departments table
+    'departments.table.headers.acronym': 'Acronym',
+    'departments.table.headers.name': 'Name',
+    'departments.table.data.isCurrentDept.y': 'Current department',
+    'departments.customTable.addRow.acronym.placeholder': 'Enter acronym for department',
+    'departments.customTable.addRow.name.placeholder': 'Enter department name',
 }
 
 export default enUS;

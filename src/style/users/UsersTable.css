@@ -90,3 +90,7 @@
 #usersTable .invite-user-row .actions {
     margin-top: 1.5rem;
 }
+
+.text-align-end {
+    text-align: end;
+}

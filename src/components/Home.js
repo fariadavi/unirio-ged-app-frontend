@@ -4,6 +4,7 @@ import NavBar from './NavBar'
 import Search from './search/Search'
 import PageNotFound from './invalid/PageNotFound';
 import Categories from './categories/Categories'
+import Departments from './departments/Departments'
 import Users from './users/Users'
 import DocumentDetails from './documents/DocumentDetails'
 
@@ -20,6 +21,9 @@ export default function Home() {
                 </Route>
                 <Route path="/categories">
                     <Categories />
+                </Route>
+                <Route path="/departments">
+                    <Departments />
                 </Route>
                 <Route path="/users/department">
                     <Users permissionType="department" />

@@ -15,6 +15,17 @@ const ptBR = {
 
     // utils
     'table.actions': 'Ações',
+    'customButtons.add.tooltip': 'Adicionar',
+    'customButtons.edit.tooltip': 'Editar',
+    'customButtons.confirm.tooltip': 'Confirmar',
+    'customButtons.cancel.tooltip': 'Cancelar',
+    'customButtons.filter.tooltip': 'Filtrar',
+    'customButtons.delete.tooltip': 'Excluir',
+    'customButtons.clear.tooltip': 'Limpar',
+    'customTable.addRow.text.placeholder': 'Entre com o texto',
+    'customTable.addRow.validation.mandatoryField': 'Campo obrigatório',
+    'customTable.filterRow.text.placeholder': 'Entre com o texto para filtrar',
+    'customTable.filterRow.clearBtn.tooltip': 'Limpar todos os filtros',
 
     // login
     'loginWithGoogle.buttonText': 'Entre com Google',
@@ -133,6 +144,20 @@ const ptBR = {
     'user.table.data.buttons.permissions.edit.confirm': 'Confirmar',
     'user.table.data.buttons.permissions.edit.cancel': 'Cancelar',
     'user.table.data.buttons.user.delete': 'Remover usuário deste departamento',
+
+    //system management
+    //departments page
+    'departments.page.header': 'Departmentos',
+
+    //departments table
+    'departments.table.headers.acronym': 'Sigla',
+    'departments.table.headers.name': 'Nome',
+    'departments.table.data.isCurrentDept.y': 'Departmento atual',
+    'departments.customTable.addRow.acronym.placeholder': 'Entre a sigla do departamento',
+    'departments.customTable.addRow.name.placeholder': 'Entre o nome do departamento',
+    'departments.customTable.addRow.addBtn.tooltip': 'Adicionar novo departamento',
+    'departments.customTable.addRow.validation.acronymMaxLength': 'Sigla deve ter no máximo 5 caracteres',
+    'departments.customTable.addRow.validation.cantContainWhitespaces': 'Sigla não pode conter espaços em branco',
 }
 
 export default ptBR;

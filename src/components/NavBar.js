@@ -6,7 +6,7 @@ import ReactTooltip from 'react-tooltip'
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap'
 import { getUserLanguage, setUserLanguage } from '../services/lang'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCogs, faExchangeAlt, faFileAlt, faHouseUser, faLanguage, faPlusCircle, faSearch, faStream, faUser, faUserCog, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
+import { faHome, faCogs, faExchangeAlt, faFileAlt, faHouseUser, faLanguage, faPlusCircle, faSearch, faStream, faUserCircle, faUsersCog, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
 import '../style/NavBar.css'
 
 export default function NavBar() {
@@ -55,7 +55,7 @@ export default function NavBar() {
                 {checkPermission('MANAGE_CATEGORIES', 'INVITE_USERS', 'MANAGE_DEPT_PERM')
                     && <NavDropdown title={
                         <>
-                            <FontAwesomeIcon icon={faCogs} />
+                            <FontAwesomeIcon icon={faHome} />
                             <span>{t('navbar.department')}</span>
                         </>
                     }>
@@ -67,7 +67,7 @@ export default function NavBar() {
                         }
                         {checkPermission('INVITE_USERS', 'MANAGE_DEPT_PERM')
                             && <Link to="/users/department" className="dropdown-item">
-                                <FontAwesomeIcon className="icon" icon={faUserCog} />
+                                <FontAwesomeIcon className="icon" icon={faUsersCog} />
                                 {t('navbar.department.users')}
                             </Link>
                         }
@@ -88,7 +88,7 @@ export default function NavBar() {
                         }
                         {checkPermission('MANAGE_SYSTEM_PERM')
                             && <Link to="/users/system" className="dropdown-item">
-                                <FontAwesomeIcon className="icon" icon={faUserCog} />
+                                <FontAwesomeIcon className="icon" icon={faUsersCog} />
                                 {t('navbar.system.users')}
                             </Link>
                         }
@@ -101,7 +101,7 @@ export default function NavBar() {
                     <div className="nav-link menu-user-box">
                         <span data-tip={user?.email}>{`${user?.firstName} ${user?.surname}`}</span>
                         <ReactTooltip />
-                        <FontAwesomeIcon icon={faUser} />
+                        <FontAwesomeIcon icon={faUserCircle} />
                     </div>
                 </Nav>
                 <Nav>

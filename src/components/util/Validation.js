@@ -24,6 +24,13 @@ const validateEmail = email =>
             ? 'invalidDomain'
             : ''
 
+const validateDeptAcronym = acronym =>
+    acronym.includes(' ')
+        ? 'cantContainWhitespaces'
+        : acronym.length > 5
+            ? 'acronymMaxLength'
+            : ''
+
 export const validateField = (field, value) => {
     switch (field) {
         case 'file':
@@ -34,6 +41,8 @@ export const validateField = (field, value) => {
             return validateCategory(value);
         case 'email':
             return validateEmail(value);
+        case 'departments.acronym':
+            return validateDeptAcronym(value);
         default:
             return '';
     }

@@ -1,0 +1,68 @@
+table.customTable th {
+    border-top: 0px;
+}
+
+table.customTable td > div {
+    line-height: 2rem;
+}
+
+table.customTable tr.extra-row td > div {
+    line-height: 1.5rem;
+    margin: 1rem 0;
+}
+
+table.customTable .add-row div .textbox {
+    position: relative;
+    margin-bottom: 0;
+    height: 2rem;
+}
+
+table.customTable .actions {
+    padding: 0.25rem .5rem;
+}
+
+table.customTable .actions > .icon {
+    color: #343a40;
+    cursor: pointer;
+    padding: 3px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 1.5rem;
+    min-width: 1.5rem;
+}
+
+table.customTable .actions .active {
+    border-radius: 0.25rem;
+    background-color: #027bc2;
+}
+
+table.customTable .actions .active .icon,
+table.customTable .actions .active .icon+span {
+    color: #fff;
+}
+
+table.customTable .actions .activeFilterCount {
+    font-size: xx-small;
+}
+
+table.customTable .spaced {
+    display: flex;
+    justify-content: space-evenly;
+    text-align: center;
+}
+
+table.customTable .center {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+table.customTable .text-bottom {
+    display: flex;
+    align-items: flex-end;
+}
+
+table.customTable .text-align-end {
+    text-align: end;
+}

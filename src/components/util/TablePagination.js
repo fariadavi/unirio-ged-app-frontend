@@ -29,8 +29,8 @@ export default function TablePagination({ numPages, activePage, onSearch }) {
             );
         }
          
-        items.push(<Pagination.Next key={'+'} onClick={() => onSearch(activePage+1)} disabled={activePage === numPages} />)
-        items.push(<Pagination.Last key={'last'} onClick={() => onSearch(numPages)} disabled={activePage === numPages}/>)
+        items.push(<Pagination.Next key={'+'} onClick={() => onSearch(activePage+1)} disabled={activePage >= numPages} />)
+        items.push(<Pagination.Last key={'last'} onClick={() => onSearch(numPages)} disabled={activePage >= numPages}/>)
 
         setPaginationItems(items);
     }, [numPages, activePage, onSearch]);
