@@ -1,36 +1,25 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react'
-import { UserManagementProvider } from '../../contexts/UserManagementContext'
-import { UserContext } from '../../contexts/UserContext'
+import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
-import rq from '../../services/api'
+import { UserContext } from '../../contexts/UserContext'
 import UserPermissionsTable from './UserPermissionsTable'
-import '../../style/users/Users.css'
+import '../../style/TablePage.css'
 
 export default function Users({ permissionType }) {
     const { t } = useTranslation();
-    const [permissions, setPermissions] = useState([]);
-    const { checkPermission } = useContext(UserContext);
-
-    const getPermissions = useCallback(async () => {
-        const res = await rq(`/permissions/${permissionType}`, { method: 'GET' });
-        if (res.ok)
-            setPermissions(await res.json());
-    }, [permissionType])
-
-    useEffect(() => getPermissions(), [getPermissions]);
+    const { checkPermission, department } = useContext(UserContext);
 
     return (
-        <UserManagementProvider>
-            <div className="manage-users">
-                <h1>{t('user.management.title')}</h1>
-                <UserPermissionsTable
-                    canInviteUsers={permissionType === 'department' ? checkPermission('INVITE_USERS') : false}
-                    canEditPermissions={permissionType === 'department' ? checkPermission('MANAGE_DEPT_PERM') :
-                        permissionType === 'system' ? checkPermission('MANAGE_SYSTEM_PERM') : false}
-                    permissions={permissions}
-                    disableDelete={true}
-                />
-            </div>
-        </UserManagementProvider>
+        <div className="header-n-table-div">
+            <h1>{t(`users.${permissionType}.page.header`)} - {department?.acronym}</h1>
+            <UserPermissionsTable
+                canInviteUsers={permissionType === 'department' && checkPermission('INVITE_USERS')}
+                canEditUserPermissions={
+                    (permissionType === 'department' && checkPermission('MANAGE_DEPT_PERM'))
+                    || (permissionType === 'system' && checkPermission('MANAGE_SYSTEM_PERM'))
+                }
+                canDeleteUsers={false}
+                type={permissionType}
+            />
+        </div>
     )
 }

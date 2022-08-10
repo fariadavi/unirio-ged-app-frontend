@@ -25,6 +25,8 @@ const ptBR = {
     'customTable.addRow.text.placeholder': 'Entre com o texto',
     'customTable.addRow.validation.mandatoryField': 'Campo obrigatório',
     'customTable.filterRow.text.placeholder': 'Entre com o texto para filtrar',
+    'customTable.filterRow.boolean.y': '$t(yes)',
+    'customTable.filterRow.boolean.n': '$t(no)',
     'customTable.filterRow.clearBtn.tooltip': 'Limpar todos os filtros',
 
     // login
@@ -101,19 +103,12 @@ const ptBR = {
     'user.name': 'Nome de usuário',
     'user.email': 'Email',
 
-    // user management
-    'user.management.title': 'Gerenciar Usuários',
-    'user.management.invite.title': 'Convidar Usuário',
-    'user.management.department-permissions.title': 'Gerenciar Permissões de Departamento',
-    'user.management.system-permissions.title': 'Gerenciar Permissões de Sistema',
-    
-    // user invite
-    'user.management.invite.placeholder': 'Entre com o email do usuário',
-    'user.management.invite.validation.invalidEmailFormat': 'Email com formato inválido',
-    'user.management.invite.validation.invalidDomain': 'Email deve pertencer às organizações @uniriotec.br ou @edu.unirio.br',
-    'user.management.invite.button': 'Enviar convite',
+    // department management
+    // user permission page
+    'users.department.page.header': 'Usuários do departmento',
 
     // user table
+    // headers
     'user.table.headers.status': 'Status',
     'user.table.headers.username': '$t(user.name)',
     'user.table.headers.email': '$t(user.email)',
@@ -126,38 +121,54 @@ const ptBR = {
     'user.table.headers.permission.manage_dept_perm': 'Gerenciar permissões de departamento',
     'user.table.headers.permission.manage_system_perm': 'Gerenciar permissões de sistema',
     'user.table.headers.permission.manage_departments': 'Gerenciar departamentos',
-    'user.table.filters.text.username': 'Filtrar por nome de usuário',
-    'user.table.filters.text.email': 'Filtrar por email',
-    'user.table.filters.boolean.y': '$t(yes)',
-    'user.table.filters.boolean.n': '$t(no)',
-    'user.table.filters.status.y': 'Ativo',
-    'user.table.filters.status.n': 'Pendente',
-    'user.table.headers.buttons.invite': 'Convidar usuário',
-    'user.table.headers.buttons.filter': 'Filtrar usuários',
-    'user.table.headers.buttons.permissions.batch_edit': 'Editar permissões dos usuários',
-    'user.table.headers.buttons.permissions.batch_edit.confirm': 'Confirmar',
-    'user.table.headers.buttons.permissions.batch_edit.cancel': 'Cancelar',
-    'user.table.filters.buttons.clear': 'Limpar todos os filtros',
-    'user.table.data.status.y': 'Ativo',
-    'user.table.data.status.n': 'Pendente',
-    'user.table.data.buttons.permissions.edit': 'Editar permissões do usuário',
-    'user.table.data.buttons.permissions.edit.confirm': 'Confirmar',
-    'user.table.data.buttons.permissions.edit.cancel': 'Cancelar',
-    'user.table.data.buttons.user.delete': 'Remover usuário deste departamento',
 
-    //system management
-    //departments page
+    // action btn tooltips
+    'userPermissions.customTable.actions.addBtn.tooltip': 'Convidar usuário',
+    'userPermissions.customTable.actions.batchEditBtn.tooltip': 'Editar permissões dos usuários',
+    'userPermissions.customTable.actions.filterBtn.tooltip': 'Filtrar usuários',
+    'userPermissions.customTable.actions.editBtn.tooltip': 'Editar permissões do usuário',
+    'userPermissions.customTable.actions.deleteBtn.tooltip': 'Remover usuário deste departamento',
+
+    // user invite row
+    'userPermissions.customTable.addRow.email.placeholder': 'Entre com o email do usuário',
+    'userPermissions.customTable.addRow.validation.invalidEmailFormat': 'Email com formato inválido',
+    'userPermissions.customTable.addRow.validation.invalidDomain': 'Email deve pertencer à uma das seguintes organizações: @uniriotec.br ou @edu.unirio.br',
+    'userPermissions.customTable.addRow.addBtn.tooltip': 'Enviar convite',
+    
+    // filter row
+    'userPermissions.customTable.filterRow.fullName.placeholder': 'Filtrar por nome de usuário',
+    'userPermissions.customTable.filterRow.email.placeholder': 'Filtrar por email',
+    'userPermissions.customTable.filterRow.status.y': 'Ativo',
+    'userPermissions.customTable.filterRow.status.n': 'Pendente',
+    
+    // table data
+    'user.table.data.status.y.tooltip': 'Ativo',
+    'user.table.data.status.n.tooltip': 'Pendente',
+
+    // system management
+    // departments page
     'departments.page.header': 'Departmentos',
 
-    //departments table
+    // departments table
+    // headers
     'departments.table.headers.acronym': 'Sigla',
     'departments.table.headers.name': 'Nome',
-    'departments.table.data.isCurrentDept.y': 'Departmento atual',
+
+    // action btn tooltips
+
+    // add department row
     'departments.customTable.addRow.acronym.placeholder': 'Entre a sigla do departamento',
     'departments.customTable.addRow.name.placeholder': 'Entre o nome do departamento',
     'departments.customTable.addRow.addBtn.tooltip': 'Adicionar novo departamento',
     'departments.customTable.addRow.validation.acronymMaxLength': 'Sigla deve ter no máximo 5 caracteres',
     'departments.customTable.addRow.validation.cantContainWhitespaces': 'Sigla não pode conter espaços em branco',
+    
+    // filter row
+    'departments.customTable.filterRow.acronym.placeholder': 'Filtrar pela sigla',
+    'departments.customTable.filterRow.name.placeholder': 'Filtrar pelo nome do departamento',
+    
+    // table data
+    'departments.table.data.isCurrentDept.y': 'Departmento atual',
 }
 
 export default ptBR;

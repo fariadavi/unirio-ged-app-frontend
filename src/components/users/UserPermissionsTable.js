@@ -1,325 +1,207 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { UserContext } from '../../contexts/UserContext'
-import { UserManagementContext } from '../../contexts/UserManagementContext'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import rq from '../../services/api'
-import ReactTooltip from 'react-tooltip'
-import { Form, Table } from 'react-bootstrap'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBan, faCheck, faCheckCircle, faEdit, faPen, faFilter, faQuestion, faTrash, faUserPlus } from '@fortawesome/free-solid-svg-icons'
-import InviteUserRow from './InviteUserRow'
-import UserPermissionsTableFilterRow from './UserPermissionsTableFilterRow'
-import TablePagination from '../util/TablePagination'
-import '../../style/users/UsersTable.css'
+import { UserContext } from '../../contexts/UserContext'
+import {
+    batchUpdateUsersPermissions,
+    deleteUser,
+    getPermissions,
+    getUsers,
+    insertUser,
+    updateUserPermissions
+} from '../../services/users/api'
+import CustomTable from '../util/CustomTable/CustomTable'
+import { Icon } from '../util/CustomIcon'
+import { faUserCheck, faQuestion, faPaperPlane, faUserPlus, faEdit } from '@fortawesome/free-solid-svg-icons'
 
-const UserPermissionsTable = ({ permissions, canInviteUsers, canEditPermissions, disableDelete = false }) => {
+const UserPermissionsTable = ({ canInviteUsers, canEditUserPermissions, canDeleteUsers, type }) => {
     const { t } = useTranslation();
+    const [users, setUsers] = useState([]);
+    const [permissions, setPermissions] = useState([]);
     const { department, user, setLoggedUserInfo } = useContext(UserContext);
-    const { users, removeUser } = useContext(UserManagementContext);
-    const [editingUsers, setEditingUsers] = useState([]);
-    const [batchEditPermissions, setBatchEditPermissions] = useState(false);
-    const [showFilterRow, setShowFilterRow] = useState(false);
-    const [showInviteUserRow, setShowInviteUserRow] = useState(false);
-    const [filteredUsers, setFilteredUsers] = useState([]);
-    const [filterMap, setFilterMap] = useState({});
-    const [pageSize] = useState(10);
-    const [currentPage, setCurrentPage] = useState(1);
 
-    useEffect(() => setFilteredUsers([]), [department]);
+    const loadUsers = useCallback(async () => {
+        const res = await getUsers();
 
-    useEffect(() => {
-        if (!users.length || !permissions.length)
-            return;
+        if (res.ok) setUsers(await res.json());
+    }, [])
 
-        const evalBooleanFilter = (booleanValue, filter) => !filter || (filter === 'y' && booleanValue) || (filter === 'n' && !booleanValue)
+    useEffect(() => loadUsers(), [loadUsers, department])
 
-        const evalContainsStringFilter = (string, filter) => !filter || string.toLowerCase().includes(filter)
+    const loadPermissions = useCallback(async () => {
+        const res = await getPermissions(type);
 
-        const evalPermissionFilter = (permission, userPermissionArray) => {
-            return !filterMap[permission]
-                || (filterMap[permission] === 'y' && userPermissionArray && userPermissionArray.includes(permission))
-                || (filterMap[permission] === 'n' && (!userPermissionArray || !userPermissionArray.includes(permission)))
+        if (res.ok) setPermissions(await res.json());
+    }, [type])
+
+    useEffect(() => loadPermissions(), [loadPermissions])
+
+    const addNewUser = useCallback(async userData => {
+        const res = await insertUser(userData.email);
+
+        if (res.ok) await loadUsers();
+
+        return res.ok;
+    }, [loadUsers])
+
+    const getSpecificUserPermissions = (allUsers, userId, possiblePermissions) =>
+        allUsers
+            ?.find(u => u.id === Number(userId))
+            ?.permissions
+            ?.filter(p => possiblePermissions.includes(p))
+
+    const addOrRemoveFromArray = (array, key, keyShouldBeInArray) =>
+        array.includes(key)
+            ? keyShouldBeInArray
+                ? array
+                : array.filter(k => k !== key)
+            : [...array, key]
+
+    const editUserPermissionsWithNewUserData = useCallback((userPermissions, userNewData) =>
+        Object
+            .entries(userNewData)
+            .reduce((array, [key, value]) =>
+                addOrRemoveFromArray(array, key, value),
+                userPermissions
+            )
+        , []);
+
+    const editUserPermissions = useCallback(async (userId, userNewData) => {
+        const res = await updateUserPermissions(
+            userId,
+            editUserPermissionsWithNewUserData(
+                getSpecificUserPermissions(users, userId, permissions),
+                userNewData
+            )
+        );
+
+        if (res.ok) {
+            await loadUsers();
+            if (user?.id === Number(userId)) setLoggedUserInfo();
         }
 
-        const start = (currentPage - 1) * pageSize;
-        const end = (currentPage * pageSize) < users.length ? (currentPage * pageSize) : users.length;
-        setFilteredUsers(
-            users.filter(user =>
-                evalBooleanFilter(user.fullName.trim().length, filterMap['status']) &&
-                evalContainsStringFilter(user.fullName, filterMap['username']) &&
-                evalContainsStringFilter(user.email, filterMap['email']) &&
-                permissions.every(p => evalPermissionFilter(p, user.permissions))
-            ).sort((a, b) => a.email.localeCompare(b.email)
-            ).slice(start, end)
+        return res.ok;
+    }, [permissions, user, users, loadUsers, setLoggedUserInfo, editUserPermissionsWithNewUserData])
+
+    const batchEditUsersPermissions = useCallback(async editedUserEntries => {
+        const res = await batchUpdateUsersPermissions(
+            Object.fromEntries(
+                editedUserEntries.map(([userId, userNewData]) => [
+                    userId,
+                    editUserPermissionsWithNewUserData(
+                        getSpecificUserPermissions(users, userId, permissions),
+                        userNewData
+                    )
+                ]))
         );
-    }, [users, filterMap, permissions, currentPage, pageSize]);
+        
+        if (res.ok) {
+            await loadUsers();
 
-    const filterUsers = (filter, value) => setFilterMap(
-        filter
-            ? value
-                ? { ...filterMap, [filter]: value }
-                : () => { const { [filter]: removed, ...newFilterMap } = filterMap; return newFilterMap }
-            : {}
-    )
+            if (editedUserEntries.some(([userId]) => user?.id === Number(userId)))
+                setLoggedUserInfo();
+        }
 
-    const toggleUserPermission = (user, permission, add) => {
-        const userPermissionArray = user.permissions || [];
+        return res.ok;
+    }, [permissions, user, users, loadUsers, setLoggedUserInfo, editUserPermissionsWithNewUserData])
 
-        user.permissions = add
-            ? [...userPermissionArray, permission]
-            : userPermissionArray.filter(p => p !== permission);
+    const removeUserFromDepartment = useCallback(async userId => {
+        const res = await deleteUser(userId)
+
+        if (res.ok) {
+            await loadUsers();
+            if (user?.id === Number(userId)) setLoggedUserInfo();
+        }
+
+        return res.ok;
+    }, [user, loadUsers, setLoggedUserInfo])
+
+    const actions = {
+        add: {
+            disabled: !canInviteUsers,
+            callbackFn: addNewUser,
+            icon: faUserPlus,
+            rowActionIcon: faPaperPlane,
+        },
+        batchEdit: {
+            disabled: !canEditUserPermissions,
+            callbackFn: batchEditUsersPermissions,
+            icon: faEdit,
+        },
+        edit: {
+            disabled: !canEditUserPermissions,
+            callbackFn: editUserPermissions,
+        },
+        delete: {
+            disabled: !canDeleteUsers,
+            callbackFn: removeUserFromDepartment,
+        },
+        filter: {}
     }
 
-    const editUserPermissions = userId => setEditingUsers([...editingUsers, userId])
-
-    const toggleBatchEditUserPermissions = () => {
-        setBatchEditPermissions(!batchEditPermissions);
-        setEditingUsers([]);
+    const columns = {
+        status: {
+            class: 'center',
+            disguise: {
+                true: <Icon
+                    icon={faUserCheck}
+                    tooltip={t('user.table.data.status.y.tooltip')}
+                />,
+                false: <Icon
+                    icon={faQuestion}
+                    tooltip={t('user.table.data.status.n.tooltip')}
+                />
+            },
+            editable: false,
+            filterable: true,
+            header: t('user.table.headers.status'),
+            type: 'boolean',
+            width: '104px'
+        },
+        email: {
+            header: t('user.table.headers.email'),
+            editable: false,
+            filterable: true,
+            requiredOnAdd: true,
+            sort: true,
+            type: 'text',
+            width: '240px'
+        },
+        fullName: {
+            header: t('user.table.headers.username'),
+            editable: false,
+            filterable: true,
+            type: 'text',
+            width: '280px'
+        },
+        ...Object.fromEntries(
+            permissions.map(perm => [perm, {
+                class: 'center',
+                header: t(`user.table.headers.permission.${perm.toLowerCase()}`),
+                filterable: true,
+                type: 'boolean'
+            }])
+        )
     }
 
-    const cancelEditUserPermissions = userId => setEditingUsers(editingUsers.filter(x => x !== userId))
+    const data = users.map(user => {
+        return {
+            ...user,
+            status: user.fullName?.trim().length > 0,
+            ...Object.fromEntries(
+                permissions.map(perm =>
+                    [perm, user.permissions.includes(perm)]
+                )
+            )
+        }
+    })
 
-    const savePermissions = async (userId, permissions) => {
-        // send permissionMap and userId to BE to update permissions of single user
-        const res = await rq(`/users/${userId}/permission`, {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(permissions.map(p => p.toUpperCase()))
-        });
+    return (<CustomTable
+        actions={actions}
+        columns={columns}
+        data={data}
+        domain={`userPermissions`}
+    />)
 
-        // if success continue
-        if (!res.ok)
-            throw Error();
-
-        // stop editing saved user
-        setEditingUsers(editingUsers.filter(x => x !== userId));
-
-        if (userId === user?.id)
-            setLoggedUserInfo();
-
-        // show success message
-    }
-
-    const batchSavePermissions = async filteredUsers => {
-        // send userPermissionMap to BE to update permissions of each user in filtered users
-        let permissionsMap = {};
-        filteredUsers.map(u => permissionsMap[u.id] = u.permissions);
-        const res = await rq(`/users/permission`, {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(permissionsMap)
-        });
-
-        // if success continue
-        if (!res.ok)
-            throw Error();
-
-        // stop batch editing users
-        setBatchEditPermissions(false);
-
-        if (filteredUsers.some(x => x.id === user?.id))
-            setLoggedUserInfo();
-
-        // show success message
-    }
-
-    const deleteUser = user => {
-        // if user has permissions, 
-        //   if user is the last with a necessary permission 
-        //     block user delete
-        //   confirm if should really be deleted
-        //     if yes, continue, else cancel
-        // delete user
-        removeUser(user.id);
-    }
-
-    return (
-        <div className="users-table-box">
-            <Table id="usersTable" striped size="sm">
-                <thead>
-                    <tr>
-                        <th width="104px">
-                            <div className="center">
-                                {t('user.table.headers.status')}
-                            </div>
-                        </th>
-                        <th width="240px"><div>{t('user.table.headers.email')}</div></th>
-                        <th width="280px"><div>{t('user.table.headers.username')}</div></th>
-                        {permissions.map(p =>
-                            <th key={`${p}`}>
-                                <div className="center text-bottom">
-                                    {t(`user.table.headers.permission.${p.toLowerCase()}`)}
-                                </div>
-                            </th>
-                        )}
-                        <th width="120px">
-                            <div className="actions spaced">
-                                {!batchEditPermissions
-                                    ? (<>
-                                        {canInviteUsers
-                                            ? <span
-                                                className={`icon ${showInviteUserRow ? 'active' : ''}`}
-                                                data-for="inviteUserTooltip"
-                                                data-tip={t('user.table.headers.buttons.invite')}
-                                                onClick={() => {
-                                                    if (showFilterRow) setShowFilterRow(false);
-                                                    setShowInviteUserRow(!showInviteUserRow);
-                                                }}>
-                                                <FontAwesomeIcon className="icon" icon={faUserPlus} />
-                                                <ReactTooltip id="inviteUserTooltip" />
-                                            </span>
-                                            : <></>}
-                                        {canEditPermissions
-                                            ? <span
-                                                data-for="batchEditUserPermissionsTooltip"
-                                                data-tip={t('user.table.headers.buttons.permissions.batch_edit')}
-                                                onClick={() => toggleBatchEditUserPermissions()}
-                                            >
-                                                <FontAwesomeIcon className="icon" icon={faEdit} />
-                                                <ReactTooltip id="batchEditUserPermissionsTooltip" />
-                                            </span>
-                                            : <></>}
-                                        <span
-                                            className={`icon ${showFilterRow ? 'active' : ''}`}
-                                            data-for="filterTableTooltip"
-                                            data-tip={t('user.table.headers.buttons.filter')}
-                                            onClick={() => {
-                                                if (showInviteUserRow) setShowInviteUserRow(false);
-                                                if (showFilterRow) filterUsers();
-                                                setShowFilterRow(!showFilterRow);
-                                            }}>
-                                            <ReactTooltip id="filterTableTooltip" />
-                                            <FontAwesomeIcon className="icon" icon={faFilter} />
-                                            <span className="activeFilterCount">
-                                                {Object.keys(filterMap).length ? `(${Object.keys(filterMap).length})` : ''}
-                                            </span>
-                                        </span>
-                                    </>)
-                                    : (<>
-                                        <span
-                                            data-for="saveBatchEditTooltip"
-                                            data-tip={t('user.table.headers.buttons.permissions.batch_edit.confirm')}
-                                            onClick={() => batchSavePermissions(filteredUsers)}
-                                        >
-                                            <FontAwesomeIcon className="icon" icon={faCheckCircle} />
-                                            <ReactTooltip id="saveBatchEditTooltip" />
-                                        </span>
-                                        <span
-                                            data-for="cancelBatchEditTooltip"
-                                            data-tip={t('user.table.headers.buttons.permissions.batch_edit.cancel')}
-                                            onClick={() => toggleBatchEditUserPermissions()}
-                                        >
-                                            <FontAwesomeIcon className="icon" icon={faBan} />
-                                            <ReactTooltip id="cancelBatchEditTooltip" />
-                                        </span>
-                                    </>)}
-                            </div>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {showFilterRow
-                        ? <UserPermissionsTableFilterRow
-                            filterMap={filterMap}
-                            filterUsers={filterUsers}
-                            permissions={permissions}
-                            disabled={batchEditPermissions || editingUsers.length} />
-                        : ''}
-                    {showInviteUserRow
-                        ? <InviteUserRow disabled={batchEditPermissions || editingUsers.length} />
-                        : ''}
-                    {filteredUsers.map(user => {
-                        const rowEditDisabled = !batchEditPermissions && !editingUsers.includes(user.id);
-                        return (
-                            <tr key={user.id}>
-                                <td>
-                                    <div className="center">
-                                        <span
-                                            data-for={`user${user.id}StatusTooltip`}
-                                            data-tip={
-                                                user.fullName.trim().length
-                                                    ? t('user.table.data.status.y')
-                                                    : t('user.table.data.status.n')
-                                            }>
-                                            {user.fullName.trim().length
-                                                ? <FontAwesomeIcon className="icon" icon={faCheck} />
-                                                : <FontAwesomeIcon className="icon" icon={faQuestion} />}
-                                            <ReactTooltip id={`user${user.id}StatusTooltip`} />
-                                        </span>
-                                    </div>
-                                </td>
-                                <td><div>{user.email}</div></td>
-                                <td><div>{user.fullName}</div></td>
-                                {permissions.map(p =>
-                                    <td key={`${p}-${user.id}`}>
-                                        <div className="center">
-                                            <Form.Check
-                                                className="check-input"
-                                                type='checkbox'
-                                                id={`${p}-${user.id}`}
-                                                disabled={rowEditDisabled}
-                                                onChange={e => toggleUserPermission(user, p, e.currentTarget.checked)}
-                                                defaultChecked={user?.permissions && user.permissions.includes(p)}
-                                            />
-                                        </div>
-                                    </td>
-                                )}
-                                <td>
-                                    <div className="actions spaced">
-                                        {batchEditPermissions
-                                            ? <></>
-                                            : rowEditDisabled
-                                                ? (<>
-                                                    {canEditPermissions
-                                                        ? (<span
-                                                            data-for={`editUser${user.id}PermissionButtonTooltip`}
-                                                            data-tip={t('user.table.data.buttons.permissions.edit')}
-                                                            onClick={() => editUserPermissions(user.id)}
-                                                        >
-                                                            <FontAwesomeIcon className="icon" icon={faPen} />
-                                                            <ReactTooltip id={`editUser${user.id}PermissionButtonTooltip`} />
-                                                        </span>)
-                                                        : <></>}
-                                                    {!disableDelete &&
-                                                        <span
-                                                            data-for={`deleteUser${user.id}ButtonTooltip`}
-                                                            data-tip={t('user.table.data.buttons.user.delete')}
-                                                            onClick={() => deleteUser(user)}
-                                                        >
-                                                            <FontAwesomeIcon className="icon" icon={faTrash} />
-                                                            <ReactTooltip id={`deleteUser${user.id}ButtonTooltip`} />
-                                                        </span>
-                                                    }
-                                                </>)
-                                                : (<>
-                                                    <span
-                                                        data-for={`saveUser${user.id}PermissionsEditTooltip`}
-                                                        data-tip={t('user.table.data.buttons.permissions.edit.confirm')}
-                                                        onClick={() => savePermissions(user.id, user.permissions)}
-                                                    >
-                                                        <FontAwesomeIcon className="icon" icon={faCheckCircle} />
-                                                        <ReactTooltip id={`saveUser${user.id}PermissionsEditTooltip`} />
-                                                    </span>
-                                                    <span
-                                                        data-for={`cancelUser${user.id}PermissionsEditTooltip`}
-                                                        data-tip={t('user.table.data.buttons.permissions.edit.cancel')}
-                                                        onClick={() => cancelEditUserPermissions(user.id)}
-                                                    >
-                                                        <FontAwesomeIcon className="icon" icon={faBan} />
-                                                        <ReactTooltip id={`cancelUser${user.id}PermissionsEditTooltip`} />
-                                                    </span>
-                                                </>)}
-                                    </div>
-                                </td>
-                            </tr>
-                        )
-                    })}
-                </tbody>
-            </Table>
-            <br />
-            <TablePagination numPages={Math.ceil(users.length / pageSize)} activePage={currentPage} onSearch={page => setCurrentPage(page)} />
-        </div>
-    )
 }
 
 export default UserPermissionsTable;

@@ -219,10 +219,12 @@ const CustomTable = ({ actions = { filter: {} }, columns = {}, data = [], domain
                         columns={columns}
                         domain={domain}
                         disabled={isBatchEditing}
+                        addBtnIcon={actions?.add?.rowActionIcon}
                         onAdd={newData => addData(newData)}
                     />}
                 {showFilterRow &&
                     <CustomTableFilterRow
+                        clearBtnIcon={actions?.filter?.rowActionIcon}
                         columns={columns}
                         domain={domain}
                         disabled={isBatchEditing}

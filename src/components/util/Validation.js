@@ -39,7 +39,7 @@ export const validateField = (field, value) => {
             return validateTitle(value);
         case 'category':
             return validateCategory(value);
-        case 'email':
+        case 'userPermissions.email':
             return validateEmail(value);
         case 'departments.acronym':
             return validateDeptAcronym(value);

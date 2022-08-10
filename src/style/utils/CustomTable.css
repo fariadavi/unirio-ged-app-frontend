@@ -17,6 +17,14 @@ table.customTable .add-row div .textbox {
     height: 2rem;
 }
 
+table.customTable .filter-row .boolean-filter { 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+    margin: -0.5rem 0;
+}
+
 table.customTable .actions {
     padding: 0.25rem .5rem;
 }

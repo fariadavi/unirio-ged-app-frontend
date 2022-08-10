@@ -3,11 +3,13 @@ import { useTranslation } from 'react-i18next'
 import { Form } from 'react-bootstrap'
 import { AddButton, ClearButton } from '../CustomButtons'
 import { validateField } from '../Validation'
+import { CustomTableBooleanFilter, CustomTableTextFilter } from './CustomTableFilters'
 
 const CustomTableAddRow = ({
     columns,
     domain,
     disabled = false,
+    addBtnIcon,
     onAdd
 }) => {
     const { t } = useTranslation();
@@ -15,7 +17,9 @@ const CustomTableAddRow = ({
     const [newDataRowValidation, setNewDataRowValidation] = useState({});
 
     const defaultTextFieldPlaceholder = t('customTable.addRow.text.placeholder')
-    const i18nAddButtonTooltipKey = t(`${domain}.customTable.addRow.addBtn.tooltip`, '') || 'customTable.addRow.addBtn.tooltip'
+    const i18nAddButtonTooltipKey = t(`${domain}.customTable.addRow.addBtn.tooltip`, '')
+        ? `${domain}.customTable.addRow.addBtn.tooltip`
+        : 'customTable.addRow.addBtn.tooltip'
 
     const updateNewRowData = (key, value) => {
         setNewDataRow(
@@ -39,7 +43,7 @@ const CustomTableAddRow = ({
                 newDataRowValidationObj = { ...newDataRowValidationObj, [key]: 'mandatoryField' }
             })
             setNewDataRowValidation({ ...newDataRowValidation, ...newDataRowValidationObj })
-            
+
         } else if (Object.entries(columns)
             .filter(([key, config]) => config?.requiredOnAdd)
             .every(([key, config]) => newDataRowValidation[key] === '')
@@ -53,47 +57,81 @@ const CustomTableAddRow = ({
 
     return (
         <tr key="0" className="extra-row add-row">
-            {Object.entries(columns).map(([key, config]) =>
-                <td key={key}>
-                    {config?.requiredOnAdd &&
-                        <div className={config.class}>
-                            <Form.Group className="textbox">
-                                <Form.Control
-                                    disabled={disabled}
-                                    placeholder={t(`${domain}.customTable.addRow.${key}.placeholder`, defaultTextFieldPlaceholder)}
-                                    onChange={e => updateNewRowData(key, e.target.value)}
-                                    onKeyPress={e => e.code === 'Enter' && addNewDataRow(newDataRow)}
-                                    isValid={newDataRow?.[key]?.trim().length > 0 && !newDataRowValidation[key]}
-                                    isInvalid={newDataRowValidation[key]}
-                                    value={newDataRow?.[key] || ''}
-                                    type="text"
-                                    size="sm" />
+            {Object.entries(columns).map(([key, config], i, arr) => {
+                const isFieldRequiredOnAdd = config?.requiredOnAdd;
+                const indexOfPreviousRequiredOnAddField = arr.findIndex(([k, v], j) => j < i && v.requiredOnAdd);
+                const indexOfNextRequiredOnAddField = arr.findIndex(([k, v], j) => j > i && v.requiredOnAdd);
+                const colSpanUntilNextRequiredOnAddField = arr.slice(i,
+                    indexOfNextRequiredOnAddField === -1
+                        ? arr.length
+                        : indexOfNextRequiredOnAddField
+                ).length;
+                const shouldRender = isFieldRequiredOnAdd || indexOfPreviousRequiredOnAddField === -1;
 
-                                <Form.Control.Feedback type="invalid" tooltip>
-                                    {t(`${domain}.customTable.addRow.validation.${newDataRowValidation[key]}`,
-                                        t(`customTable.addRow.validation.${newDataRowValidation[key]}`)
-                                    )}
-                                </Form.Control.Feedback>
-                            </Form.Group>
-                        </div>
-                    }
-                </td>
+                return (shouldRender &&
+                    <td key={key} colSpan={colSpanUntilNextRequiredOnAddField}>
+                        {config?.requiredOnAdd &&
+                            <div className={config.class}>
+                                <Form.Group className="textbox">
+                                    <Form.Control
+                                        disabled={disabled}
+                                        placeholder={t(`${domain}.customTable.addRow.${key}.placeholder`, defaultTextFieldPlaceholder)}
+                                        onChange={e => updateNewRowData(key, e.target.value)}
+                                        onKeyPress={e => e.code === 'Enter' && addNewDataRow(newDataRow)}
+                                        isValid={newDataRow?.[key]?.trim().length > 0 && !newDataRowValidation[key]}
+                                        isInvalid={newDataRowValidation[key]}
+                                        value={newDataRow?.[key] || ''}
+                                        type="text"
+                                        size="sm" />
+
+                                    <Form.Control.Feedback type="invalid" tooltip>
+                                        {t(`${domain}.customTable.addRow.validation.${newDataRowValidation[key]}`,
+                                            t(`customTable.addRow.validation.${newDataRowValidation[key]}`)
+                                        )}
+                                    </Form.Control.Feedback>
+                                </Form.Group>
+                            </div>
+                        }
+                    </td>
+                )
+            }
             )}
             <td>
                 {!disabled &&
                     <div className="actions spaced">
                         <AddButton
+                            icon={addBtnIcon}
                             i18nTooltipKey={i18nAddButtonTooltipKey}
                             onClick={() => addNewDataRow(newDataRow)}
                         />
                     </div>
                 }
             </td>
-        </tr>
+        </tr >
     )
 }
 
+const customFilterForType = type => {
+    switch (type) {
+        case 'boolean':
+            return CustomTableBooleanFilter
+        case 'text':
+        default:
+            return CustomTableTextFilter
+    }
+}
+
+const CustomTableFilter = ({ domain, disabled, property, onChange, type, value }) =>
+    React.createElement(customFilterForType(type), {
+        domain: domain,
+        disabled: disabled,
+        property: property,
+        onChange: onChange,
+        value: value
+    })
+
 const CustomTableFilterRow = ({
+    clearBtnIcon,
     columns,
     domain,
     disabled = false,
@@ -101,8 +139,9 @@ const CustomTableFilterRow = ({
     onFilter
 }) => {
     const { t } = useTranslation();
-    const defaultTextFieldPlaceholder = t('customTable.filterRow.text.placeholder')
-    const i18nClearButtonTooltipKey = t(`${domain}.customTable.filterRow.clearBtn.tooltip`, '') || 'customTable.filterRow.clearBtn.tooltip'
+    const i18nClearButtonTooltipKey = t(`${domain}.customTable.filterRow.clearBtn.tooltip`, '')
+        ? `${domain}.customTable.filterRow.clearBtn.tooltip`
+        : 'customTable.filterRow.clearBtn.tooltip'
 
     return (
         <tr key="0" className="extra-row filter-row">
@@ -110,13 +149,14 @@ const CustomTableFilterRow = ({
                 <td key={key}>
                     {config?.filterable &&
                         <div className={config.class}>
-                            <Form.Control
-                                type="text"
+                            <CustomTableFilter
+                                domain={domain}
                                 disabled={disabled}
-                                onChange={e => onFilter(key, e.target.value)}
-                                placeholder={t(`${domain}.customTable.filterRow.${key}.placeholder`, defaultTextFieldPlaceholder)}
-                                value={filterMap?.[key] || ''}
-                                size="sm" />
+                                onChange={value => onFilter(key, value)}
+                                property={key}
+                                type={config?.type}
+                                value={filterMap?.[key]}
+                            />
                         </div>
                     }
                 </td>
@@ -125,6 +165,7 @@ const CustomTableFilterRow = ({
                 {!disabled &&
                     <div className="actions spaced">
                         <ClearButton
+                            icon={clearBtnIcon}
                             i18nTooltipKey={i18nClearButtonTooltipKey}
                             onClick={() => onFilter()}
                         />

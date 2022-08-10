@@ -24,6 +24,8 @@ const enUS = {
     'customTable.addRow.text.placeholder': 'Enter text',
     'customTable.addRow.validation.mandatoryField': 'Mandatory field',
     'customTable.filterRow.text.placeholder': 'Enter text to filter',
+    'customTable.filterRow.boolean.y': '$t(yes)',
+    'customTable.filterRow.boolean.n': '$t(no)',
     'customTable.filterRow.clearBtn.tooltip': 'Clear all filters',
 
     // login
@@ -100,60 +102,72 @@ const enUS = {
     'user.name': 'User Name',
     'user.email': 'Email',
 
-    // user management
-    'user.management.title': 'Manage Users',
-    'user.management.invite.title': 'Invite User',
-    'user.management.department-permissions.title': 'Manage Department Permissions',
-    'user.management.system-permissions.title': 'Manage System Permissions',
-    
-    // user invite
-    'user.management.invite.placeholder': 'Enter user mail',
-    'user.management.invite.validation.invalidEmailFormat': 'Invalid email format',
-    'user.management.invite.validation.invalidDomain': 'Email must belong to @uniriotec.br or @edu.unirio.br',
-    'user.management.invite.button': 'Send Invite',
+    // department management
+    // user permission page
+    'users.department.page.header': 'Department Users',
 
     // user table
+    // headers
     'user.table.headers.status': 'Status',
     'user.table.headers.username': '$t(user.name)',
     'user.table.headers.email': '$t(user.email)',
     'user.table.headers.permission.search_docs': 'Search documents',
     'user.table.headers.permission.add_docs': 'Add documents',
-    'user.table.headers.permission.edit_docs_others': 'Edit other users\' documents',
-    'user.table.headers.permission.delete_docs_others': 'Delete other users\' documents',
+    'user.table.headers.permission.edit_docs_others': 'Edit other users documents',
+    'user.table.headers.permission.delete_docs_others': 'Delete other users documents',
     'user.table.headers.permission.invite_users': 'Invite users',
     'user.table.headers.permission.manage_categories': 'Manage categories',
     'user.table.headers.permission.manage_dept_perm': 'Manage department permissions',
     'user.table.headers.permission.manage_system_perm': 'Manage system permissions',
     'user.table.headers.permission.manage_departments': 'Manage departments',
-    'user.table.filters.text.username': 'Filter by user name',
-    'user.table.filters.text.email': 'Filter by email',
-    'user.table.filters.boolean.y': '$t(yes)',
-    'user.table.filters.boolean.n': '$t(no)',
-    'user.table.filters.status.y': 'Active',
-    'user.table.filters.status.n': 'Pending',
-    'user.table.headers.buttons.invite': 'Invite user',
-    'user.table.headers.buttons.filter': 'Filter users',
-    'user.table.headers.buttons.permissions.batch_edit': 'Edit users permissions in batch',
-    'user.table.headers.buttons.permissions.batch_edit.confirm': 'Confirm',
-    'user.table.headers.buttons.permissions.batch_edit.cancel': 'Cancel',
-    'user.table.filters.buttons.clear': 'Clear all filters',
-    'user.table.data.status.y': 'Active',
-    'user.table.data.status.n': 'Pending',
-    'user.table.data.buttons.permissions.edit': 'Edit user permissions',
-    'user.table.data.buttons.permissions.edit.confirm': 'Confirm',
-    'user.table.data.buttons.permissions.edit.cancel': 'Cancel',
-    'user.table.data.buttons.user.delete': 'Remove user from this department',
 
-    //system management
-    //departments page
+    // action btn tooltips
+    'userPermissions.customTable.actions.addBtn.tooltip': 'Invite user',
+    'userPermissions.customTable.actions.batchEditBtn.tooltip': 'Edit users permissions',
+    'userPermissions.customTable.actions.filterBtn.tooltip': 'Filter users',
+    'userPermissions.customTable.actions.editBtn.tooltip': 'Edit user permissions',
+    'userPermissions.customTable.actions.deleteBtn.tooltip': 'Remove user from this department',
+
+    // user invite row
+    'userPermissions.customTable.addRow.email.placeholder': 'Enter user mail',
+    'userPermissions.customTable.addRow.validation.invalidEmailFormat': 'Invalid email format',
+    'userPermissions.customTable.addRow.validation.invalidDomain': 'Email must belong to one of the following domains: @uniriotec.br or @edu.unirio.br',
+    'userPermissions.customTable.addRow.addBtn.tooltip': 'Send Invite',
+    
+    // filter row
+    'userPermissions.customTable.filterRow.fullName.placeholder': 'Filter by user name',
+    'userPermissions.customTable.filterRow.email.placeholder': 'Filter by email',
+    'userPermissions.customTable.filterRow.status.y': 'Active',
+    'userPermissions.customTable.filterRow.status.n': 'Pending',
+    
+    // table data
+    'user.table.data.status.y.tooltip': 'Active',
+    'user.table.data.status.n.tooltip': 'Pending',
+
+    // system management
+    // departments page
     'departments.page.header': 'Departments',
 
-    //departments table
+    // departments table
+    // headers
     'departments.table.headers.acronym': 'Acronym',
     'departments.table.headers.name': 'Name',
-    'departments.table.data.isCurrentDept.y': 'Current department',
+
+    // action btn tooltips
+
+    // add department row
     'departments.customTable.addRow.acronym.placeholder': 'Enter acronym for department',
     'departments.customTable.addRow.name.placeholder': 'Enter department name',
+    'departments.customTable.addRow.addBtn.tooltip': 'Add new department',
+    'departments.customTable.addRow.validation.acronymMaxLength': 'Acronym length must be 5 characters or fewer',
+    'departments.customTable.addRow.validation.cantContainWhitespaces': 'Acronym can\'t contain whitespaces',
+    
+    // filter row
+    'departments.customTable.filterRow.acronym.placeholder': 'Filter by acronym',
+    'departments.customTable.filterRow.name.placeholder': 'Filter by department name',
+    
+    // table data
+    'departments.table.data.isCurrentDept.y': 'Current department',
 }
 
 export default enUS;

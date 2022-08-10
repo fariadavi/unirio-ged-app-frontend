@@ -27,13 +27,13 @@ export const CustomTableHeaderActions = ({
                             active={isAdding}
                             icon={actions.add?.icon}
                             onClick={() => onClickAddBtn()}
-                            i18nTooltipKey={`${domain}.customTable.addBtn.tooltip`}
+                            i18nTooltipKey={`${domain}.customTable.actions.addBtn.tooltip`}
                         />}
                     {enableBatchEdit &&
                         <EditButton
                             icon={actions.batchEdit?.icon}
                             onClick={() => onClickEditBtn()}
-                            i18nTooltipKey={`${domain}.customTable.batchEditBtn.tooltip`}
+                            i18nTooltipKey={`${domain}.customTable.actions.batchEditBtn.tooltip`}
                         />}
                     {enableFilter &&
                         <FilterButton
@@ -41,19 +41,19 @@ export const CustomTableHeaderActions = ({
                             activeFilterCount={activeFilterCount}
                             icon={actions.filter?.icon}
                             onClick={() => onClickFilterBtn()}
-                            i18nTooltipKey={`${domain}.customTable.filterBtn.tooltip`}
+                            i18nTooltipKey={`${domain}.customTable.actions.filterBtn.tooltip`}
                         />}
                 </>)
                 : (<>
                     <ConfirmButton
                         icon={actions.batchEdit?.confirm?.icon}
                         onClick={() => onClickConfirmEditBtn()}
-                        i18nTooltipKey={`${domain}.customTable.batchEdit.confirmBtn.tooltip`}
+                        i18nTooltipKey={`${domain}.customTable.actions.batchEdit.confirmBtn.tooltip`}
                     />
                     <CancelButton
                         icon={actions.batchEdit?.cancel?.icon}
                         onClick={() => onClickCancelEditBtn()}
-                        i18nTooltipKey={`${domain}.customTable.batchEdit.cancelBtn.tooltip`}
+                        i18nTooltipKey={`${domain}.customTable.actions.batchEdit.cancelBtn.tooltip`}
                     />
                 </>)}
         </>
@@ -82,25 +82,25 @@ export const CustomTableBodyActions = ({
                         <EditButton
                             icon={actions.edit?.icon}
                             onClick={() => onClickEditBtn(dataId)}
-                            i18nTooltipKey={`${domain}.customTable.editBtn.tooltip`}
+                            i18nTooltipKey={`${domain}.customTable.actions.editBtn.tooltip`}
                         />}
                     {disabledelete &&
                         <DeleteButton
                             icon={actions.delete?.icon}
                             onClick={() => onClickDeleteBtn(dataId)}
-                            i18nTooltipKey={`${domain}.customTable.deleteBtn.tooltip`}
+                            i18nTooltipKey={`${domain}.customTable.actions.deleteBtn.tooltip`}
                         />}
                 </>)
                 : (<>
                     <ConfirmButton
                         icon={actions.edit?.confirm?.icon}
                         onClick={() => onClickConfirmEditBtn(dataId)}
-                        i18nTooltipKey={`${domain}.customTable.edit.confirmBtn.tooltip`}
+                        i18nTooltipKey={`${domain}.customTable.actions.edit.confirmBtn.tooltip`}
                     />
                     <CancelButton
                         icon={actions.edit?.cancel?.icon}
                         onClick={() => onClickCancelEditBtn(dataId)}
-                        i18nTooltipKey={`${domain}.customTable.edit.cancelBtn.tooltip`}
+                        i18nTooltipKey={`${domain}.customTable.actions.edit.cancelBtn.tooltip`}
                     />
                 </>)
             )}
