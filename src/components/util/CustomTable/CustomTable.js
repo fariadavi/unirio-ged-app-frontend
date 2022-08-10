@@ -88,7 +88,9 @@ const CustomTable = ({ actions = { filter: {} }, columns = {}, data = [], domain
             const result =
                 dataRowEntries.length
                     && dataRowEntries.some(([key, value]) =>
-                        value.trim() !== data.find(d => d.id === dataId)[key]
+                        (typeof value === 'string'
+                            ? value.trim()
+                            : value) !== data.find(d => d.id === dataId)[key]
                     )
                     ? await actions.edit?.callbackFn(dataId, dataRow)
                     : true;
@@ -114,7 +116,9 @@ const CustomTable = ({ actions = { filter: {} }, columns = {}, data = [], domain
                 dataRows.length
                     && dataRows.some(([key, value]) =>
                         Object.entries(value).some(([k, v]) =>
-                            v.trim() !== data.find(d => d.id === Number(key))[k]
+                        (typeof value === 'string'
+                            ? value.trim()
+                            : value) !== data.find(d => d.id === Number(key))[k]
                         )
                     )
                     ? await actions.batchEdit?.callbackFn(dataRows)
@@ -255,7 +259,7 @@ const CustomTable = ({ actions = { filter: {} }, columns = {}, data = [], domain
                             : (data.length - filteredRowIds.length)
                     )
                     .map(dataRow => {
-                        const isEditingRow = Object.keys(editingRows).includes(dataRow.id?.toString());
+                        const editingRow = editingRows[dataRow.id?.toString()];
 
                         return (
                             <tr key={dataRow.id}>
@@ -263,11 +267,11 @@ const CustomTable = ({ actions = { filter: {} }, columns = {}, data = [], domain
                                     <td key={key}>
                                         <div className={config?.class}>
                                             <CustomTableDataField
-                                                isEditing={(isBatchEditing || isEditingRow) && config?.editable !== false}
+                                                disguise={config?.disguise?.[dataRow[key]]}
+                                                isEditing={(isBatchEditing || !!editingRow) && config?.editable !== false}
                                                 onChange={value => setEditData(dataRow.id, key, value)}
                                                 type={config?.type}
-                                                value={dataRow[key]}
-                                                disguise={config?.disguise?.[dataRow[key]]}
+                                                value={editingRow?.[key] === undefined ? dataRow[key] : editingRow[key]}
                                             />
                                         </div>
                                     </td>
@@ -279,7 +283,7 @@ const CustomTable = ({ actions = { filter: {} }, columns = {}, data = [], domain
                                                 actions={actions}
                                                 dataId={dataRow.id}
                                                 isBatchEditing={isBatchEditing}
-                                                isEditingRow={isEditingRow}
+                                                isEditingRow={!!editingRow}
                                                 onClickEditBtn={dataId => toggleEditData(dataId)}
                                                 onClickConfirmEditBtn={dataId => confirmEditData(dataId)}
                                                 onClickCancelEditBtn={dataId => toggleEditData(dataId)}

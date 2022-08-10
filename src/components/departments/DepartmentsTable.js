@@ -15,13 +15,15 @@ import { faChevronRight, faEdit } from '@fortawesome/free-solid-svg-icons'
 const DepartmentsTable = ({ canAddDept, canEditDept, canDeleteDept }) => {
     const { t } = useTranslation();
     const [departments, setDepartments] = useState([]);
-    const { department, setLoggedUserInfo } = useContext(UserContext);
+    const { department, user, setLoggedUserInfo } = useContext(UserContext);
 
     const loadDepartments = useCallback(async () => {
         const res = await getDepartments();
 
         if (res.ok) setDepartments(await res.json());
     }, [])
+
+    useEffect(() => loadDepartments(), [loadDepartments])
 
     const addNewDepartment = useCallback(async departmentData => {
         const res = await insertDepartment(
@@ -46,11 +48,12 @@ const DepartmentsTable = ({ canAddDept, canEditDept, canDeleteDept }) => {
 
         if (res.ok) {
             await loadDepartments();
-            setLoggedUserInfo();
+            if (user?.departments?.some(dept => dept.id === Number(departmentId)))
+                setLoggedUserInfo();
         }
 
         return res.ok;
-    }, [loadDepartments, setLoggedUserInfo])
+    }, [user, loadDepartments, setLoggedUserInfo])
 
     const batchEditDepartments = useCallback(async editedDepartmentEntries => {
         const res = await batchUpdateDepartments(
@@ -65,24 +68,28 @@ const DepartmentsTable = ({ canAddDept, canEditDept, canDeleteDept }) => {
 
         if (res.ok) {
             await loadDepartments();
-            setLoggedUserInfo();
+            if (editedDepartmentEntries
+                .some(([deptId]) =>
+                    user?.departments?.some(dept => dept.id === Number(deptId))
+                ))
+                setLoggedUserInfo();
         }
 
         return res.ok;
-    }, [loadDepartments, setLoggedUserInfo])
+    }, [user, loadDepartments, setLoggedUserInfo])
 
     const removeDepartment = useCallback(async departmentId => {
         const res = await deleteDepartment(departmentId);
 
         if (res.ok) {
             await loadDepartments();
-            setLoggedUserInfo();
+
+            if (user?.departments?.some(dept => dept.id === Number(departmentId)))
+                setLoggedUserInfo();
         }
 
         return res.ok;
-    }, [loadDepartments, setLoggedUserInfo])
-
-    useEffect(() => loadDepartments(), [loadDepartments])
+    }, [user, loadDepartments, setLoggedUserInfo])
 
     const actions = {
         add: {
@@ -112,7 +119,7 @@ const DepartmentsTable = ({ canAddDept, canEditDept, canDeleteDept }) => {
             type: 'boolean',
             width: '32px',
             disguise: {
-                true: <Icon 
+                true: <Icon
                     icon={faChevronRight}
                     tooltip={t('departments.table.data.isCurrentDept.y')}
                 />,

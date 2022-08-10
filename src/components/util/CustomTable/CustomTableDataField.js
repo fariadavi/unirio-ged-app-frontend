@@ -7,20 +7,14 @@ const CustomTableBooleanField = ({
     value,
     disguise
 }) =>
-    isEditing
-        ? <Form.Check
-            className='check-input'
-            type='checkbox'
-            onChange={e => onChange(e.currentTarget.checked)}
-            defaultChecked={value || false}
-        />
-        : (disguise ||
-            <Form.Check
-                disabled
-                className='check-input'
-                type='checkbox'
-                checked={value || false}
-            />)
+    (!isEditing && disguise)
+    || <Form.Check
+        checked={!!value || false}
+        className='check-input'
+        disabled={!isEditing}
+        onChange={e => onChange(e.currentTarget.checked)}
+        type='checkbox'
+    />
 
 const CustomTableTextField = ({
     isEditing,
@@ -34,7 +28,7 @@ const CustomTableTextField = ({
             type='text'
             size='sm'
         />
-        : (value || '')
+        : (value?.trim() || '')
 
 const dataFieldForType = type => {
     switch (type) {

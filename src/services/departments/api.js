@@ -25,7 +25,7 @@ const batchUpdateDepartments = async departmentList =>
     })
 
 const deleteDepartment = async departmentId =>
-    await rq(`/departments/`, { method: 'DELETE' })
+    await rq(`/departments/${departmentId}`, { method: 'DELETE' })
 
 export {
     batchUpdateDepartments,
