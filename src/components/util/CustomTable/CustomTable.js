@@ -20,8 +20,15 @@ const CustomTable = ({ actions = { filter: {} }, columns = {}, data = [], domain
     const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
-        const columnToSortBy = Object.entries(columns).find(([key, value]) => value.sort)
-        if (columnToSortBy) setSortProperty(columnToSortBy[0])
+        setShowAddRow(false);
+        setShowFilterRow(false);
+        setBatchEditing(false);
+        setEditingRows({});
+        setFilteredRowIds([]);
+        setFilterMap({});
+        setSortProperty(Object.entries(columns).find(([key, value]) => value.sort)?.[0]);
+        setSortDirection('ASC');
+        setCurrentPage(1);
     }, [columns])
 
     useEffect(() => {
@@ -116,9 +123,9 @@ const CustomTable = ({ actions = { filter: {} }, columns = {}, data = [], domain
                 dataRows.length
                     && dataRows.some(([key, value]) =>
                         Object.entries(value).some(([k, v]) =>
-                        (typeof value === 'string'
-                            ? value.trim()
-                            : value) !== data.find(d => d.id === Number(key))[k]
+                            (typeof value === 'string'
+                                ? value.trim()
+                                : value) !== data.find(d => d.id === Number(key))[k]
                         )
                     )
                     ? await actions.batchEdit?.callbackFn(dataRows)

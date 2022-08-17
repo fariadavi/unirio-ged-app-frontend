@@ -25,7 +25,7 @@ const UserPermissionsTable = ({ canInviteUsers, canEditUserPermissions, canDelet
         if (res.ok) setUsers(await res.json());
     }, [])
 
-    useEffect(() => loadUsers(), [loadUsers, department])
+    useEffect(() => loadUsers(), [loadUsers, department, type])
 
     const loadPermissions = useCallback(async () => {
         const res = await getPermissions(type);
@@ -33,7 +33,7 @@ const UserPermissionsTable = ({ canInviteUsers, canEditUserPermissions, canDelet
         if (res.ok) setPermissions(await res.json());
     }, [type])
 
-    useEffect(() => loadPermissions(), [loadPermissions])
+    useEffect(() => loadPermissions(), [loadPermissions, type])
 
     const addNewUser = useCallback(async userData => {
         const res = await insertUser(userData.email);
