@@ -1,7 +1,7 @@
-import { getLocalToken } from "./auth";
+import { getLocalItem, SERVER_TOKEN_KEY } from "../utils/localStorageManager";
 
 export default async function rq(url, options) {
-    const token = getLocalToken();
+    const token = getLocalItem(SERVER_TOKEN_KEY);
     
     if (token) {
         if (!options.headers)

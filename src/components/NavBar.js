@@ -4,7 +4,7 @@ import { UserContext } from '../contexts/UserContext'
 import { Link } from 'react-router-dom'
 import ReactTooltip from 'react-tooltip'
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap'
-import { getUserLanguage, setUserLanguage } from '../services/lang'
+import { getLocalItem, setLocalItem, LANG_KEY } from '../utils/localStorageManager'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHome, faCogs, faExchangeAlt, faFileAlt, faHouseUser, faLanguage, faPlusCircle, faSearch, faStream, faUserCircle, faUsersCog, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
 import '../style/NavBar.css'
@@ -12,12 +12,12 @@ import '../style/NavBar.css'
 export default function NavBar() {
     const { t, i18n } = useTranslation();
     const { user, department, checkPermission, changeDepartment, logoutUser } = useContext(UserContext);
-    const [language, setLanguage] = useState(getUserLanguage());
+    const [language, setLanguage] = useState(getLocalItem(LANG_KEY));
     const languageList = Object.keys(i18n.store.data)
 
     useEffect(() => {
         i18n.changeLanguage(language)
-        setUserLanguage(language || navigator.language || navigator.userLanguage)
+        setLocalItem(LANG_KEY, language || navigator.language || navigator.userLanguage)
     }, [i18n, language])
 
     const handleSwitchLanguage = langCode => { if (langCode !== language) setLanguage(langCode) };

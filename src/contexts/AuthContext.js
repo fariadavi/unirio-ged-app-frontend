@@ -1,18 +1,18 @@
 import React, { useCallback, createContext, useState } from 'react';
-import { getLocalToken, setLocalToken, removeLocalToken } from '../services/auth'
+import { getLocalItem, setLocalItem, removeLocalItem, SERVER_TOKEN_KEY } from '../utils/localStorageManager'
 import rq from '../services/api.js'
 
 const AuthContext = createContext();
 
 function AuthProvider({ children }) {
-    const [token, setToken] = useState(getLocalToken());
+    const [token, setToken] = useState(getLocalItem(SERVER_TOKEN_KEY));
     const [authLoading, setAuthLoading] = useState(false);
 
 	const handleAuthLogout = useCallback(() => {
 		setAuthLoading(true);
 
 		setToken(null);
-		removeLocalToken();
+		removeLocalItem(SERVER_TOKEN_KEY);
 
 		setAuthLoading(false);
 	}, [])
@@ -30,9 +30,9 @@ function AuthProvider({ children }) {
 			if (!res.ok)
 				throw new Error(res.status);
 			
-			const localToken = await res.text();
-			setLocalToken(localToken);
-			setToken(localToken);
+			const serverToken = await res.text();
+			setLocalItem(SERVER_TOKEN_KEY, serverToken);
+			setToken(serverToken);
 		} catch (err) {
 			handleAuthLogout();
 		}
