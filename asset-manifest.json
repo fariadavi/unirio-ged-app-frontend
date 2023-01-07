@@ -1,23 +1,13 @@
 {
   "files": {
-    "main.css": "/unirio-ged-app-frontend/static/css/main.92e6b679.chunk.css",
-    "main.js": "/unirio-ged-app-frontend/static/js/main.4d8836a1.chunk.js",
-    "main.js.map": "/unirio-ged-app-frontend/static/js/main.4d8836a1.chunk.js.map",
-    "runtime-main.js": "/unirio-ged-app-frontend/static/js/runtime-main.90cdc58a.js",
-    "runtime-main.js.map": "/unirio-ged-app-frontend/static/js/runtime-main.90cdc58a.js.map",
-    "static/css/2.4c97ca4f.chunk.css": "/unirio-ged-app-frontend/static/css/2.4c97ca4f.chunk.css",
-    "static/js/2.1f7086cd.chunk.js": "/unirio-ged-app-frontend/static/js/2.1f7086cd.chunk.js",
-    "static/js/2.1f7086cd.chunk.js.map": "/unirio-ged-app-frontend/static/js/2.1f7086cd.chunk.js.map",
+    "main.css": "/unirio-ged-app-frontend/static/css/main.ce51fb17.css",
+    "main.js": "/unirio-ged-app-frontend/static/js/main.c8e80c50.js",
     "index.html": "/unirio-ged-app-frontend/index.html",
-    "static/css/2.4c97ca4f.chunk.css.map": "/unirio-ged-app-frontend/static/css/2.4c97ca4f.chunk.css.map",
-    "static/css/main.92e6b679.chunk.css.map": "/unirio-ged-app-frontend/static/css/main.92e6b679.chunk.css.map",
-    "static/js/2.1f7086cd.chunk.js.LICENSE.txt": "/unirio-ged-app-frontend/static/js/2.1f7086cd.chunk.js.LICENSE.txt"
+    "main.ce51fb17.css.map": "/unirio-ged-app-frontend/static/css/main.ce51fb17.css.map",
+    "main.c8e80c50.js.map": "/unirio-ged-app-frontend/static/js/main.c8e80c50.js.map"
   },
   "entrypoints": [
-    "static/js/runtime-main.90cdc58a.js",
-    "static/css/2.4c97ca4f.chunk.css",
-    "static/js/2.1f7086cd.chunk.js",
-    "static/css/main.92e6b679.chunk.css",
-    "static/js/main.4d8836a1.chunk.js"
+    "static/css/main.ce51fb17.css",
+    "static/js/main.c8e80c50.js"
   ]
 }
