@@ -105,6 +105,7 @@ const enUS = {
     // department management
     // user permission page
     'users.department.page.header': 'Department Users',
+    'users.system.page.header': 'System Users',
 
     // user table
     // headers

@@ -20,10 +20,10 @@ const UserPermissionsTable = ({ canInviteUsers, canEditUserPermissions, canDelet
     const { department, user, setLoggedUserInfo } = useContext(UserContext);
 
     const loadUsers = useCallback(async () => {
-        const res = await getUsers();
+        const res = await getUsers(type);
 
         if (res.ok) setUsers(await res.json());
-    }, [])
+    }, [type])
 
     useEffect(() => loadUsers(), [loadUsers, department, type])
 
@@ -177,6 +177,7 @@ const UserPermissionsTable = ({ canInviteUsers, canEditUserPermissions, canDelet
             permissions.map(perm => [perm, {
                 class: 'center',
                 header: t(`user.table.headers.permission.${perm.toLowerCase()}`),
+                editable: perm !== 'SEARCH_DOCS',
                 filterable: true,
                 type: 'boolean'
             }])

@@ -10,14 +10,14 @@ export default function Users({ permissionType }) {
 
     return (
         <div className="header-n-table-div">
-            <h1>{t(`users.${permissionType}.page.header`)} - {department?.acronym}</h1>
+            <h1>{t(`users.${permissionType}.page.header`)}{ permissionType === 'department' && ` ${department?.acronym}`}</h1>
             <UserPermissionsTable
                 canInviteUsers={permissionType === 'department' && checkPermission('INVITE_USERS')}
                 canEditUserPermissions={
                     (permissionType === 'department' && checkPermission('MANAGE_DEPT_PERM'))
                     || (permissionType === 'system' && checkPermission('MANAGE_SYSTEM_PERM'))
                 }
-                canDeleteUsers={false}
+                canDeleteUsers={permissionType === 'department' && checkPermission('MANAGE_DEPT_PERM')}
                 type={permissionType}
             />
         </div>

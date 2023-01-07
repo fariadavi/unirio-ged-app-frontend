@@ -106,6 +106,7 @@ const ptBR = {
     // department management
     // user permission page
     'users.department.page.header': 'Usuários do departmento',
+    'users.system.page.header': 'Usuários do sistema',
 
     // user table
     // headers

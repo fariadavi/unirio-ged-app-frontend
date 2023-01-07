@@ -1,7 +1,7 @@
 import rq from '../../services/api'
 
-const getUsers = async () =>
-    await rq('/users', { method: 'GET' });
+const getUsers = async (type) =>
+    await rq(`/users${type === 'department' ? '/currentdept' : ''}`, { method: 'GET' });
 
 const getPermissions = async type =>
     await rq(`/permissions/${type}`, { method: 'GET' });
