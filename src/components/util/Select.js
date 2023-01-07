@@ -7,9 +7,7 @@ import '../../style/utils/Select.css'
 const Select = ({ className, label, name, placeholder, value, onChange, options, noOptionsLabel, textProperty, idProperty = 'id', required, isValid, isInvalid, children }) =>
     <div className={`${className} select-wrapper`}>
 
-        {label
-            ? <Form.Label>{label}</Form.Label>
-            : ''}
+        {label && <Form.Label>{label}</Form.Label>}
 
         <Form.Control as="select" custom
             required={required}
