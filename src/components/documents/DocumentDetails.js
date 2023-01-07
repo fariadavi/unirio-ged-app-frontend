@@ -4,6 +4,7 @@ import { UserContext } from '../../contexts/UserContext'
 import rq from '../../services/api'
 import DatePicker from '../util/DatePicker'
 import CategorySelect from '../util/CategorySelect'
+import PageNotFound from '../invalid/PageNotFound';
 import { getStatusBadge } from '../util/StatusBadge'
 import { Button, Col, Form } from 'react-bootstrap'
 import { Redirect, Route, Switch, useParams, useRouteMatch } from 'react-router-dom'
@@ -32,7 +33,7 @@ const DocumentForm = () => {
     useEffect(() => {
         if (docId && docId !== document.id) {
             rq(`/documents/${docId}`, { method: 'GET' })
-                .then(res => { if (res.ok) return res.json(); else setRedirect('/404'); })
+                .then(res => { if (res.ok) return res.json(); else setValidation({ invalidDocument: true }); })
                 .then(doc => { if (doc) setDocument({ ...doc, file: { name: doc.fileName, size: -1 } }) });
 
         } else if (!docId && document.id) {
@@ -123,8 +124,8 @@ const DocumentForm = () => {
     return (
         redirect
             ? <Redirect to={redirect} />
-            : (!docId && !checkPermission('ADD_DOCS')) || (docId && document.registeredBy !== user.id && !checkPermission('EDIT_DOCS_OTHERS'))
-                ? <div>Unauthorized page here</div>
+            : (docId && validation.invalidDocument) || (!docId && !checkPermission('ADD_DOCS')) || (docId && document.registeredBy !== user.id && !checkPermission('EDIT_DOCS_OTHERS'))
+                ? <PageNotFound />
                 : <div className="document-details-page">
                     <Form className="document-form" noValidate onSubmit={handleSubmit}>
 
