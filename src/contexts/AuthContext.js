@@ -1,5 +1,5 @@
 import React, { useCallback, createContext, useState } from 'react';
-import { getLocalItem, setLocalItem, removeLocalItem, SERVER_TOKEN_KEY } from '../utils/localStorageManager'
+import { getLocalItem, setLocalItem, removeLocalItem, SERVER_TOKEN_KEY, GOOGLE_TOKEN_KEY } from '../utils/localStorageManager'
 import rq from '../services/api.js'
 
 const AuthContext = createContext();
@@ -13,6 +13,7 @@ function AuthProvider({ children }) {
 
 		setToken(null);
 		removeLocalItem(SERVER_TOKEN_KEY);
+		removeLocalItem(GOOGLE_TOKEN_KEY);
 
 		setAuthLoading(false);
 	}, [])
@@ -32,6 +33,7 @@ function AuthProvider({ children }) {
 			
 			const serverToken = await res.text();
 			setLocalItem(SERVER_TOKEN_KEY, serverToken);
+			setLocalItem(GOOGLE_TOKEN_KEY, googleData.accessToken);
 			setToken(serverToken);
 		} catch (err) {
 			handleAuthLogout();

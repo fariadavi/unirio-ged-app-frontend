@@ -42,6 +42,7 @@ const ptBR = {
     // navbar
     'navbar.documents': '$t(document_plural)',
     'navbar.documents.add': 'Adicionar',
+    'navbar.documents.import': 'Importar',
     'navbar.documents.search': 'Pesquisar',
     'navbar.department': '$t(department)',
     'navbar.department.category': '$t(category_plural)',

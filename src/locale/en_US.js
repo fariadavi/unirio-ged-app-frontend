@@ -41,6 +41,7 @@ const enUS = {
     // navbar
     'navbar.documents': '$t(document_plural)',
     'navbar.documents.add': 'Add New',
+    'navbar.documents.import': 'Import',
     'navbar.documents.search': 'Search',
     'navbar.department': '$t(department)',
     'navbar.department.category': '$t(category_plural)',

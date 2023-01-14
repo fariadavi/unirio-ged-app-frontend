@@ -6,7 +6,7 @@ import ReactTooltip from 'react-tooltip'
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap'
 import { getLocalItem, setLocalItem, LANG_KEY } from '../utils/localStorageManager'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHome, faCogs, faExchangeAlt, faFileAlt, faHouseUser, faLanguage, faPlusCircle, faSearch, faStream, faUserCircle, faUsersCog, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
+import { faHome, faCogs, faCloudDownloadAlt, faExchangeAlt, faFileAlt, faHouseUser, faLanguage, faPlusCircle, faSearch, faStream, faUserCircle, faUsersCog, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
 import '../style/NavBar.css'
 
 export default function NavBar() {
@@ -39,10 +39,16 @@ export default function NavBar() {
                         </>
                     }>
                         {checkPermission('ADD_DOCS')
-                            && <Link to="/documents/" className="dropdown-item">
-                                <FontAwesomeIcon className="icon" icon={faPlusCircle} />
-                                {t('navbar.documents.add')}
-                            </Link>
+                            && (<>
+                                <Link to="/documents/new" className="dropdown-item">
+                                    <FontAwesomeIcon className="icon" icon={faPlusCircle} />
+                                    {t('navbar.documents.add')}
+                                </Link>
+                                <Link to="/documents/import/" className="dropdown-item">
+                                    <FontAwesomeIcon className="icon" icon={faCloudDownloadAlt} />
+                                    {t('navbar.documents.import')}
+                                </Link>
+                            </>)
                         }
                         {checkPermission('SEARCH_DOCS')
                             && <Link to="/" className="dropdown-item">
