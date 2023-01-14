@@ -152,6 +152,7 @@ const enUS = {
     // departments table
     // headers
     'departments.table.headers.acronym': 'Acronym',
+    'departments.table.headers.numUsers': 'User count',
     'departments.table.headers.name': 'Name',
 
     // action btn tooltips

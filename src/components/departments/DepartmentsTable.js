@@ -133,13 +133,20 @@ const DepartmentsTable = ({ canAddDept, canEditDept, canDeleteDept }) => {
             requiredOnAdd: true,
             sort: true,
             type: 'text',
-            width: '150px'
+            width: '112px'
         },
         name: {
             header: t('departments.table.headers.name'),
             filterable: true,
             requiredOnAdd: true,
             type: 'text'
+        },
+        numUsers: {
+            class: 'center',
+            header: t('departments.table.headers.numUsers'),
+            editable: false,
+            type: 'number',
+            width: '128px'
         }
     }
 

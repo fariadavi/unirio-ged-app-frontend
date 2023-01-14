@@ -15,7 +15,7 @@ export default function Departments() {
             <DepartmentsTable
                 canAddDept={canManageDepts}
                 canEditDept={canManageDepts}
-                canDeleteDept={false}
+                canDeleteDept={canManageDepts}
             />
         </div>
     )

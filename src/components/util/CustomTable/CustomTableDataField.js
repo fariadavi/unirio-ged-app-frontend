@@ -28,7 +28,7 @@ const CustomTableTextField = ({
             type='text'
             size='sm'
         />
-        : (value?.trim() || '')
+        : (value.toString()?.trim() || '')
 
 const dataFieldForType = type => {
     switch (type) {

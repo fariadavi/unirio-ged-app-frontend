@@ -153,6 +153,7 @@ const ptBR = {
     // departments table
     // headers
     'departments.table.headers.acronym': 'Sigla',
+    'departments.table.headers.numUsers': 'Nº Usuários',
     'departments.table.headers.name': 'Nome',
 
     // action btn tooltips
