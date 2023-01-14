@@ -5,7 +5,7 @@ export const getStatusBadge = status => {
 
     let badgeVariant
     switch (status) {
-        case 'SUCCESS':
+        case 'PROCESSED':
             badgeVariant = 'success'
             break;
         case 'FAILED':

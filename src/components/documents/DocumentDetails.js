@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { UserContext } from '../../contexts/UserContext'
 import rq from '../../services/api'
+import DocumentImport from './DocumentImport'
 import DatePicker from '../util/DatePicker'
 import CategorySelect from '../util/CategorySelect'
 import PageNotFound from '../invalid/PageNotFound';
@@ -21,9 +22,9 @@ const DocumentForm = () => {
         title: '',
         summary: '',
         category: 0,
-        date: new Date().toISOString().split('T')[0],
+        date: !docId && new Date().toISOString().split('T')[0],
         file: undefined
-    }), []);
+    }), [docId]);
     const [document, setDocument] = useState(initialDocumentValues);
 
     useEffect(() => { if (redirect) setRedirect(null) }, [redirect]);
@@ -41,7 +42,7 @@ const DocumentForm = () => {
             setValidation({});
 
         } else if (document.tenant && document.tenant !== department.acronym.toLowerCase()) {
-            setRedirect('/documents');
+            setRedirect('/documents/new');
         }
     }, [docId, document.id, document.tenant, department, initialDocumentValues]);
 
@@ -242,8 +243,9 @@ export default function DocumentDetails() {
 
     return (
         <Switch>
+            <Route path={`${match.path}/new`} component={DocumentForm} />
+            <Route path={`${match.path}/import`} component={DocumentImport} />
             <Route path={`${match.path}/:docId`} component={DocumentForm} />
-            <Route path={match.path} component={DocumentForm} />
         </Switch>
     )
 }
