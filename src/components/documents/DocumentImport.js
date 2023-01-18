@@ -4,15 +4,15 @@ import rq from '../../services/api'
 import { AuthContext } from '../../contexts/AuthContext'
 import useDrivePicker from 'react-google-drive-picker'
 import CategorySelect from '../util/CategorySelect'
-import { getLocalItem, isTokenExpired, GOOGLE_TOKEN_KEY, LANG_KEY } from '../../utils/localStorageManager'
+import { getLocalItem, isTokenExpired, LANG_KEY } from '../../utils/localStorageManager'
 
 const DocumentImport = () => {
     const { t } = useTranslation();
+    const [openPicker, authResult] = useDrivePicker();
     const { token, handleAuthLogout } = useContext(AuthContext);
     const [category, setCategory] = useState('');
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [filesList, setFilesList] = useState([]);
-    const [openPicker] = useDrivePicker();
 
     const handleOpenPicker = () => {
         if (isTokenExpired(token)) handleAuthLogout();        
@@ -23,10 +23,13 @@ const DocumentImport = () => {
             return;
         }
 
+    const handleOpenPicker = async () => {
+        if (isTokenExpired(token)) handleAuthLogout();
+
         openPicker({
             clientId: process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID,
             developerKey: process.env.REACT_APP_GOOGLE_DEVELOPER_KEY,
-            token: googleToken,
+            token: authResult?.access_token,
             setIncludeFolders: true,
             setSelectFolderEnabled: true,
             supportDrives: true,
@@ -47,7 +50,7 @@ const DocumentImport = () => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'token': getLocalItem(GOOGLE_TOKEN_KEY)
+                'token': authResult?.access_token
             },
             body: JSON.stringify(filesList)
         });
