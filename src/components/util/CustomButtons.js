@@ -1,12 +1,11 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { v4 as uuid } from 'uuid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBan, faCheckCircle, faPen, faFilter, faTimes, faTrash, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+import { faBan, faCheckCircle, faPen, faFilter, faTimes, faTrash, faPlusCircle } from '@fortawesome/free-solid-svg-icons'
 import ReactTooltip from 'react-tooltip'
 
 const Button = ({ icon, tooltip = '', active = false, onClick, append }) => {
-    const tooltipId = uuid();
+    const tooltipId = crypto.randomUUID();
     return (
         <span
             className={`icon ${active ? 'active' : ''}`}

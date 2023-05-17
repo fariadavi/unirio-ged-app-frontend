@@ -1,15 +1,14 @@
 import React from 'react'
-import { v4 as uuid } from 'uuid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import ReactTooltip from 'react-tooltip'
 
-export const Icon = ({ icon, tooltip = '' }) => {
-    const tooltipId = uuid();
+export const Icon = ({ icon, tooltip = '', style }) => {
+    const tooltipId = crypto.randomUUID();
     return (
         <span
             data-for={tooltipId}
             data-tip={tooltip}>
-            <FontAwesomeIcon className="icon" icon={icon} />
+            <FontAwesomeIcon className="icon" icon={icon} style={style} />
             <ReactTooltip id={tooltipId} />
         </span>
     )
