@@ -5,16 +5,19 @@ import rq from '../../services/api'
 import { Form } from 'react-bootstrap'
 import Select from './Select'
 
-const CategorySelect = ({ className, label, onChange, isValid, isInvalid, validationMessage, value }) => {
+const CategorySelect = ({ categories = undefined, className, label, onChange, isValid, isInvalid, size, validationMessage, value }) => {
     const { t } = useTranslation();
     const { department } = useContext(UserContext);
-    const [categories, setCategories] = useState([]);
+    const [cats, setCats] = useState([]);
 
     useEffect(() => {
-        rq('/categories', { method: 'GET' })
-            .then(res => { if (res.ok) return res.json() })
-            .then(cats => setCategories(cats));
-    }, [department]);
+        if (!categories)
+            rq('/categories', { method: 'GET' })
+                .then(res => { if (res.ok) return res.json() })
+                .then(c => setCats(c));
+        else
+            setCats(categories);
+    }, [categories, department]);
 
     return <Select
         className={className}
@@ -23,11 +26,12 @@ const CategorySelect = ({ className, label, onChange, isValid, isInvalid, valida
         isValid={isValid}
         isInvalid={isInvalid}
         onChange={onChange}
-        options={categories}
+        options={cats}
         placeholder={t('document.form.category.choose')}
         noOptionsLabel={t('document.form.category.zeroOptions')}
         textProperty="fullName"
         value={value}
+        size={size}
     >
         {isInvalid
             ? <Form.Control.Feedback type="invalid">

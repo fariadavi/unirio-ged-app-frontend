@@ -4,10 +4,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimesCircle } from '@fortawesome/free-regular-svg-icons'
 import '../../style/utils/Select.css'
 
-const Select = ({ className, label, name, placeholder, value, onChange, options, noOptionsLabel, textProperty, idProperty = 'id', required, isValid, isInvalid, children }) =>
-    <div className={`${className} select-wrapper`}>
+const Select = ({ className = '', label, name, placeholder, value, onChange, options, noOptionsLabel, textProperty, idProperty = 'id', required, isValid, isInvalid, children, size }) =>
+    <div className={`select-wrapper ${className}`}>
 
-        {label && <Form.Label>{label}</Form.Label>}
+        {!!label && <Form.Label>{label}</Form.Label>}
 
         <Form.Control as="select" custom
             required={required}
@@ -15,7 +15,8 @@ const Select = ({ className, label, name, placeholder, value, onChange, options,
             onChange={e => onChange(name, e.target.value)}
             isValid={isValid}
             isInvalid={isInvalid}
-            value={value}>
+            value={value}
+            size={size}>
             <option key={0} style={{ display: options.length ? 'none' : '' }}>
                 {options.length ? placeholder : noOptionsLabel}
             </option>
