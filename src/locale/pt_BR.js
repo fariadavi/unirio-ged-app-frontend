@@ -29,6 +29,13 @@ const ptBR = {
     'customTable.filterRow.boolean.n': '$t(no)',
     'customTable.filterRow.clearBtn.tooltip': 'Limpar todos os filtros',
 
+    // status badge
+    'badge.status.not_processed': 'Não Processado',
+    'badge.status.processing': 'Processando',
+    'badge.status.processed': 'Processado',
+    'badge.status.failed': 'Falha no Processamento',
+    'badge.status.empty_content': 'Sem Conteúdo',
+
     // login
     'loginWithGoogle.buttonText': 'Entre com Google',
 

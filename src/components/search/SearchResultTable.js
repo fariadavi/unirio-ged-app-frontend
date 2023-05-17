@@ -2,7 +2,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import rq from '../../services/api'
 import TablePagination from '../util/TablePagination'
-import { getStatusBadge } from '../util/StatusBadge'
+import StatusBadge from '../util/StatusBadge'
 import { Link } from 'react-router-dom'
 import { Table } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -84,7 +84,9 @@ export default function SearchResultTable({ refProp, documents, currentPage, num
                             </td>
                             <td className="category"><p className="center">{item.fullCategoryHierarchy}</p></td>
                             <td className="date"><p className="center">{item.formattedDate}</p></td>
-                            <td className="status"><p className="center">{getStatusBadge(item.status)}</p></td>
+                            <td className="status"><p className="center">{
+                                    <StatusBadge status={item.status}/>
+                            }</p></td>
                             <td className="user"><p className="center">{item.registeredBy}</p></td>
                         </tr>
                     ))}

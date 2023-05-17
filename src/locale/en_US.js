@@ -28,6 +28,13 @@ const enUS = {
     'customTable.filterRow.boolean.n': '$t(no)',
     'customTable.filterRow.clearBtn.tooltip': 'Clear all filters',
 
+    // status badge
+    'badge.status.not_processed': 'Not Processed',
+    'badge.status.processing': 'Processing',
+    'badge.status.processed': 'Processed',
+    'badge.status.failed': 'Failed',
+    'badge.status.empty_content': 'Empty Content',
+
     // login
     'loginWithGoogle.buttonText': 'Sign in with Google',
 

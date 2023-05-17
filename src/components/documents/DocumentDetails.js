@@ -6,7 +6,7 @@ import DocumentImport from './DocumentImport'
 import DatePicker from '../util/DatePicker'
 import CategorySelect from '../util/CategorySelect'
 import PageNotFound from '../invalid/PageNotFound';
-import { getStatusBadge } from '../util/StatusBadge'
+import StatusBadge from '../util/StatusBadge'
 import { Button, Col, Form } from 'react-bootstrap'
 import { Redirect, Route, Switch, useParams, useRouteMatch } from 'react-router-dom'
 import { validateField, validateObject } from '../util/Validation.js'
@@ -173,7 +173,7 @@ const DocumentForm = () => {
                                 <Form.Label>{t('document.status')}</Form.Label>
 
                                 <Form.Text as="p">
-                                    {getStatusBadge(document['status'])}
+                                    <StatusBadge status={document['status']}/>
                                 </Form.Text>
                             </Form.Group>
                         </Form.Row>
