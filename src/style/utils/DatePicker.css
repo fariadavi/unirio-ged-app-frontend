@@ -14,6 +14,14 @@
     transition: opacity .1s ease-out;
 }
 
+.custom-date-picker input[type="date"].form-control-sm + .clear-input {
+    line-height: 2rem;
+}
+
+.custom-date-picker input[type="date"].form-control-lg + .clear-input {
+    line-height: 3rem;
+}
+
 .custom-date-picker input[type="date"]:valid + .clear-input {
     cursor: pointer;
     opacity: 1;
@@ -26,4 +34,12 @@
     width: 1.1rem;
     right: 0.75rem;
     top: 0.5rem;
+}
+
+.custom-date-picker input[type=date].form-control-sm::-webkit-calendar-picker-indicator {
+    top: 0.325rem;
+}
+
+.custom-date-picker input[type=date].form-control-lg::-webkit-calendar-picker-indicator {
+    top: 0.875rem;
 }
