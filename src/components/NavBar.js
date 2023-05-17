@@ -105,8 +105,8 @@ export default function NavBar() {
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="ml-auto">
                     <div className="nav-link menu-user-box">
-                        <span data-tip={user?.email}>{`${user?.firstName} ${user?.surname}`}</span>
-                        <ReactTooltip />
+                        <span data-tip={user?.email} data-for="userTooltip">{`${user?.firstName} ${user?.surname}`}</span>
+                        <ReactTooltip id="userTooltip" />
                         <FontAwesomeIcon icon={faUserCircle} />
                     </div>
                 </Nav>
