@@ -1,0 +1,161 @@
+.header-n-table-div > div {
+    padding: 1rem;
+}
+
+.drive-items-list {
+    margin: 0 0 1rem;
+}
+
+.drive-items-list .list-group-item.header {
+    border-width: 0 0 2px;
+}
+
+.drive-items-list .list-group-item.header .select{
+    min-width: 220px;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    left: -1rem;
+}
+.drive-items-list .list-group-item .actions .icon,
+.drive-items-list .list-group-item.header .select .dropdown .toggle {
+    cursor: pointer;
+    width: 1rem;
+}
+
+.drive-items-list .list-group-item.header .center {
+    text-align: center;
+}
+
+.drive-items-list .list-group-item.header .select .dropdown-menu {
+    padding: 1rem;
+}
+
+.drive-items-list .list-group-item.header .select .dropdown-menu .items-btns {
+    display: flex;
+    margin-top: 1rem;
+    gap: 1rem;
+    justify-content: space-between;
+}
+
+.drive-items-list .list-group-item.header .select .dropdown-menu .dropdown-item.btn {
+    padding: 0.25rem 0.5rem;
+    width: auto;
+}
+
+.drive-items-list .list-group-item.header .select .dropdown-menu .dropdown-item.btn.btn-primary {
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.drive-items-list .list-group-item.header .select .dropdown-menu .dropdown-item.btn.btn-secondary {
+    color: #fff;
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+.drive-items-list .content {
+    /* height: calc(100vh - 22rem); */
+    max-height: calc(100vh - 22rem);
+    overflow-y: scroll;
+}
+
+.drive-items-list .content .actions {
+    display: flex;
+    justify-content: center;
+    column-gap: 1rem;
+}
+
+.drive-items-list .list-group-item .actions .icon.disabled,
+.drive-items-list .list-group-item .actions .icon.disabled .icon {
+    cursor: default;
+    opacity: .5;
+}
+
+.drive-items-list .list-group-item.header,
+.drive-items-list .content .list-group-item {
+    padding: .5rem 1.25rem;
+    display: grid;
+    column-gap: 1rem;
+}
+
+.drive-items-list .col5 .list-group-item {
+    grid-template-columns: 1.5rem 6fr 1fr 1fr 6rem;
+}
+
+.drive-items-list .col6 .list-group-item {
+    grid-template-columns: 1.5rem 12rem 6fr 1fr 1fr 6rem;
+}
+
+.drive-items-list .list-group-item.empty {
+    text-align: center;
+    color: #6c757d;
+}
+
+.drive-items-list .list-group-item > .form-check {
+    top: 2px;
+}
+
+.drive-items-list .list-group-item > *:not(.select-wrapper .custom-date-picker) {
+    margin-top: 0.25rem;
+}
+
+.drive-items-list .list-group-item .select-wrapper {
+    min-width: 220px;
+}
+
+.page-btns {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+}
+
+.page-btns.center {
+    justify-content: center;
+    margin-top: 0;
+}
+
+.page-btns .files-action-btns-box {
+    display: flex;
+    gap: 1rem;
+}
+
+.page-btns .select-from-drive-btn {
+    text-align: center;
+}
+
+.page-btns .select-from-drive-btn button .icon {
+    margin-right: .375rem;
+}
+
+.page-btns .select-from-drive-btn .current-user-box span {
+    font-size: small;
+    color: rgba(0, 0 ,0, .6);
+}
+
+.page-btns .select-from-drive-btn .current-user-box button {
+    font-size: small;
+    padding: 0;
+    vertical-align: unset;
+}
+
+.page-btns .import-selected-btn {
+    align-self: start;
+}
+
+.page-btns .import-selected-btn .badge {
+    margin-left: .375rem;
+}
+
+.modal.selectFilesModal .modal-header > .title {
+    margin-bottom: 0;
+}
+
+.modal.selectFilesModal .modal-footer {
+    border-top: none;
+}
+
+.modal.selectFilesModal .modal-footer .btn:first-of-type {
+    margin-right: auto;
+}

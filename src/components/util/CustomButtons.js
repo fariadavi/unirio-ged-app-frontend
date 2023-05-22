@@ -4,15 +4,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBan, faCheckCircle, faPen, faFilter, faTimes, faTrash, faPlusCircle } from '@fortawesome/free-solid-svg-icons'
 import ReactTooltip from 'react-tooltip'
 
-const Button = ({ icon, tooltip = '', active = false, onClick, append }) => {
+const Button = ({ className = '', icon, tooltip = '', active = false, onClick, append, style }) => {
     const tooltipId = crypto.randomUUID();
     return (
         <span
-            className={`icon ${active ? 'active' : ''}`}
+            className={`icon ${active ? 'active' : ''} ${className}`}
             data-for={tooltipId}
             data-tip={tooltip}
-            onClick={dataId => onClick(dataId)}>
-            <FontAwesomeIcon className="icon" icon={icon} />
+            onClick={dataId => onClick(dataId)}
+            style={style}>
+            <FontAwesomeIcon className="icon" icon={icon}  />
             {append}
             <ReactTooltip id={tooltipId} />
         </span>
