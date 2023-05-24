@@ -1,8 +1,8 @@
-import React, { useContext, useEffect, useReducer, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useReducer, useState } from 'react'
 // import { useTranslation } from 'react-i18next'
 import { UserContext } from '../../contexts/UserContext'
 import { getLocalItem, LANG_KEY } from '../../utils/localStorageManager'
-import { getGoogleUserInfo } from '../../services/util/api'
+import { getDriveFiles, getGoogleUserInfo } from '../../services/util/api'
 import rq from '../../services/api'
 import { Badge, Button, Form, ListGroup, Modal } from 'react-bootstrap'
 import useDrivePicker from 'react-google-drive-picker'
@@ -21,14 +21,14 @@ const DocumentImport = () => {
     const { department } = useContext(UserContext);
     const [pickerUser, setPickerUser] = useState();
     const [categories, setCategories] = useState([]);
-    const [tempFilesList, setTempFilesList] = useState([]);
-    const [filesList, setFilesList] = useState([]);
+    const [tempFileList, setTempFileList] = useState([]);
+    const [fileList, setFileList] = useState([]);
     const [params, updateParams] = useReducer((prev, next) => {
         return { ...prev, ...next }
     }, {
         category: '', date: ''
     });
-    const selectedFiles = filesList.filter(f => f.selected)
+    const selectedFiles = fileList.filter(f => f.selected)
     const [sortProperty, setSortProperty] = useState('name');
     const [sortDirection, setSortDirection] = useState('ASC');
     const [showSelectFilesModal, setShowSelectFilesModal] = useState(false);
@@ -38,34 +38,102 @@ const DocumentImport = () => {
             .then(res => { if (res.ok) return res.json() })
             .then(cats => setCategories(cats));
     }, [department]);
+    
+    const filterArray = (array, predicate) => {
+        return [array.filter(a => predicate(a)), array.filter(a => !predicate(a))]
+    }
+
+    const getFilesFromParentFolders = useCallback(async folderIds => {
+        const searchQuery = folderIds.map(fi => `'${fi}' in parents`).join(' OR ');
+        const fieldsQuery = '&fields=files(id,name,mimeType,description,fileExtension,parents)';
+        const res = await getDriveFiles(authResult?.access_token, searchQuery + fieldsQuery);
+
+        if (!res.ok)
+            throw new Error();
+
+        const json = await res.json();
+
+        return json.files;
+    }, [authResult?.access_token])
+
+    const mapFileFromDocument = useCallback(doc => {
+        return {
+            ...doc,
+            type: doc.type ||
+                (doc.mimeType === 'application/vnd.google-apps.folder'
+                    ? 'folder'
+                    : (doc.fileExtension ? 'file' : 'document')),
+            selected: '',
+            category: '',
+            date: '',
+            processed: doc.type !== 'folder' && doc.mimeType !== 'application/vnd.google-apps.folder',
+            email: pickerUser?.email,
+            token: authResult?.access_token
+        }
+    }, [authResult?.access_token, pickerUser?.email])
 
     useEffect(() => {
-        if (filesList.some(f => !f.token || !f.email))
-            setFilesList(fl => fl.map(f => {
-                return {
-                    ...f,
-                    token: f['token'] || authResult?.access_token,
-                    email: f['email'] || pickerUser?.email,
-                }
-            }))
-    }, [filesList, authResult?.access_token, pickerUser?.email]);
+        if (showSelectFilesModal || !tempFileList.length) return;
 
-    useEffect(() => {
-        const getPickerUser = async () => {
-            if (!authResult?.access_token)
-                return;
+        if (tempFileList.some(t => !t.processed)) {
+            let [ processed, pending ] = filterArray(tempFileList, t => t.processed)
 
-            const res = await getGoogleUserInfo(authResult?.access_token);
-            if (!res.ok)
-                return;
-
-            return await res.json();
+            getFilesFromParentFolders(
+                pending.map(t => t.id)
+            ).then(fl => setTempFileList([
+                ...processed,
+                ...fl.map(mapFileFromDocument)
+            ]))
         }
 
-        authResult?.access_token && getPickerUser().then(u => setPickerUser(u))
+        if (!tempFileList.some(t => !t.processed)) {
+            setFileList(fl => [
+                ...fl,
+                ...tempFileList.map(mapFileFromDocument)
+            ]);
+            setTempFileList([]);
+        }
+    }, [getFilesFromParentFolders, mapFileFromDocument, showSelectFilesModal, tempFileList]);
+
+    useEffect(() => {
+        if (!authResult?.access_token) return;
+
+        const getPickerUser = async () => {
+            const res = await getGoogleUserInfo(authResult?.access_token);
+            return res.ok && await res.json();
+        }
+
+        getPickerUser().then(u => {
+            setPickerUser(u);
+
+            //update tokens of docs in the list that belong to the same user
+            setFileList(fl => {
+                let filesFromUserWithOldTokenPredicate = f => f.email === u?.email && f.token !== authResult?.access_token;
+                let [filesWithOutdatedToken, rest] = filterArray(fl, filesFromUserWithOldTokenPredicate);
+                return [
+                    ...filesWithOutdatedToken.map(f => { return { ...f, token: authResult?.access_token } }),
+                    ...rest
+                ]
+            })
+        });
     }, [authResult]);
 
-    const handleOpenPicker = async (switchAccount = false) =>
+    const pickerCallback = data => {
+        if (data.action === 'picked') {
+            let files = data?.docs?.filter(d =>
+                !fileList.some(f => f.id === d.id)
+            ).map(mapFileFromDocument);
+
+            if (files.length === 0) return;
+
+            if (fileList.length > 0)
+                setShowSelectFilesModal(true);
+
+            setTempFileList(files);
+        }
+    }
+
+    const handleOpenPicker = (switchAccount = false) =>
         openPicker({
             clientId: process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID,
             developerKey: process.env.REACT_APP_GOOGLE_DEVELOPER_KEY,
@@ -76,41 +144,19 @@ const DocumentImport = () => {
             multiselect: true,
             customScopes: ['https://www.googleapis.com/auth/drive.readonly'],
             locale: getLocalItem(LANG_KEY),
-            callbackFunction: (data) => {
-                if (data.action === 'picked') {
-                    let files = data?.docs?.filter(d =>
-                        !filesList.some(f => f.id === d.id)
-                    ).map(d => {
-                        return {
-                            ...d,
-                            selected: '',
-                            category: '',
-                            date: ''
-                        }
-                    })
-
-                    if (files.length === 0) return;
-
-                    if (filesList.length > 0) {
-                        setTempFilesList(files);
-                        setShowSelectFilesModal(true);
-                    } else {
-                        setFilesList(files);
-                    }
-                }
-            }
+            callbackFunction: pickerCallback
         })
 
     const sendSingleFile = async (itemId) => {
-        let success = await uploadFiles(filesList.filter(f => f.id === itemId));
+        let success = await uploadFiles(fileList.filter(f => f.id === itemId));
         if (!success) return;
-        setFilesList(fl => fl.filter(f => f.id !== itemId));
+        setFileList(fl => fl.filter(f => f.id !== itemId));
     }
 
     const sendSelectedFiles = async () => {
         let success = await uploadFiles(selectedFiles);
         if (!success) return;
-        setFilesList(fl => fl.filter(f => !f.selected));
+        setFileList(fl => fl.filter(f => !f.selected));
     }
 
     const validateFilesForUpload = files => {
@@ -146,17 +192,17 @@ const DocumentImport = () => {
     }
 
     const setItemProperty = (itemId, property, value) => {
-        let fileIndex = filesList.findIndex(f => f.id === itemId);
-        const { [fileIndex]: file, ...rest } = filesList;
+        let fileIndex = fileList.findIndex(f => f.id === itemId);
+        const { [fileIndex]: file, ...rest } = fileList;
 
-        setFilesList(Object.values({
+        setFileList(Object.values({
             ...rest,
             [fileIndex]: { ...file, [property]: value }
         }));
     }
 
     const setPropertyMultipleItems = (property, value, setForAll) => {
-        setFilesList(fl => fl.map(f =>
+        setFileList(fl => fl.map(f =>
             setForAll || (f[property] === '' || f[property] === 0)
                 ? { ...f, [property]: value }
                 : f
@@ -175,16 +221,14 @@ const DocumentImport = () => {
             : () => { setSortProperty(key); return 'ASC' }
         )
 
-    const clearTempListAndCloseModal = () => {
-        setShowSelectFilesModal(false);
-        setTempFilesList([]);
-    }
+    const visibleFileList = fileList.filter(f => f.email)
 
-    const filesFromMultipleAccounts = filesList.some(f => f.email !== filesList[0].email)
+    const filesFromMultipleAccounts = visibleFileList.some(f => f.email !== visibleFileList[0]?.email)
 
     return (
         <div className="header-n-table-div">
             <h1>Import from Google Drive</h1>
+            {!!tempFileList.length && "Loading..."}
             <div>
                 <div className='drive-items-list'>
                     <ListGroup variant="flush" className={filesFromMultipleAccounts ? 'col6' : 'col5'}>
@@ -192,8 +236,8 @@ const DocumentImport = () => {
                         <ListGroup.Item key="0" className='header'>
                             <Form.Check
                                 type="checkbox"
-                                checked={filesList.length && selectedFiles.length === filesList.length}
-                                onChange={() => setFilesList(fl => fl.map(f => { return { ...f, selected: selectedFiles.length !== filesList.length } }))}
+                                checked={visibleFileList.length && selectedFiles.length === visibleFileList.length}
+                                onChange={() => setFileList(fl => fl.map(f => { return { ...f, selected: selectedFiles.length !== visibleFileList.length } }))}
                             />
                             {filesFromMultipleAccounts &&
                                 <span onClick={() => toggleSortByColumn('email')}>
@@ -239,18 +283,18 @@ const DocumentImport = () => {
                         </ListGroup.Item>
 
                         {/* body */}
-                        {!filesList.length
+                        {!visibleFileList.length
                             ? <ListGroup.Item key="-1" className='empty'>
                                 <span>No items selected</span>
                             </ListGroup.Item>
                             : <ListGroup variant="flush" className='content'>
-                                {filesList
-                                    .sort((a, b) =>
-                                        sortDirection === 'ASC'
-                                            ? a[sortProperty]?.localeCompare(b[sortProperty])
-                                            : b[sortProperty]?.localeCompare(a[sortProperty])
+                                {visibleFileList
+                                    .filter(f => f.token)
+                                    .sort((a, b) => sortDirection === 'ASC'
+                                        ? a[sortProperty]?.localeCompare(b[sortProperty])
+                                        : b[sortProperty]?.localeCompare(a[sortProperty])
                                     ).map((f, i) =>
-                                        <ListGroup.Item key={i} className={filesList.all}>
+                                        <ListGroup.Item key={i}>
                                             <Form.Check
                                                 type="checkbox"
                                                 checked={f.selected}
@@ -278,17 +322,16 @@ const DocumentImport = () => {
                                                     ? <BasicButton
                                                         className="disabled"
                                                         icon={faFileUpload}
-                                                        onClick={() => {}}
+                                                        onClick={() => { }}
                                                         tooltip='upload single file btn'
                                                     />
                                                     : <BasicButton
                                                         icon={faFileUpload}
                                                         onClick={() => sendSingleFile(f.id)}
                                                         tooltip='upload single file btn'
-                                                    />
-                                                }
+                                                    />}
                                                 <DeleteButton
-                                                    onClick={() => setFilesList(fl => fl.filter(file => file.id !== f.id))}
+                                                    onClick={() => setFileList(fl => fl.filter(file => file.id !== f.id))}
                                                     i18nTooltipKey='delete file btn i18n key'
                                                 />
                                             </div>
@@ -299,7 +342,7 @@ const DocumentImport = () => {
                     </ListGroup>
                 </div>
 
-                <div className={`page-btns ${!filesList.length ? 'center' : 'full'}`}>
+                <div className={`page-btns ${!visibleFileList.length ? 'center' : 'full'}`}>
                     <div className='select-from-drive-btn'>
                         <Button variant="primary" onClick={() => handleOpenPicker()}>
                             <Icon icon={faGoogleDrive} />
@@ -319,12 +362,12 @@ const DocumentImport = () => {
                         }
                     </div>
 
-                    {!!filesList.length &&
+                    {!!visibleFileList.length &&
                         <div className='files-action-btns-box'>
                             <Button
                                 className='import-selected-btn'
                                 variant={selectedFiles.length ? "primary" : "secondary"}
-                                onClick={() => setFilesList(fl => fl.filter(f => !f.selected))}
+                                onClick={() => setFileList(fl => fl.filter(f => !f.selected))}
                                 disabled={selectedFiles.length === 0}
                             >
                                 <span>Remove selected</span>
@@ -352,8 +395,8 @@ const DocumentImport = () => {
                 backdrop="static"
                 className="selectFilesModal"
                 show={showSelectFilesModal}
-                onEscapeKeyDown={clearTempListAndCloseModal}
-                onHide={clearTempListAndCloseModal}
+                onEscapeKeyDown={() => { setTempFileList([]); setShowSelectFilesModal(false); }}
+                onHide={() => { setTempFileList([]); setShowSelectFilesModal(false); }}
             >
                 <Modal.Header closeButton={true}>
                     <h5 className="title">Atenção</h5>
@@ -364,13 +407,13 @@ const DocumentImport = () => {
                     Deseja adicionar os novos itens à lista ou substituir todos?
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={clearTempListAndCloseModal}>
+                    <Button variant="secondary" onClick={() => { setTempFileList([]); setShowSelectFilesModal(false); }}>
                         Cancelar
                     </Button>
-                    <Button variant="primary" onClick={() => { setFilesList([...filesList, ...tempFilesList.filter(f => !filesList.some(f2 => f2.id === f.id))]); clearTempListAndCloseModal(); }}>
+                    <Button variant="primary" onClick={() => { setShowSelectFilesModal(false); }}>
                         Adicionar
                     </Button>
-                    <Button variant="primary" onClick={() => { setFilesList(tempFilesList); clearTempListAndCloseModal(); }}>
+                    <Button variant="primary" onClick={() => { setFileList([]); setShowSelectFilesModal(false); }}>
                         Substituir
                     </Button>
                 </Modal.Footer>

@@ -11,7 +11,9 @@ export default async function rq(url, options) {
 
         if (!options.headers)
             options.headers = {}
-        options.headers.Authorization = `Bearer ${token}`
+            
+        if (!options.headers.Authorization)
+            options.headers.Authorization = `Bearer ${token}`
     }
 
     return fetch(`${process.env.REACT_APP_SERVER_URL}${url}`, options)

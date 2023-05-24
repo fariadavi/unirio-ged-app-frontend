@@ -21,6 +21,12 @@ body {
 
 /* Colors */
 
+.btn-primary {
+    color: #fff !important;
+    background-color: #027bc2 !important;
+    border-color: #027bc2 !important;
+}
+
 .bg-color-blue {
     background-color: #027bc2 !important;
 }

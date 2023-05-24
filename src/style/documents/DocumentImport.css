@@ -43,18 +43,6 @@
     width: auto;
 }
 
-.drive-items-list .list-group-item.header .select .dropdown-menu .dropdown-item.btn.btn-primary {
-    color: #fff;
-    background-color: #007bff;
-    border-color: #007bff;
-}
-
-.drive-items-list .list-group-item.header .select .dropdown-menu .dropdown-item.btn.btn-secondary {
-    color: #fff;
-    background-color: #6c757d;
-    border-color: #6c757d;
-}
-
 .drive-items-list .content {
     /* height: calc(100vh - 22rem); */
     max-height: calc(100vh - 22rem);
