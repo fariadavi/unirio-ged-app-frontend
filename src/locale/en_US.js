@@ -29,7 +29,7 @@ const enUS = {
     'customTable.filterRow.clearBtn.tooltip': 'Clear all filters',
 
     // status badge
-    'badge.status.not_processed': 'Not Processed',
+    'badge.status.pending': 'Pending',
     'badge.status.processing': 'Processing',
     'badge.status.processed': 'Processed',
     'badge.status.failed': 'Failed',

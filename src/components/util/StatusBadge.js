@@ -18,14 +18,16 @@ export default function StatusBadge({ status }) {
         case 'PROCESSING':
             badgeVariant = 'info'
             break;
-        default:
-        case 'NOT_PROCESSED':
         case 'EMPTY_CONTENT':
+            badgeVariant = 'dark'
+            break;
+        default:
+        case 'PENDING':
             badgeVariant = 'secondary'
             break;
     }
 
-    return (<Badge className="capitalize" variant={badgeVariant}>
+    return (<Badge variant={badgeVariant}>
         {t(`badge.status.${status.toLowerCase()}`)}
     </Badge>)
 }
