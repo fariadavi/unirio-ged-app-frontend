@@ -1,0 +1,108 @@
+.categories-page {
+    width: 50%;
+}
+
+ul, li {
+    list-style-type: none;
+}
+
+.tree-node__branch:hover {
+    cursor: pointer;
+}
+
+.tree-node:hover {
+    background-color: rgba(0, 0, 0, .1);
+    border-radius: .25rem;
+}
+
+.tree-row {
+    white-space: nowrap;
+    padding-bottom: 2px;
+}
+
+.tree-node .icon-wrapper {
+    padding: 0 0.5rem;
+    display: inline-flex;
+    justify-content: center;
+    width: 1.5rem;
+}
+
+.tree-node .icon-wrapper.add-category {
+    padding: 0 0.25rem;
+}
+
+.tree-node svg.icon,
+.tree-node .name,
+.tree-node .doc-count {
+    vertical-align: middle;
+}
+
+.tree-node .doc-count {
+    float: right;
+    padding-right: 0.5rem;
+    padding-top: 2px;
+}
+
+.tree-node svg.icon.arrow {
+    height: .75rem;
+    width: .75rem;
+}
+
+.tree-node svg.icon.circle {
+    height: .25rem;
+    width: .25rem;
+}
+
+.tree-node svg.icon.add {
+    height: .75rem;
+    width: .75rem;
+}
+
+.tree-node .btns.actions,
+.tree-node .btns.actions .iconBtn.hide,
+.tree-node .edit-category .btns .iconBtn.hide {
+    display: none;
+}
+
+.tree-node .btns,
+.tree-node:hover .actions {
+    display: inline-flex;
+    gap: 0.25rem;
+    margin-left: 0.5rem;
+}
+
+.tree-node .iconBtn-wrapper {
+    cursor: pointer;
+}
+
+.tree-node .iconBtn {
+    cursor: pointer;
+    opacity: .8;
+    padding: 2px;
+}
+
+.tree-node .edit-category {
+    display: inline-block;
+    width: calc(100% - 3.5rem);
+}
+
+.tree-node .edit-category input {
+    display: inline-block;
+    margin: 1px 0;
+    height: 1.5rem;
+    width: 100%;
+}
+
+.tree-node .edit-category .btns {
+    margin-left: 0;
+}
+
+.tree-node .edit-category .btns .iconBtn {
+    padding: 1px;
+    margin-bottom: .25rem;
+    margin-left: 0.5rem;
+}
+
+.tree-node .iconBtn:hover {
+    color: #027bc2;
+}

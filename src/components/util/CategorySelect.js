@@ -12,7 +12,7 @@ const CategorySelect = ({ categories = undefined, className, label, onChange, is
 
     useEffect(() => {
         if (!categories)
-            rq('/categories', { method: 'GET' })
+            rq('/categories?fullName=true', { method: 'GET' })
                 .then(res => { if (res.ok) return res.json() })
                 .then(c => setCats(c));
         else

@@ -34,11 +34,11 @@ const DocumentImport = () => {
     const [showSelectFilesModal, setShowSelectFilesModal] = useState(false);
 
     useEffect(() => {
-        rq('/categories', { method: 'GET' })
+        rq('/categories?fullName=true', { method: 'GET' })
             .then(res => { if (res.ok) return res.json() })
             .then(cats => setCategories(cats));
     }, [department]);
-    
+
     const filterArray = (array, predicate) => {
         return [array.filter(a => predicate(a)), array.filter(a => !predicate(a))]
     }
@@ -76,7 +76,7 @@ const DocumentImport = () => {
         if (showSelectFilesModal || !tempFileList.length) return;
 
         if (tempFileList.some(t => !t.processed)) {
-            let [ processed, pending ] = filterArray(tempFileList, t => t.processed)
+            let [processed, pending] = filterArray(tempFileList, t => t.processed)
 
             getFilesFromParentFolders(
                 pending.map(t => t.id)
