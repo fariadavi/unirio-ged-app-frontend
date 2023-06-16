@@ -290,7 +290,9 @@ export default function Categories() {
                                         </div>
                                     </div>
                                 }
-                                {!element.fixed && !element.temp && <span className="doc-count">{element.numDocs || 0} docs</span>}
+                                {!element.fixed && !element.temp && element.id !== categoryEdit?.id &&
+                                    <span className="doc-count">{element.numDocs || 0} docs</span>
+                                }
                             </div>
                         </div>
                     );
