@@ -224,7 +224,7 @@ export default function Categories() {
                     handleExpand,
                 }) => {
                     return (
-                        <div {...getNodeProps({ onClick: e => { handleExpand(e); if (isBranch) toggleExpand(element.id, isExpanded); } })}>
+                        <div {...getNodeProps({ onClick: e => { handleExpand(e); if (isBranch) toggleExpand(element.id, isExpanded); else cancelCategoryEdit(categoryEdit.temp); } })}>
                             <div className="tree-row">
                                 {
                                     !element.fixed
@@ -262,10 +262,13 @@ export default function Categories() {
                                             />
                                         </div>
                                     </>
-                                    : <div className="edit-category" onMouseDown={e => e.preventDefault()}>
+                                    : <div className="edit-category">
                                         <Form.Control
                                             defaultValue={categoryEdit.name}
-                                            onBlur={() => cancelCategoryEdit(categoryEdit.temp)}
+                                            onBlur={e => {
+                                                if (e.currentTarget?.parentElement?.parentElement?.parentElement === e.relatedTarget) return;
+                                                cancelCategoryEdit(categoryEdit.temp);
+                                            }}
                                             onChange={e => setCategoryEdit({ ...categoryEdit, name: e.currentTarget.value })}
                                             onClick={e => e.stopPropagation()}
                                             onKeyDown={e => {
