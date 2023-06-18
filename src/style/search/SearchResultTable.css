@@ -10,18 +10,42 @@
 }
 
 .docs-table td p {
+    transition: text-overflow 0.5s ease-in 0.3s;
+}
+
+.docs-table td p {
     margin: 0;
     max-width: 100%;
+    overflow-wrap: break-word;
 }
-    
-.docs-table .truncated td p {
+
+.docs-table .truncated:not(.expanded) td p {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
+.docs-table .expandable td .expand-btn {
+    display: block;
+}
+
+.docs-table .expandable td .expand-btn .icon {
+    cursor: pointer;
+}
+
+.docs-table td .expand-btn,
+.docs-table .expandable:not(.expanded) td .expand-btn .expand-icon,
+.docs-table .expandable.expanded td .expand-btn .collapse-icon {
+    display: none;
+}
+
 .docs-table td.actions {
-    width: 10rem;
+    width: 8rem;
+}
+
+.docs-table td.actions .disabled {
+    opacity: .5;
+    cursor: default;
 }
 
 .docs-table td.title {
@@ -32,8 +56,15 @@
     max-width: calc(40vw - 22rem);
 }
 
+.docs-table td.summary > div {
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+}
+
 .docs-table td.category {
-    max-width: calc(40vw - 22rem);
+    max-width: calc(40vw - 40rem);
+    /* direction: rtl; */
 }
 
 .docs-table td.date {

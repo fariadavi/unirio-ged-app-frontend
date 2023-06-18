@@ -79,14 +79,6 @@ export default function Search() {
             });
     }
 
-    const expandResult = docId => {
-        const doc = docs.find(x => x.id === docId);
-
-        doc['expand'] = !doc['expand']
-
-        setDocs([...docs]);
-    }
-
     useEffect(() => { setDocs([]); setSearching(null); setSearchSuccess(false); }, [department]);
 
     return (
@@ -102,7 +94,6 @@ export default function Search() {
                                 numPages={Math.ceil(totalResults / pageSize)}
                                 deleteDocument={handleDelete}
                                 onSearch={searchPage}
-                                expandResult={expandResult}
                             />
                             : isSearchSuccess && !docs.length
                                 ? <NoResultMessage currentQueryString={currentQueryString} />
