@@ -199,10 +199,11 @@ const DocumentForm = () => {
                                 <Form.Label>{t('document.category')}</Form.Label>
 
                                 <CategorySelect
+                                    name='categoryId'
                                     onChange={setDocumentValue}
                                     isInvalid={validation['category']}
                                     validationMessage={t(`document.form.validation.${validation['category']}`)}
-                                    value={document['category']}
+                                    value={document['categoryId']}
                                 />
                             </Form.Group>
 
