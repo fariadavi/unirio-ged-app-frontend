@@ -27,7 +27,7 @@ function useCurrentWidth() {
                 lock = true;
             }
             clearTimeout(timeoutId);
-            timeoutId = setTimeout(() => { console.log('clearing lock'); setWidth(getWidth()); lock = false }, 200);
+            timeoutId = setTimeout(() => { setWidth(getWidth()); lock = false }, 200);
         };
         window.addEventListener('resize', resizeListener);
         return () => window.removeEventListener('resize', resizeListener);
