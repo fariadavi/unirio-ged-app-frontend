@@ -16,7 +16,7 @@
 .docs-table td p {
     margin: 0;
     max-width: 100%;
-    overflow-wrap: break-word;
+    overflow-wrap: anywhere;
 }
 
 .docs-table .truncated:not(.expanded) td p {
