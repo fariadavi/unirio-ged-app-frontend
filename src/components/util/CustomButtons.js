@@ -20,57 +20,57 @@ const Button = ({ className = '', icon, tooltip = '', active = false, onClick, a
     )
 }
 
-const AddButton = ({ icon = faPlusCircle, i18nTooltipKey, active, onClick }) => {
+const AddButton = ({ icon = faPlusCircle, i18nTooltipKey = '', active, onClick }) => {
     const { t } = useTranslation();
 
     return (
         <Button
             icon={icon}
-            tooltip={t(i18nTooltipKey, t('customButtons.add.tooltip'))}
+            tooltip={t([i18nTooltipKey, 'customButtons.add.tooltip'])}
             active={active}
             onClick={onClick}
         />)
 }
 
-const EditButton = ({ icon = faPen, i18nTooltipKey, onClick }) => {
+const EditButton = ({ icon = faPen, i18nTooltipKey = '', onClick }) => {
     const { t } = useTranslation();
 
     return (
         <Button
             icon={icon}
-            tooltip={t(i18nTooltipKey, t('customButtons.edit.tooltip'))}
+            tooltip={t([i18nTooltipKey, 'customButtons.edit.tooltip'])}
             onClick={dataId => onClick(dataId)}
         />)
 }
 
-const ConfirmButton = ({ icon = faCheckCircle, i18nTooltipKey, onClick }) => {
+const ConfirmButton = ({ icon = faCheckCircle, i18nTooltipKey = '', onClick }) => {
     const { t } = useTranslation();
 
     return (
         <Button
             icon={icon}
-            tooltip={t(i18nTooltipKey, t('customButtons.confirm.tooltip'))}
+            tooltip={t([i18nTooltipKey, 'customButtons.confirm.tooltip'])}
             onClick={dataId => onClick(dataId)}
         />)
 }
-const CancelButton = ({ icon = faBan, i18nTooltipKey, onClick }) => {
+const CancelButton = ({ icon = faBan, i18nTooltipKey = '', onClick }) => {
     const { t } = useTranslation();
 
     return (
         <Button
             icon={icon}
-            tooltip={t(i18nTooltipKey, t('customButtons.cancel.tooltip'))}
+            tooltip={t([i18nTooltipKey, 'customButtons.cancel.tooltip'])}
             onClick={dataId => onClick(dataId)}
         />)
 }
 
-const FilterButton = ({ icon = faFilter, i18nTooltipKey, active, onClick, activeFilterCount }) => {
+const FilterButton = ({ icon = faFilter, i18nTooltipKey = '', active, onClick, activeFilterCount }) => {
     const { t } = useTranslation();
 
     return (
         <Button
             icon={icon}
-            tooltip={t(i18nTooltipKey, t('customButtons.filter.tooltip'))}
+            tooltip={t([i18nTooltipKey, 'customButtons.filter.tooltip'])}
             active={active}
             onClick={onClick}
             append={
@@ -81,23 +81,23 @@ const FilterButton = ({ icon = faFilter, i18nTooltipKey, active, onClick, active
         />)
 }
 
-const DeleteButton = ({ icon = faTrash, i18nTooltipKey, onClick }) => {
+const DeleteButton = ({ icon = faTrash, i18nTooltipKey = '', onClick }) => {
     const { t } = useTranslation();
 
     return (
         <Button
             icon={icon}
-            tooltip={t(i18nTooltipKey, t('customButtons.delete.tooltip'))}
+            tooltip={t([i18nTooltipKey, 'customButtons.delete.tooltip'])}
             onClick={dataId => onClick(dataId)}
         />)
 }
 
-const ClearButton = ({ icon = faTimes, i18nTooltipKey, onClick }) => {
+const ClearButton = ({ icon = faTimes, i18nTooltipKey = '', onClick }) => {
     const { t } = useTranslation();
 
     return (<Button
         icon={icon}
-        tooltip={t(i18nTooltipKey, t('customButtons.clear.tooltip'))}
+        tooltip={t([i18nTooltipKey, 'customButtons.clear.tooltip'])}
         onClick={onClick}
     />)
 }
