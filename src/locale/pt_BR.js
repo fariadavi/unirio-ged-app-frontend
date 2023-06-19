@@ -103,7 +103,7 @@ const ptBR = {
     'search.noResultFound.searchTips.title': 'Sugestões:',
     'search.noResultFound.searchTips.item1': 'Certifique-se de que todas as palavras estão escritas corretamente.',
     'search.noResultFound.searchTips.item2': 'Tente usar outras/menos palavras-chave.',
-    'search.noResultFound.searchTips.item3': 'Certifique-se de que todas os filtros opcionais estão preenchidos corretamente.',
+    'search.noResultFound.searchTips.item3': 'Certifique-se de que todos os filtros opcionais estão preenchidos corretamente.',
     'search.noResultFound.searchTips.item4': 'Tente remover os filtros e readicioná-los gradualmente.',
     'search.error': 'Houve um erro realizando a busca desejada. Por favor, tente novamente mais tarde.',
     

@@ -15,10 +15,10 @@ const NoResultMessage = ({ currentQueryString }) => {
             <div>
                 <p style={{ marginBottom: 0 }}>{t('search.noResultFound.searchTips.title')}</p>
                 <ul>
-                    <li>{t('search.noResultFound.searchTips.item1')}</li>
-                    <li>{t('search.noResultFound.searchTips.item2')}</li>
-                    <li>{t('search.noResultFound.searchTips.item3')}</li>
-                    <li>{t('search.noResultFound.searchTips.item4')}</li>
+                    <li>- {t('search.noResultFound.searchTips.item1')}</li>
+                    <li>- {t('search.noResultFound.searchTips.item2')}</li>
+                    <li>- {t('search.noResultFound.searchTips.item3')}</li>
+                    <li>- {t('search.noResultFound.searchTips.item4')}</li>
                 </ul>
             </div>
         </div>
