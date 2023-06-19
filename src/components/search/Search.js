@@ -3,7 +3,7 @@ import { UserContext } from '../../contexts/UserContext'
 import { useTranslation } from 'react-i18next'
 import rq from '../../services/api'
 import SearchBar from './SearchBar'
-import SearchResultTable from './SearchResultTable'
+import SearchResultList from './SearchResultList'
 import NoResultMessage from './NoResultMessage'
 import '../../style/search/Search.css'
 
@@ -41,9 +41,6 @@ export default function Search() {
                 setTotalResults(result.totalHits || 0);
                 setDocs(result.results || []);
                 setSearchSuccess(true);
-
-                if (result.totalHits)
-                    tableRef.current.scrollIntoView({ block: 'start', behavior: 'smooth' });
             }
         }
         ).catch(err => { setSearchSuccess(false); window.alert(t('search.error')); }
@@ -83,21 +80,20 @@ export default function Search() {
 
     return (
         <div className="search-page">
-            <div className={`search-result ${isSearchSuccess ? 'active' : ''}`}>
+            <div ref={tableRef} className={`search-result ${isSearchSuccess ? 'active' : ''}`}>
                 {canSearchDocs &&
                     <div>
                         {isSearchSuccess && docs.length
-                            ? <SearchResultTable
-                                refProp={tableRef}
-                                documents={docs}
+                            ? <SearchResultList
+                                results={docs}
+                                totalResults={totalResults}
                                 currentPage={currentPage}
                                 numPages={Math.ceil(totalResults / pageSize)}
                                 deleteDocument={handleDelete}
                                 onSearch={searchPage}
                             />
-                            : isSearchSuccess && !docs.length
-                                ? <NoResultMessage currentQueryString={currentQueryString} />
-                                : ''
+                            : isSearchSuccess && !docs.length &&
+                            <NoResultMessage currentQueryString={currentQueryString} />
                         }
                     </div>
                 }

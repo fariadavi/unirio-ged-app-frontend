@@ -1,0 +1,47 @@
+.result p {
+    margin-bottom: .5rem;
+}
+
+.result .title {
+    color: #027bc2 !important;
+    font-weight: bold;
+    display: flex;
+    gap: .75rem;
+    margin-bottom: 0;
+    font-size: large;
+}
+
+.result .title .actions {
+    display: flex;
+    gap: .25rem;
+}
+
+.result .title .actions .icon {
+    color: #343a40;
+    cursor: pointer;
+    height: 1rem;
+    width: 1rem;
+}
+
+.result .title .actions .disabled .icon {
+    opacity: .5;
+    cursor: default;
+}
+
+.result .subtitle,
+.result .summary,
+.result .contentMatches,
+.result .footer {
+    font-size: small;
+    color: gray;
+}
+
+.result .contentMatches p {
+    margin-bottom: 0;
+}
+
+.result .footer {
+    display: flex;
+    gap: .5rem;
+    color: #027bc2 !important;
+}

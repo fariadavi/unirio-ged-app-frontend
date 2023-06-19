@@ -105,6 +105,15 @@ const enUS = {
     'search.noResultFound.searchTips.item3': 'Make sure all the optional filters are correctly filled up.',
     'search.noResultFound.searchTips.item4': 'Try removing the filters and re-add them gradually.',
     'search.error': 'There was an error performing the requested search. Please try again later.',
+    'search.results.visualize.tooltip': 'Open',
+    'search.results.download.tooltip': 'Download',
+    'search.results.edit.tooltip': 'Edit',
+    'search.results.delete.tooltip': 'Delete',
+    'search.results.createdBy': 'Created by',
+    'search.results.createdAt': 'on',
+    'search.results.count': 'results',
+    'search.results.page': 'Page',
+    'search.results.page.of': 'of',
     
     // user
     'user.name': 'User Name',

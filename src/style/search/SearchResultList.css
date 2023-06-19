@@ -1,0 +1,10 @@
+.search-results-info {
+    color: gray;
+    font-size: small;
+}
+
+.search-results {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}

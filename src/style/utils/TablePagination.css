@@ -1,0 +1,9 @@
+.tablePagination .page-item.active .page-link {
+    background-color: #027bc2 !important;
+    border-color: #027bc2 !important;    
+    color: #fff !important;
+}
+
+.tablePagination .page-link {
+    color: #027bc2 !important;
+}

@@ -1,7 +1,7 @@
 .search-page {
     display: flex;
     flex-direction: column-reverse;
-    width: 95%;
+    width: 85%;
 }
 
 .search-page > div {
@@ -29,6 +29,7 @@
     flex-grow: 3;
     margin-top: 4rem;
     z-index: 1;
+    scroll-margin-top: 4rem;
 }
 
 .search-page .search-result > div {

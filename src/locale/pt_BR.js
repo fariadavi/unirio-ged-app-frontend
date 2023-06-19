@@ -106,6 +106,15 @@ const ptBR = {
     'search.noResultFound.searchTips.item3': 'Certifique-se de que todos os filtros opcionais estão preenchidos corretamente.',
     'search.noResultFound.searchTips.item4': 'Tente remover os filtros e readicioná-los gradualmente.',
     'search.error': 'Houve um erro realizando a busca desejada. Por favor, tente novamente mais tarde.',
+    'search.results.visualize.tooltip': 'Visualizar',
+    'search.results.download.tooltip': 'Download',
+    'search.results.edit.tooltip': 'Editar',
+    'search.results.delete.tooltip': 'Excluir',
+    'search.results.createdBy': 'Cadastrado por',
+    'search.results.createdAt': 'em',
+    'search.results.count': 'resultados',
+    'search.results.page': 'Página',
+    'search.results.page.of': 'de',
     
     // user
     'user.name': 'Nome de usuário',

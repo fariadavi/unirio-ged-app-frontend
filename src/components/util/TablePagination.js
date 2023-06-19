@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { Pagination } from 'react-bootstrap'
+import '../../style/utils/TablePagination.css'
 
-export default function TablePagination({ numPages, activePage, onSearch }) {
+export default function TablePagination({ numPages, activePage, onSearch, centered = false }) {
     const [paginationItems, setPaginationItems] = useState([]);
 
     useEffect(() => {
@@ -36,7 +37,7 @@ export default function TablePagination({ numPages, activePage, onSearch }) {
     }, [numPages, activePage, onSearch]);
 
     return (
-        <Pagination className="tablePagination justify-content-end">
+        <Pagination className={`tablePagination justify-content-${ centered ? 'center' : 'end'}`}>
             {paginationItems}
         </Pagination>
     );
