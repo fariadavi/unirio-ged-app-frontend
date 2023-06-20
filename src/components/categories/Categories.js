@@ -1,10 +1,11 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { UserContext } from '../../contexts/UserContext'
+import { useTranslation } from 'react-i18next'
 import rq from '../../services/api'
 import TreeView from 'react-accessible-treeview'
 import { Form } from 'react-bootstrap'
 import { Icon } from '../util/CustomIcon'
-import { faChevronDown, faChevronRight, faCircle, faPen, faPlusCircle, faSave, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faCheckCircle, faChevronDown, faChevronRight, faCircle, faPen, faPlusCircle, faTrash } from '@fortawesome/free-solid-svg-icons'
 import '../../style/categories/Categories.css'
 
 const useFocus = () => {
@@ -37,6 +38,7 @@ const ActionBtn = ({ className = '', icon, onClick, tooltip }) =>
     </span>
 
 export default function Categories() {
+    const { t } = useTranslation();
     const { department } = useContext(UserContext);
     const [expandedIds, setExpandedIds] = useState([]);
     const [categories, setCategories] = useState([{ "id": 0, "children": [], "parent": null }]);
@@ -209,7 +211,7 @@ export default function Categories() {
 
     return (
         <div className="header-n-table-div categories-page">
-            <h1>Categories</h1>
+            <h1>{t('categories.page.title')}</h1>
 
             <TreeView
                 data={categories}
@@ -235,7 +237,7 @@ export default function Categories() {
                                             className="icon-wrapper add-category"
                                             icon={faPlusCircle}
                                             onClick={() => addNewCategoryToList(0, true)}
-                                            tooltip="add new row"
+                                            tooltip={t('customButtons.add.tooltip')}
                                         />
                                 }
                                 {categoryEdit?.id !== element.id
@@ -246,19 +248,19 @@ export default function Categories() {
                                                 className={element.id < 0 ? 'hide' : ''}
                                                 icon={faPlusCircle}
                                                 onClick={() => addNewCategoryToList(element.id, isExpanded)}
-                                                tooltip="add"
+                                                tooltip={t('customButtons.add.tooltip')}
                                             />
                                             <ActionBtn
                                                 className={element.id < 0 ? 'hide' : ''}
                                                 icon={faPen}
                                                 onClick={() => editCategory(element.id, element.name)}
-                                                tooltip="edit"
+                                                tooltip={t('customButtons.edit.tooltip')}
                                             />
                                             <ActionBtn
                                                 className={element.id < 0 || element.children?.length > 0 ? 'hide' : ''}
                                                 icon={faTrash}
                                                 onClick={() => deleteCategory(element)}
-                                                tooltip="delete"
+                                                tooltip={t('customButtons.delete.tooltip')}
                                             />
                                         </div>
                                     </>
@@ -283,9 +285,9 @@ export default function Categories() {
                                         <div className="btns">
                                             <ActionBtn
                                                 // className={!categoryEdit.name ? 'hide' : ''}
-                                                icon={faSave}
+                                                icon={faCheckCircle}
                                                 onClick={() => updateCategoryName(categoryEdit.temp)}
-                                                tooltip="save"
+                                                tooltip={t('customButtons.confirm.tooltip')}
                                             />
                                         </div>
                                     </div>
