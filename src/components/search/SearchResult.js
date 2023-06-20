@@ -61,11 +61,11 @@ const Actions = ({ item, deleteAction }) => {
     </div>
 }
 
-export default function SearchResult({ result, deleteDocument }) {
+export default function SearchResult({ key, result, deleteDocument }) {
     const { t } = useTranslation();
 
     return (
-        <div className="result">
+        <div className="result" key={key}>
             <p className="title">
                 <span>{result.title}</span>
                 <span><Actions item={result} deleteAction={deleteDocument} /></span>
