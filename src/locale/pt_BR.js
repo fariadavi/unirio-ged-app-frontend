@@ -188,6 +188,32 @@ const ptBR = {
     
     // table data
     'departments.table.data.isCurrentDept.y': 'Departmento atual',
+
+    // categories
+    'categories.page.title': 'Categorias',
+
+    // import from google drive
+    'import.page.title': 'Importar do Google Drive',
+    'import.table.headers.account': 'Conta',
+    'import.table.headers.name': 'Nome',
+    'import.table.headers.category': 'Categoria',
+    'import.table.headers.date': 'Data',
+    'import.table.headers.actions': 'Ações',
+    'import.table.headers.popover.btns.primary.label': 'Definir para todos',
+    'import.table.headers.popover.btns.secondary.label': 'Definir para vazios',
+    'import.table.content.empty': 'Nenhum documento para importação',
+    'import.table.content.actions.import': 'Importar',
+    'import.page.btns.selectFromDrive': 'Selecionar do Google Drive',
+    'import.page.btns.switchAccount': 'Trocar Conta',
+    'import.page.btns.removeSelected': 'Remover Selecionados',
+    'import.page.btns.importSelected': 'Importar Selecionados',
+    'import.warningModal.title': '$t(category)',
+    'import.warningModal.body.line1': 'Existem itens na lista para importação.',
+    'import.warningModal.body.line2': 'Deseja acrescentar os novos itens ou substituí-los?',
+    'import.warningModal.btns.cancel': 'Cancelar',
+    'import.warningModal.btns.append': 'Adicionar',
+    'import.warningModal.btns.replace': 'Substituir',
+
 }
 
 export default ptBR;

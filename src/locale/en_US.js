@@ -187,6 +187,31 @@ const enUS = {
     
     // table data
     'departments.table.data.isCurrentDept.y': 'Current department',
+
+    // categories
+    'categories.page.title': 'Categories',
+
+    // import from google drive
+    'import.page.title': 'Import from Google Drive',
+    'import.table.headers.account': 'Account',
+    'import.table.headers.name': 'Name',
+    'import.table.headers.category': 'Category',
+    'import.table.headers.date': 'Date',
+    'import.table.headers.actions': 'Actions',
+    'import.table.headers.popover.btns.primary.label': 'Set for all',
+    'import.table.headers.popover.btns.secondary.label': 'Set for empty',
+    'import.table.content.empty': 'No documents for import',
+    'import.table.content.actions.import': 'Import',
+    'import.page.btns.selectFromDrive': 'Select from Google Drive',
+    'import.page.btns.switchAccount': 'Switch Account',
+    'import.page.btns.removeSelected': 'Remove Selected',
+    'import.page.btns.importSelected': 'Import Selected',
+    'import.warningModal.title': '$t(category)',
+    'import.warningModal.body.line1': 'There are items in the list for import.',
+    'import.warningModal.body.line2': 'Do you want to append the new items to the list or replace them?',
+    'import.warningModal.btns.cancel': 'Cancel',
+    'import.warningModal.btns.append': 'Append',
+    'import.warningModal.btns.replace': 'Replace',
 }
 
 export default enUS;
