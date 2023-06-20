@@ -38,6 +38,7 @@ export const validateField = (field, value) => {
         case 'title':
             return validateTitle(value);
         case 'category':
+        case 'categoryId':
             return validateCategory(value);
         case 'userPermissions.email':
             return validateEmail(value);
