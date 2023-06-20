@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect, useReducer, useState } from 'react'
-// import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 import { UserContext } from '../../contexts/UserContext'
 import { getLocalItem, LANG_KEY } from '../../utils/localStorageManager'
 import { getDriveFiles, getGoogleUserInfo } from '../../services/util/api'
@@ -16,7 +16,7 @@ import { faGoogleDrive } from '@fortawesome/free-brands-svg-icons'
 import '../../style/documents/DocumentImport.css'
 
 const DocumentImport = () => {
-    // const { t } = useTranslation();
+    const { t } = useTranslation();
     const [openPicker, authResult] = useDrivePicker();
     const { department } = useContext(UserContext);
     const [pickerUser, setPickerUser] = useState();
@@ -227,13 +227,13 @@ const DocumentImport = () => {
 
     return (
         <div className="header-n-table-div">
-            <h1>Import from Google Drive</h1>
+            <h1>{t('import.page.title')}</h1>
             {!!tempFileList.length && "Loading..."}
             <div>
-                <div className='drive-items-list'>
+                <div className="drive-items-list">
                     <ListGroup variant="flush" className={filesFromMultipleAccounts ? 'col6' : 'col5'}>
                         {/* header */}
-                        <ListGroup.Item key="0" className='header'>
+                        <ListGroup.Item key="0" className="header">
                             <Form.Check
                                 type="checkbox"
                                 checked={visibleFileList.length && selectedFiles.length === visibleFileList.length}
@@ -241,53 +241,53 @@ const DocumentImport = () => {
                             />
                             {filesFromMultipleAccounts &&
                                 <span onClick={() => toggleSortByColumn('email')}>
-                                    Conta {sortProperty === 'email' && <Icon icon={getSortIcon()} />}
+                                    {t('import.table.headers.account')} {sortProperty === 'email' && <Icon icon={getSortIcon()} />}
                                 </span>
                             }
                             <span onClick={() => toggleSortByColumn('name')}>
-                                Nome {sortProperty === 'name' && <Icon icon={getSortIcon()} />}
+                                {t('import.table.headers.name')} {sortProperty === 'name' && <Icon icon={getSortIcon()} />}
                             </span>
-                            <div className='select'>
-                                <span>Categoria</span>
+                            <div className="select">
+                                <span>{t('import.table.headers.category')}</span>
                                 <DocumentImportHeaderDropdown
-                                    labelPrimaryBtn="Set for all"
-                                    labelSecondaryBtn="Set for non selected"
-                                    onToggle={(isOpen, event, metadata) => { if (metadata.source === 'rootClose') updateParams({ 'category': '' }); }}
+                                    labelPrimaryBtn={t('import.table.headers.popover.btns.primary.label')}
+                                    labelSecondaryBtn={t('import.table.headers.popover.btns.secondary.label')}
+                                    onToggle={(_, __, metadata) => { if (metadata.source === 'rootClose') updateParams({ 'category': '' }); }}
                                     onSelect={btnClicked => setPropertyMultipleItems('category', params.category, btnClicked === 'primary')}
                                     style={{ marginRight: '10px' }}
                                 >
                                     <CategorySelect
                                         categories={categories}
-                                        onChange={(key, value) => updateParams({ 'category': value })}
+                                        onChange={(_, value) => updateParams({ 'category': value })}
                                         size="sm"
                                         value={params.category}
                                     />
                                 </DocumentImportHeaderDropdown>
                             </div>
-                            <div className='select'>
-                                <span>Data</span>
+                            <div className="select">
+                                <span>{t('import.table.headers.date')}</span>
                                 <DocumentImportHeaderDropdown
-                                    labelPrimaryBtn="Set for all"
-                                    labelSecondaryBtn="Set for non selected"
-                                    onToggle={(isOpen, event, metadata) => { if (metadata.source === 'rootClose') updateParams({ 'date': '' }); }}
+                                    labelPrimaryBtn={t('import.table.headers.popover.btns.primary.label')}
+                                    labelSecondaryBtn={t('import.table.headers.popover.btns.secondary.label')}
+                                    onToggle={(_, __, metadata) => { if (metadata.source === 'rootClose') updateParams({ 'date': '' }); }}
                                     onSelect={btnClicked => setPropertyMultipleItems('date', params.date, btnClicked === 'primary')}
                                     style={{ marginRight: '1rem' }}
                                 >
                                     <DatePicker
-                                        onChange={(key, value) => updateParams({ 'date': value })}
+                                        onChange={(_, value) => updateParams({ 'date': value })}
                                         value={params.date}
                                     />
                                 </DocumentImportHeaderDropdown>
                             </div>
-                            <span className='actions'>Actions</span>
+                            <span className="actions">{t('import.table.headers.actions')}</span>
                         </ListGroup.Item>
 
                         {/* body */}
                         {!visibleFileList.length
-                            ? <ListGroup.Item key="-1" className='empty'>
-                                <span>No items selected</span>
+                            ? <ListGroup.Item key="-1" className="empty">
+                                <span>{t('import.table.content.empty')}</span>
                             </ListGroup.Item>
-                            : <ListGroup variant="flush" className='content'>
+                            : <ListGroup variant="flush" className="content">
                                 {visibleFileList
                                     .filter(f => f.token)
                                     .sort((a, b) => sortDirection === 'ASC'
@@ -305,35 +305,25 @@ const DocumentImport = () => {
                                             <div>
                                                 <CategorySelect
                                                     categories={categories}
-                                                    onChange={(key, value) => setItemProperty(f.id, 'category', value)}
+                                                    onChange={(_, value) => setItemProperty(f.id, 'category', value)}
                                                     size="sm"
                                                     value={f.category}
                                                 />
                                             </div>
                                             <div>
                                                 <DatePicker
-                                                    onChange={(key, value) => setItemProperty(f.id, 'date', value)}
+                                                    onChange={(_, value) => setItemProperty(f.id, 'date', value)}
                                                     size="sm"
                                                     value={f.date}
                                                 />
                                             </div>
                                             <div className="actions">
-                                                {validateFilesForUpload([f])
-                                                    ? <BasicButton
-                                                        className="disabled"
-                                                        icon={faFileUpload}
-                                                        onClick={() => { }}
-                                                        tooltip='upload single file btn'
-                                                    />
-                                                    : <BasicButton
-                                                        icon={faFileUpload}
-                                                        onClick={() => sendSingleFile(f.id)}
-                                                        tooltip='upload single file btn'
-                                                    />}
-                                                <DeleteButton
-                                                    onClick={() => setFileList(fl => fl.filter(file => file.id !== f.id))}
-                                                    i18nTooltipKey='delete file btn i18n key'
-                                                />
+                                                <BasicButton
+                                                    className={validateFilesForUpload([f]) ? 'disabled' : ''}
+                                                    icon={faFileUpload}
+                                                    onClick={() => { if (!validateFilesForUpload([f])) sendSingleFile(f.id) }}
+                                                    tooltip={t('import.table.content.actions.import')} />
+                                                <DeleteButton onClick={() => setFileList(fl => fl.filter(file => file.id !== f.id))} />
                                             </div>
                                         </ListGroup.Item>
                                     )}
@@ -343,46 +333,46 @@ const DocumentImport = () => {
                 </div>
 
                 <div className={`page-btns ${!visibleFileList.length ? 'center' : 'full'}`}>
-                    <div className='select-from-drive-btn'>
+                    <div className="select-from-drive-btn">
                         <Button variant="primary" onClick={() => handleOpenPicker()}>
                             <Icon icon={faGoogleDrive} />
-                            <span>Select from Google Drive</span>
+                            <span>{t('import.page.btns.selectFromDrive')}</span>
                         </Button>
 
                         {!!pickerUser &&
-                            <div className='current-user-box'>
+                            <div className="current-user-box">
                                 <span >{pickerUser.email} - </span>
                                 <Button
                                     variant="link"
                                     onClick={() => { setPickerUser(); handleOpenPicker(true); }}
                                 >
-                                    Switch account
+                                    {t('import.page.btns.switchAccount')}
                                 </Button>
                             </div>
                         }
                     </div>
 
                     {!!visibleFileList.length &&
-                        <div className='files-action-btns-box'>
+                        <div className="files-action-btns-box">
                             <Button
-                                className='import-selected-btn'
-                                variant={selectedFiles.length ? "primary" : "secondary"}
+                                className="import-selected-btn"
+                                variant={selectedFiles.length ? 'primary' : 'secondary'}
                                 onClick={() => setFileList(fl => fl.filter(f => !f.selected))}
                                 disabled={selectedFiles.length === 0}
                             >
-                                <span>Remove selected</span>
-                                <Badge variant='light'>
+                                <span>{t('import.page.btns.removeSelected')}</span>
+                                <Badge variant="light">
                                     {selectedFiles.length || ''}
                                 </Badge>
                             </Button>
                             <Button
-                                className='import-selected-btn'
-                                variant={selectedFiles.length ? "primary" : "secondary"}
+                                className="import-selected-btn"
+                                variant={selectedFiles.length ? 'primary' : 'secondary'}
                                 onClick={() => sendSelectedFiles()}
                                 disabled={selectedFiles.length === 0}
                             >
-                                <span>Import selected</span>
-                                <Badge variant='light'>
+                                <span>{t('import.page.btns.importSelected')}</span>
+                                <Badge variant="light">
                                     {selectedFiles.length || ''}
                                 </Badge>
                             </Button>
@@ -399,22 +389,22 @@ const DocumentImport = () => {
                 onHide={() => { setTempFileList([]); setShowSelectFilesModal(false); }}
             >
                 <Modal.Header closeButton={true}>
-                    <h5 className="title">Atenção</h5>
+                    <h5 className="title">{t('import.warningModal.title')}</h5>
                 </Modal.Header>
                 <Modal.Body>
-                    Já existe uma lista de arquivos selecionados para importação.
+                    {t('import.warningModal.body.line1')}
                     <br /><br />
-                    Deseja adicionar os novos itens à lista ou substituir todos?
+                    {t('import.warningModal.body.line2')}
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={() => { setTempFileList([]); setShowSelectFilesModal(false); }}>
-                        Cancelar
+                        {t('import.warningModal.btns.cancel')}
                     </Button>
                     <Button variant="primary" onClick={() => { setShowSelectFilesModal(false); }}>
-                        Adicionar
+                        {t('import.warningModal.btns.append')}
                     </Button>
                     <Button variant="primary" onClick={() => { setFileList([]); setShowSelectFilesModal(false); }}>
-                        Substituir
+                        {t('import.warningModal.btns.replace')}
                     </Button>
                 </Modal.Footer>
             </Modal>
