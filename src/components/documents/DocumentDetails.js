@@ -21,7 +21,7 @@ const DocumentForm = () => {
     const initialDocumentValues = useMemo(() => ({
         title: '',
         summary: '',
-        category: 0,
+        categoryId: 0,
         date: !docId && new Date().toISOString().split('T')[0],
         file: undefined
     }), [docId]);
@@ -29,7 +29,7 @@ const DocumentForm = () => {
 
     useEffect(() => { if (redirect) setRedirect(null) }, [redirect]);
 
-    useEffect(() => setDocument(doc => ({ ...doc, category: 0 })), [department]);
+    useEffect(() => setDocument(doc => ({ ...doc, categoryId: 0 })), [department]);
 
     useEffect(() => {
         if (docId && docId !== document.id) {
@@ -201,8 +201,8 @@ const DocumentForm = () => {
                                 <CategorySelect
                                     name='categoryId'
                                     onChange={setDocumentValue}
-                                    isInvalid={validation['category']}
-                                    validationMessage={t(`document.form.validation.${validation['category']}`)}
+                                    isInvalid={validation['categoryId']}
+                                    validationMessage={t(`document.form.validation.${validation['categoryId']}`)}
                                     value={document['categoryId']}
                                 />
                             </Form.Group>
