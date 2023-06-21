@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useEffect, useRef, useState } from 'react'
+import React, { createContext, useCallback, useLayoutEffect, useRef, useState } from 'react'
 import { SERVER_TOKEN_KEY, getLocalItem, setLocalItem, removeLocalItem } from '../utils/localStorageManager'
 import { getTokenDetails } from '../utils/jwtHelper'
 import rq from '../services/api.js'
@@ -57,7 +57,7 @@ function AuthProvider({ children }) {
 		timeoutId.current = setTimeout(() => handleAuthLogout(), msUntilTokenExp - 1000);
 	}, [handleAuthLogout]);
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		const refreshAuthentication = async () => {
 			try {
 				const res = await rq('/api/auth/refresh', { method: "GET" });

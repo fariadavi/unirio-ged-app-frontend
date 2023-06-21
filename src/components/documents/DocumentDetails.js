@@ -22,9 +22,9 @@ const DocumentForm = () => {
         title: '',
         summary: '',
         categoryId: 0,
-        date: !docId && new Date().toISOString().split('T')[0],
+        date: new Date().toISOString().split('T')[0],
         file: undefined
-    }), [docId]);
+    }), []);
     const [document, setDocument] = useState(initialDocumentValues);
 
     useEffect(() => { if (redirect) setRedirect(null) }, [redirect]);

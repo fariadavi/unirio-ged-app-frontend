@@ -153,7 +153,7 @@ const DepartmentsTable = ({ canAddDept, canEditDept, canDeleteDept }) => {
     const data = departments.map(dept => {
         return {
             ...dept,
-            isCurrentDept: dept.id === department.id
+            isCurrentDept: dept.id === department?.id
         }
     })
 

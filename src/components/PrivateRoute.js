@@ -1,5 +1,5 @@
 import React, { useContext, useLayoutEffect } from 'react'
-import { Redirect, Route } from 'react-router-dom';
+import { Redirect, Route } from 'react-router-dom'
 import { AuthContext } from '../contexts/AuthContext'
 import { UserContext } from '../contexts/UserContext'
 
