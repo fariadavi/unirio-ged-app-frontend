@@ -15,7 +15,7 @@ export default function PrivateRoute({ component, ...options }) {
     }, [token, user, logoutUser]);
 
     useLayoutEffect(() => {
-        if (!location || location.pathname === '/') {
+        if (!user || !location || location.pathname === '/') {
             setRedirect(null);
             return;
         }
@@ -27,7 +27,7 @@ export default function PrivateRoute({ component, ...options }) {
 
         if (!checkPermissionForPaths(path))
             setRedirect("/");
-    }, [location, checkPermissionForPaths]);
+    }, [location, checkPermissionForPaths, user]);
 
     return (
         token && user
