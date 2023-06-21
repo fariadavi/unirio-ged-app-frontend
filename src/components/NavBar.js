@@ -11,7 +11,7 @@ import '../style/NavBar.css'
 
 export default function NavBar() {
     const { t, i18n } = useTranslation();
-    const { user, department, checkPermission, changeDepartment, logoutUser } = useContext(UserContext);
+    const { user, department, checkPermissionForPaths, changeDepartment, logoutUser } = useContext(UserContext);
     const [language, setLanguage] = useState(getLocalItem(LANG_KEY));
     const languageList = Object.keys(i18n.store.data)
 
@@ -31,26 +31,26 @@ export default function NavBar() {
                 </Link>
             </Navbar.Brand>
             <Nav className="mr-auto">
-                {checkPermission('ADD_DOCS', 'SEARCH_DOCS')
+                {checkPermissionForPaths("/documents/new", "/")
                     && <NavDropdown title={
                         <>
                             <FontAwesomeIcon icon={faFileAlt} />
                             <span>{t('navbar.documents')}</span>
                         </>
                     }>
-                        {checkPermission('ADD_DOCS')
+                        {checkPermissionForPaths("/documents/new")
                             && (<>
                                 <Link to="/documents/new" className="dropdown-item">
                                     <FontAwesomeIcon className="icon" icon={faPlusCircle} />
                                     {t('navbar.documents.add')}
                                 </Link>
-                                <Link to="/documents/import/" className="dropdown-item">
+                                <Link to="/documents/import" className="dropdown-item">
                                     <FontAwesomeIcon className="icon" icon={faCloudDownloadAlt} />
                                     {t('navbar.documents.import')}
                                 </Link>
                             </>)
                         }
-                        {checkPermission('SEARCH_DOCS')
+                        {checkPermissionForPaths("/")
                             && <Link to="/" className="dropdown-item">
                                 <FontAwesomeIcon className="icon" icon={faSearch} />
                                 {t('navbar.documents.search')}
@@ -58,20 +58,20 @@ export default function NavBar() {
                         }
                     </NavDropdown>
                 }
-                {checkPermission('MANAGE_CATEGORIES', 'INVITE_USERS', 'MANAGE_DEPT_PERM')
+                {checkPermissionForPaths("/department/categories", "/department/users")
                     && <NavDropdown title={
                         <>
                             <FontAwesomeIcon icon={faHome} />
                             <span>{t('navbar.department')}</span>
                         </>
                     }>
-                        {checkPermission('MANAGE_CATEGORIES')
+                        {checkPermissionForPaths("/department/categories")
                             && <Link to="/department/categories" className="dropdown-item">
                                 <FontAwesomeIcon className="icon" icon={faStream} />
                                 {t('navbar.department.category')}
                             </Link>
                         }
-                        {checkPermission('INVITE_USERS', 'MANAGE_DEPT_PERM')
+                        {checkPermissionForPaths("/department/users")
                             && <Link to="/department/users" className="dropdown-item">
                                 <FontAwesomeIcon className="icon" icon={faUsersCog} />
                                 {t('navbar.department.users')}
@@ -79,20 +79,20 @@ export default function NavBar() {
                         }
                     </NavDropdown>
                 }
-                {checkPermission('MANAGE_DEPARTMENTS', 'MANAGE_SYSTEM_PERM')
+                {checkPermissionForPaths('/system/departments', '/system/users')
                     && <NavDropdown title={
                         <>
                             <FontAwesomeIcon icon={faCogs} />
                             <span>{t('navbar.system')}</span>
                         </>
                     }>
-                        {checkPermission('MANAGE_DEPARTMENTS')
+                        {checkPermissionForPaths('/system/departments')
                             && <Link to="/system/departments" className="dropdown-item">
                                 <FontAwesomeIcon className="icon" icon={faHouseUser} />
                                 {t('navbar.system.department')}
                             </Link>
                         }
-                        {checkPermission('MANAGE_SYSTEM_PERM')
+                        {checkPermissionForPaths('/system/users')
                             && <Link to="/system/users" className="dropdown-item">
                                 <FontAwesomeIcon className="icon" icon={faUsersCog} />
                                 {t('navbar.system.users')}

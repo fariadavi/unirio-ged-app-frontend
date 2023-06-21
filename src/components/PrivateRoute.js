@@ -1,20 +1,39 @@
-import React, { useContext, useLayoutEffect } from 'react'
-import { Redirect, Route } from 'react-router-dom'
+import React, { useContext, useLayoutEffect, useState } from 'react'
+import { Redirect, Route, useLocation } from 'react-router-dom'
 import { AuthContext } from '../contexts/AuthContext'
 import { UserContext } from '../contexts/UserContext'
 
 export default function PrivateRoute({ component, ...options }) {
-    const { user, logoutUser } = useContext(UserContext);
+    const { user, logoutUser, checkPermissionForPaths } = useContext(UserContext);
     const { token } = useContext(AuthContext);
+    const [redirect, setRedirect] = useState(null);
+    const location = useLocation();
 
     useLayoutEffect(() => {
         if (!token && user)
             logoutUser();
     }, [token, user, logoutUser]);
 
+    useLayoutEffect(() => {
+        if (!location || location.pathname === '/') {
+            setRedirect(null);
+            return;
+        }
+
+        let path = location.pathname;
+        if (path.length > 1 && path.at(-1) === '/') path = path.slice(0, -1);
+        path = path.startsWith('/documents/') && !path.startsWith('/documents/new') && !path.startsWith('/documents/import')
+            ? '/documents/{id}' : path;
+
+        if (!checkPermissionForPaths(path))
+            setRedirect("/");
+    }, [location, checkPermissionForPaths]);
+
     return (
         token && user
-            ? <Route {...options} component={component} />
+            ? redirect
+                ? <Redirect to={redirect} />
+                : <Route {...options} component={component} />
             : !token
                 ? <Redirect to="/login" />
                 : <h1>Loading User...</h1>

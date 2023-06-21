@@ -1,6 +1,7 @@
-import React, { createContext, useCallback, useContext, useEffect, useState } from 'react'
+import React, { createContext, useCallback, useContext, useLayoutEffect, useState } from 'react'
 import rq from '../services/api.js'
 import { AuthContext } from '../contexts/AuthContext'
+import { permissionMap } from '../resources/permission-config.js';
 
 const UserContext = createContext();
 
@@ -9,7 +10,14 @@ function UserProvider({ children }) {
     const [user, setUser] = useState();
     const [userLoading, setUserLoading] = useState(false);
 
-    const checkPermission = (...permissions) => permissions.some(p => user.permissions.includes(p));
+    const checkPermission = useCallback((...permissions) =>
+        (permissions && user?.permissions)
+            ? permissions.some(p => user.permissions.includes(p))
+            : false, [user]);
+
+
+    const checkPermissionForPaths = useCallback((...paths) =>
+        checkPermission(...paths.flatMap(path => permissionMap[path])), [checkPermission]);
 
     const setLoggedUserInfo = useCallback(async () => {
         setUserLoading(true);
@@ -55,13 +63,13 @@ function UserProvider({ children }) {
         setUserLoading(false);
     }
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         if (!user && token)
             setLoggedUserInfo();
     }, [user, token, setLoggedUserInfo]);
 
     return (
-        <UserContext.Provider value={{ user, department: user?.currentDepartment, userLoading, checkPermission, setLoggedUserInfo, changeDepartment, logoutUser }}>
+        <UserContext.Provider value={{ user, department: user?.currentDepartment, userLoading, checkPermission, checkPermissionForPaths, setLoggedUserInfo, changeDepartment, logoutUser }}>
             {children}
         </UserContext.Provider>
     );
