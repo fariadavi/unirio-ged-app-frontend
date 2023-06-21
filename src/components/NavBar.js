@@ -66,13 +66,13 @@ export default function NavBar() {
                         </>
                     }>
                         {checkPermission('MANAGE_CATEGORIES')
-                            && <Link to="/categories" className="dropdown-item">
+                            && <Link to="/department/categories" className="dropdown-item">
                                 <FontAwesomeIcon className="icon" icon={faStream} />
                                 {t('navbar.department.category')}
                             </Link>
                         }
                         {checkPermission('INVITE_USERS', 'MANAGE_DEPT_PERM')
-                            && <Link to="/users/department" className="dropdown-item">
+                            && <Link to="/department/users" className="dropdown-item">
                                 <FontAwesomeIcon className="icon" icon={faUsersCog} />
                                 {t('navbar.department.users')}
                             </Link>
@@ -87,13 +87,13 @@ export default function NavBar() {
                         </>
                     }>
                         {checkPermission('MANAGE_DEPARTMENTS')
-                            && <Link to="/departments" className="dropdown-item">
+                            && <Link to="/system/departments" className="dropdown-item">
                                 <FontAwesomeIcon className="icon" icon={faHouseUser} />
                                 {t('navbar.system.department')}
                             </Link>
                         }
                         {checkPermission('MANAGE_SYSTEM_PERM')
-                            && <Link to="/users/system" className="dropdown-item">
+                            && <Link to="/system/users" className="dropdown-item">
                                 <FontAwesomeIcon className="icon" icon={faUsersCog} />
                                 {t('navbar.system.users')}
                             </Link>

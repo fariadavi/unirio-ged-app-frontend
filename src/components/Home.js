@@ -19,17 +19,17 @@ export default function Home() {
                 <Route path="/documents">
                     <DocumentDetails />
                 </Route>
-                <Route path="/categories">
+                <Route path="/department/categories">
                     <Categories />
                 </Route>
-                <Route path="/departments">
+                <Route path="/department/users">
+                    <Users type="department" />
+                </Route>
+                <Route path="/system/departments">
                     <Departments />
                 </Route>
-                <Route path="/users/department">
-                    <Users permissionType="department" />
-                </Route>
-                <Route path="/users/system">
-                    <Users permissionType="system" />
+                <Route path="/system/users" >
+                    <Users type="system" />
                 </Route>
                 <Route path="*">
                     <PageNotFound />
