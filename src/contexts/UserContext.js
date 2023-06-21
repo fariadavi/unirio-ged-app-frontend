@@ -16,9 +16,9 @@ function UserProvider({ children }) {
 
         try {
             const res = await rq('/users/loggedUserInfo', { method: "GET" });
-            
+
             setUserLoading(false);
-            
+
             if (!res.ok)
                 throw new Error(res.status);
 
@@ -42,7 +42,7 @@ function UserProvider({ children }) {
 
         if (!res.ok)
             throw new Error(res.status);
-        
+
         setLoggedUserInfo();
     }
 
@@ -51,7 +51,7 @@ function UserProvider({ children }) {
 
         setUser(null);
         handleAuthLogout();
-        
+
         setUserLoading(false);
     }
 

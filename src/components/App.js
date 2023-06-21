@@ -9,13 +9,13 @@ import '../style/App.css'
 
 export default function App() {
 	return (
-		<AuthProvider>
-			<UserProvider>
-				<Router>
+		<Router>
+			<AuthProvider>
+				<UserProvider>
 					<Route path="/login" component={Login} />
 					<PrivateRoute path="*" component={Home} />
-				</Router>
-			</UserProvider>
-		</AuthProvider>
+				</UserProvider>
+			</AuthProvider>
+		</Router>
 	)
 }
