@@ -28,10 +28,14 @@ const UserPermissionsTable = ({ canInviteUsers, canEditUserPermissions, canDelet
     useEffect(() => loadUsers(), [loadUsers, department, type])
 
     const loadPermissions = useCallback(async () => {
-        const res = await getPermissions(type);
+        if (!canEditUserPermissions) {
+            setPermissions([]);
+            return;
+        }
 
+        const res = await getPermissions(type);
         if (res.ok) setPermissions(await res.json());
-    }, [type])
+    }, [canEditUserPermissions, type])
 
     useEffect(() => loadPermissions(), [loadPermissions, type])
 
