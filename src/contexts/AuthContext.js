@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useEffect, useState } from 'react'
+import React, { createContext, useCallback, useEffect, useRef, useState } from 'react'
 import { SERVER_TOKEN_KEY, getLocalItem, setLocalItem, removeLocalItem } from '../utils/localStorageManager'
 import { getTokenDetails } from '../utils/jwtHelper'
 import rq from '../services/api.js'
@@ -10,15 +10,18 @@ function AuthProvider({ children }) {
 	const [token, setToken] = useState(getLocalItem(SERVER_TOKEN_KEY));
 	const [authLoading, setAuthLoading] = useState(false);
 	const location = useLocation();
+	const timeoutId = useRef(null);
 
 	const handleAuthLogout = useCallback(() => {
 		setAuthLoading(true);
 
-		setToken(null);
 		removeLocalItem(SERVER_TOKEN_KEY);
+		setToken(null);
+		clearTimeout(timeoutId.current);
+		timeoutId.current = null;
 
 		setAuthLoading(false);
-	}, [])
+	}, []);
 
 	const handleAuthentication = async googleData => {
 		setAuthLoading(true);
@@ -37,12 +40,22 @@ function AuthProvider({ children }) {
 			if (!serverToken) throw new Error();
 			setLocalItem(SERVER_TOKEN_KEY, serverToken);
 			setToken(serverToken);
+			setAutoLogoutTimer(serverToken);
 		} catch (err) {
 			handleAuthLogout();
 		}
 
 		setAuthLoading(false);
 	}
+
+	const setAutoLogoutTimer = useCallback(token => {
+		if (!token) return;
+		const { msUntilTokenExp } = getTokenDetails(token);
+
+		if (timeoutId.current)
+			clearTimeout(timeoutId.current);
+		timeoutId.current = setTimeout(() => handleAuthLogout(), msUntilTokenExp - 1000);
+	}, [handleAuthLogout]);
 
 	useEffect(() => {
 		const refreshAuthentication = async () => {
@@ -56,6 +69,7 @@ function AuthProvider({ children }) {
 				if (!serverToken) throw new Error();
 				setLocalItem(SERVER_TOKEN_KEY, serverToken);
 				setToken(serverToken);
+				setAutoLogoutTimer(serverToken);
 			} catch (err) {
 				console.log('Unable to refresh token. User will be logged out at the end of the session.');
 			}
