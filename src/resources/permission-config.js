@@ -1,4 +1,4 @@
-export const permissionMap = {
+export const permissionsByPath = {
     '/': ['SEARCH_DOCS'],
     '/documents/new': ['ADD_DOCS'],
     '/documents/import': ['ADD_DOCS'],
