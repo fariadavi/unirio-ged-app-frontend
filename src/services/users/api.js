@@ -13,8 +13,8 @@ const insertUser = async email =>
         body: `email=${email}`
     })
 
-const updateUserPermissions = async (userId, permissionsArray) =>
-    await rq(`/users/${userId}/permission`, {
+const updateUserPermissions = async (userId, permissionsArray, type) =>
+    await rq(`/users/${userId}/permission${type ? `?type=${type}` : ''}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(permissionsArray)

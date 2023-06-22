@@ -75,7 +75,8 @@ const UserPermissionsTable = ({ canInviteUsers, canEditUserPermissions, canDelet
             editUserPermissionsWithNewUserData(
                 getSpecificUserPermissions(users, userId, permissions),
                 userNewData
-            )
+            ),
+            type
         );
 
         if (res.ok) {
@@ -84,7 +85,7 @@ const UserPermissionsTable = ({ canInviteUsers, canEditUserPermissions, canDelet
         }
 
         return res.ok;
-    }, [permissions, user, users, loadUsers, setLoggedUserInfo, editUserPermissionsWithNewUserData])
+    }, [editUserPermissionsWithNewUserData, users, permissions, type, loadUsers, user?.id, setLoggedUserInfo])
 
     const batchEditUsersPermissions = useCallback(async editedUserEntries => {
         const res = await batchUpdateUsersPermissions(
