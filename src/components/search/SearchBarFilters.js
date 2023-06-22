@@ -22,10 +22,11 @@ export const TextInputFilter = ({ disabled, value, onChange, onSubmit }) =>
         />
     </InputGroup>
 
-export const CategoryFilter = ({ label, onChange, value }) => {
+export const CategoryFilter = ({ disabled = false, label, onChange, value }) => {
     return (
         <CategorySelect
             className="custom-input-group category-filter"
+            disabled={disabled}
             label={label}
             onChange={onChange}
             value={value}
@@ -33,15 +34,17 @@ export const CategoryFilter = ({ label, onChange, value }) => {
     )
 }
 
-export const MinMaxDateFilter = ({ labelFromDate, labelUntilDate, onChange, minDateValue, maxDateValue }) =>
+export const MinMaxDateFilter = ({ disabled = false, labelFromDate, labelUntilDate, onChange, minDateValue, maxDateValue }) =>
     <div className="custom-input-group date-filter">
         <DatePicker name="minDate"
+            disabled={disabled}
             label={labelFromDate}
             onChange={onChange}
             max={maxDateValue}
             value={minDateValue}
         />
         <DatePicker name="maxDate"
+            disabled={disabled}
             label={labelUntilDate}
             onChange={onChange}
             min={minDateValue}
@@ -49,10 +52,11 @@ export const MinMaxDateFilter = ({ labelFromDate, labelUntilDate, onChange, minD
         />
     </div>
 
-export const UserDocumentsFilter = ({ label, value, onClick }) =>
+export const UserDocumentsFilter = ({ disabled = false, label, value, onClick }) =>
     <div className="custom-input-group user-filter">
         <Form.Check type="checkbox" name="myDocuments" custom
             id="filterMyDocuments"
+            disabled={disabled}
             onClick={e => onClick('myDocuments', e.target.value)}
             label={label}
             value={value}

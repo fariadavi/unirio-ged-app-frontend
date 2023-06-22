@@ -66,6 +66,7 @@ export default function SearchBar({ isSearching, onSearch }) {
                     value={filters.category}
                     placeholder={t('document.form.category.choose')}
                     unselectOptionLabel={t('none', { context: 'female' })}
+                    disabled={!expandedOptions}
                 />
 
                 <MinMaxDateFilter
@@ -74,12 +75,14 @@ export default function SearchBar({ isSearching, onSearch }) {
                     onChange={handleFilterChange}
                     minDateValue={filters.minDate}
                     maxDateValue={filters.maxDate}
+                    disabled={!expandedOptions}
                 />
 
                 <UserDocumentsFilter
                     label={t('searchBar.filters.registeredByMe')}
                     onClick={handleFilterChange}
                     value={filters.myDocuments}
+                    disabled={!expandedOptions}
                 />
             </Form.Group>
             <Form.Group className="search-form-group search-actions-group">

@@ -5,7 +5,7 @@ import rq from '../../services/api'
 import { Form } from 'react-bootstrap'
 import Select from './Select'
 
-const CategorySelect = ({ categories = undefined, className, label, name = 'category', onChange, isValid, isInvalid, size, validationMessage, value }) => {
+const CategorySelect = ({ categories = undefined, disabled = false, className, label, name = 'category', onChange, isValid, isInvalid, size, validationMessage, value }) => {
     const { t } = useTranslation();
     const { department } = useContext(UserContext);
     const [cats, setCats] = useState([]);
@@ -21,6 +21,7 @@ const CategorySelect = ({ categories = undefined, className, label, name = 'cate
 
     return <Select
         className={className}
+        disabled={disabled}
         label={label}
         name={name}
         isValid={isValid}
