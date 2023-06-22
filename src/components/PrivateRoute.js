@@ -22,9 +22,6 @@ export default function PrivateRoute({ component, ...options }) {
 
         let path = location.pathname;
         if (path.length > 1 && path.at(-1) === '/') path = path.slice(0, -1);
-        path = path.startsWith('/documents/') && !path.startsWith('/documents/new') && !path.startsWith('/documents/import')
-            ? '/documents/{id}' : path;
-
         if (!checkPermissionForPaths(path))
             setRedirect("/");
     }, [location, checkPermissionForPaths, user]);

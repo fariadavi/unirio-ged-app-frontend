@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { UserContext } from '../../contexts/UserContext'
 import { useTranslation } from 'react-i18next'
 import rq from '../../services/api'
 import { Icon } from '../util/CustomIcon'
@@ -41,6 +42,7 @@ const getDocumentFile = (docId, fileName, isDownload) => {
 
 const Actions = ({ item, deleteAction }) => {
     const { t } = useTranslation();
+    const { user, checkPermission } = useContext(UserContext);
 
     return <div className="actions">
         <span
@@ -52,12 +54,14 @@ const Actions = ({ item, deleteAction }) => {
         <span onClick={() => getDocumentFile(item.id, item.fileName, true)}>
             <Icon icon={faDownload} tooltip={t('search.results.download.tooltip')} />
         </span>
-        <Link to={`/documents/${item.id}`}>
-            <Icon icon={faEdit} tooltip={t('search.results.edit.tooltip')} />
-        </Link>
-        <span onClick={() => deleteAction(item.id)}>
-            <Icon icon={faTrash} tooltip={t('search.results.delete.tooltip')} />
-        </span>
+        {(item.registeredById === user.id || checkPermission('EDIT_DOCS_OTHERS'))
+            && <Link to={`/documents/${item.id}`}>
+                <Icon icon={faEdit} tooltip={t('search.results.edit.tooltip')} />
+            </Link>}
+        {(item.registeredById === user.id || checkPermission('DELETE_DOCS_OTHERS'))
+            && <span onClick={() => deleteAction(item.id)}>
+                <Icon icon={faTrash} tooltip={t('search.results.delete.tooltip')} />
+            </span>}
     </div>
 }
 

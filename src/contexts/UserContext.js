@@ -1,7 +1,7 @@
 import React, { createContext, useCallback, useContext, useLayoutEffect, useState } from 'react'
 import rq from '../services/api.js'
 import { AuthContext } from '../contexts/AuthContext'
-import { permissionsByPath } from '../resources/permission-config.js';
+import { reqPermByPath } from '../resources/permission-config.js';
 
 const UserContext = createContext();
 
@@ -17,7 +17,8 @@ function UserProvider({ children }) {
 
 
     const checkPermissionForPaths = useCallback((...paths) =>
-        checkPermission(...paths.flatMap(path => permissionsByPath[path])), [checkPermission]);
+        !paths.length || paths.some(path => !reqPermByPath[path]) || 
+        checkPermission(...paths.flatMap(path => reqPermByPath[path])), [checkPermission]);
 
     const setLoggedUserInfo = useCallback(async () => {
         setUserLoading(true);

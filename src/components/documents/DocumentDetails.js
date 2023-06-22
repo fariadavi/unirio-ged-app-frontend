@@ -40,11 +40,8 @@ const DocumentForm = () => {
         } else if (!docId && document.id) {
             setDocument(initialDocumentValues);
             setValidation({});
-
-        } else if (document.tenant && document.tenant !== department.acronym.toLowerCase()) {
-            setRedirect('/documents/new');
         }
-    }, [docId, document.id, document.tenant, department, initialDocumentValues]);
+    }, [docId, document.id, initialDocumentValues]);
 
     const setDocumentValue = (key, value) => {
         setValidation({ ...validation, [key]: validateField(key, value) });
@@ -118,14 +115,15 @@ const DocumentForm = () => {
             .then(res => {
                 if (!res.ok) return;
                 window.alert(`Document '${docId}' deleted`);
-                setRedirect('/documents');
+                setRedirect(checkPermission('ADD_DOCS') ? '/documents/new' : '/');
             });
     }
 
     return (
         redirect
             ? <Redirect to={redirect} />
-            : (docId && validation.invalidDocument) || (!docId && !checkPermission('ADD_DOCS')) || (docId && document.registeredBy !== user.id && !checkPermission('EDIT_DOCS_OTHERS'))
+            : (docId && document?.tenant?.toLowerCase() !== department?.acronym?.toLowerCase()) || (docId && validation.invalidDocument) ||
+                (!docId && !checkPermission('ADD_DOCS')) || (docId && document.registeredById !== user.id && !checkPermission('EDIT_DOCS_OTHERS'))
                 ? <PageNotFound />
                 : <div className="document-details-page">
                     <Form className="document-form" noValidate onSubmit={handleSubmit}>
@@ -173,7 +171,7 @@ const DocumentForm = () => {
                                 <Form.Label>{t('document.status')}</Form.Label>
 
                                 <Form.Text as="p">
-                                    <StatusBadge status={document['status']}/>
+                                    <StatusBadge status={document['status']} />
                                 </Form.Text>
                             </Form.Group>
                         </Form.Row>
