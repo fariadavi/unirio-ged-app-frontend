@@ -216,13 +216,10 @@ const DocumentForm = () => {
                         </Form.Row>
 
                         <div className="buttons">
-                            <Button
-                                variant="danger"
-                                onClick={handleDelete}
-                                style={{ display: docId ? 'block' : 'none' }}
-                            >
-                                {t('document.form.deleteButton')}
-                            </Button>
+                            {docId && (document.registeredById === user.id || checkPermission('DELETE_DOCS_OTHERS')) &&
+                                <Button variant="danger" onClick={handleDelete}>
+                                    {t('document.form.deleteButton')}
+                                </Button>}
 
                             <Button
                                 className="border-color-blue bg-color-blue"
@@ -232,8 +229,8 @@ const DocumentForm = () => {
                                 {t(`document.form.${docId ? 'updateButton' : 'submitButton'}`)}
                             </Button>
                         </div>
-                    </Form>
-                </div>
+                    </Form >
+                </div >
     )
 }
 
