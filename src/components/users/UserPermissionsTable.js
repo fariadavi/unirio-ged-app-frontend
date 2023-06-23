@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { UserContext } from '../../contexts/UserContext'
 import {
@@ -98,7 +98,7 @@ const UserPermissionsTable = ({ canInviteUsers, canEditUserPermissions, canDelet
                     )
                 ]))
         );
-        
+
         if (res.ok) {
             await loadUsers();
 
@@ -143,53 +143,55 @@ const UserPermissionsTable = ({ canInviteUsers, canEditUserPermissions, canDelet
         filter: {}
     }
 
-    const columns = {
-        status: {
-            class: 'center',
-            disguise: {
-                true: <Icon
-                    icon={faUserCheck}
-                    tooltip={t('user.table.data.status.y.tooltip')}
-                />,
-                false: <Icon
-                    icon={faQuestion}
-                    tooltip={t('user.table.data.status.n.tooltip')}
-                />
-            },
-            editable: false,
-            filterable: true,
-            header: t('user.table.headers.status'),
-            type: 'boolean',
-            width: '104px'
-        },
-        email: {
-            header: t('user.table.headers.email'),
-            editable: false,
-            filterable: true,
-            requiredOnAdd: true,
-            sort: true,
-            type: 'text',
-            width: '240px'
-        },
-        fullName: {
-            header: t('user.table.headers.username'),
-            editable: false,
-            filterable: true,
-            type: 'text',
-            width: '280px'
-        },
-        ...Object.fromEntries(
-            permissions.map(perm => [perm, {
+    const columns = useMemo(() => {
+        return {
+            status: {
                 class: 'center',
-                header: t(`user.table.headers.permission.${perm.toLowerCase()}`),
-                editable: perm !== 'SEARCH_DOCS',
+                disguise: {
+                    true: <Icon
+                        icon={faUserCheck}
+                        tooltip={t('user.table.data.status.y.tooltip')}
+                    />,
+                    false: <Icon
+                        icon={faQuestion}
+                        tooltip={t('user.table.data.status.n.tooltip')}
+                    />
+                },
+                editable: false,
                 filterable: true,
-                type: 'boolean'
-            }])
-        )
-    }
+                header: t('user.table.headers.status'),
+                type: 'boolean',
+                width: '104px'
+            },
+            email: {
+                header: t('user.table.headers.email'),
+                editable: false,
+                filterable: true,
+                requiredOnAdd: true,
+                sort: true,
+                type: 'text',
+                width: '240px'
+            },
+            fullName: {
+                header: t('user.table.headers.username'),
+                editable: false,
+                filterable: true,
+                type: 'text',
+                width: '280px'
+            },
+            ...Object.fromEntries(
+                permissions.map(perm => [perm, {
+                    class: 'center',
+                    header: t(`user.table.headers.permission.${perm.toLowerCase()}`),
+                    // editable: perm !== 'SEARCH_DOCS',
+                    filterable: true,
+                    type: 'boolean'
+                }])
+            )
+        }
+    }, [permissions, t]);
 
-    const data = users.map(user => {
+    const data = useMemo(() => users.map(user => {
         return {
             ...user,
             status: user.fullName?.trim().length > 0,
@@ -199,7 +201,7 @@ const UserPermissionsTable = ({ canInviteUsers, canEditUserPermissions, canDelet
                 )
             )
         }
-    })
+    }), [permissions, users]);
 
     return (<CustomTable
         actions={actions}
