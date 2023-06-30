@@ -21,7 +21,7 @@ jobs:
           npm ci
           npm run build
         env:
-          REACT_APP_SERVER_URL: ${{ secrets.REACT_APP_SERVER_URL }}
+          REACT_APP_SERVER_URL: ${{ vars.REACT_APP_SERVER_URL }}
           REACT_APP_GOOGLE_DEVELOPER_KEY: ${{ secrets.REACT_APP_GOOGLE_DEVELOPER_KEY }}
           REACT_APP_GOOGLE_OAUTH_CLIENT_ID: ${{ secrets.REACT_APP_GOOGLE_OAUTH_CLIENT_ID }}
 
