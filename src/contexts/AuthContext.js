@@ -23,14 +23,14 @@ function AuthProvider({ children }) {
 		setAuthLoading(false);
 	}, []);
 
-	const handleAuthentication = async googleData => {
+	const handleAuthentication = async credentialResponse => {
 		setAuthLoading(true);
 
 		try {
 			const res = await rq('/api/auth/google/login', {
 				method: "POST",
 				headers: { "Content-Type": "application/x-www-form-urlencoded" },
-				body: googleData.tokenId
+				body: credentialResponse.credential
 			})
 
 			if (!res.ok)

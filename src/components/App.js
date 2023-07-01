@@ -1,6 +1,7 @@
 import React from 'react'
 import { UserProvider } from '../contexts/UserContext';
 import { AuthProvider } from '../contexts/AuthContext';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 import { HashRouter as Router, Route } from 'react-router-dom'
 import PrivateRoute from './PrivateRoute'
 import Login from './Login';
@@ -12,8 +13,10 @@ export default function App() {
 		<Router>
 			<AuthProvider>
 				<UserProvider>
-					<Route path="/login" component={Login} />
-					<PrivateRoute path="*" component={Home} />
+					<GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID}>
+						<Route path="/login" component={Login} />
+						<PrivateRoute path="*" component={Home} />
+					</GoogleOAuthProvider>
 				</UserProvider>
 			</AuthProvider>
 		</Router>
