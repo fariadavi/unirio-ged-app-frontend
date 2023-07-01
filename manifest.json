@@ -10,12 +10,12 @@
     {
       "src": "/images/unirio_192.png",
       "sizes": "192x192",
-      "type": "image/jpg"
+      "type": "image/png"
     },
     {
       "src": "/images/unirio_512.png",
       "sizes": "512x512",
-      "type": "image/jpg"
+      "type": "image/png"
     }
   ],
   "start_url": "/unirio-ged-app-frontend",
