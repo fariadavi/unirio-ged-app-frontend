@@ -51,7 +51,10 @@ const Actions = ({ item, deleteAction }) => {
         >
             <Icon icon={getFileIcon(item.mediaType)} tooltip={t('search.results.visualize.tooltip')} />
         </span>
-        <span onClick={() => getDocumentFile(item.id, item.fileName, true)}>
+        <span
+            onClick={() => item.fileName.length && getDocumentFile(item.id, item.fileName, true)}
+            className={item.fileName.length ? '' : 'disabled'}
+        >
             <Icon icon={faDownload} tooltip={t('search.results.download.tooltip')} />
         </span>
         {(item.registeredById === user.id || checkPermission('EDIT_DOCS_OTHERS'))
