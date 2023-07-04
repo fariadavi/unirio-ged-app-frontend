@@ -2,7 +2,7 @@ import React, { useCallback, useContext, useEffect, useReducer, useState } from 
 import { useTranslation } from 'react-i18next'
 import { UserContext } from '../../contexts/UserContext'
 import { getLocalItem, LANG_KEY } from '../../utils/localStorageManager'
-import { getDriveFiles, getGoogleUserInfo } from '../../services/util/api'
+import { getDriveFileInfo, getDriveFiles, getGoogleUserInfo } from '../../services/util/api'
 import rq from '../../services/api'
 import { Badge, Button, Form, ListGroup, Modal } from 'react-bootstrap'
 import useDrivePicker from 'react-google-drive-picker'
@@ -43,9 +43,8 @@ const DocumentImport = () => {
         return [array.filter(a => predicate(a)), array.filter(a => !predicate(a))]
     }
 
-    const getFilesFromParentFolders = useCallback(async folderIds => {
-        const searchQuery = folderIds.map(fi => `'${fi}' in parents`).join(' OR ');
-        const fieldsQuery = '&fields=files(id,name,mimeType,description,fileExtension,parents)';
+    const queryGoogleDriveFiles = useCallback(async searchQuery => {
+        const fieldsQuery = '&fields=files(id,name,mimeType,description,fileExtension,parents,createdTime)';
         const res = await getDriveFiles(authResult?.access_token, searchQuery + fieldsQuery);
 
         if (!res.ok)
@@ -56,6 +55,34 @@ const DocumentImport = () => {
         return json.files;
     }, [authResult?.access_token])
 
+    const getFilesFromFolders = useCallback(async folderIds => {
+        if (!folderIds.length) return [];
+
+        const searchQuery = folderIds.map(fi => `'${fi}' in parents`).join(' OR ');
+        return queryGoogleDriveFiles(searchQuery);
+    }, [queryGoogleDriveFiles])
+
+    const getFilesDetails = useCallback(async filesIds => {
+        if (!filesIds.length) return [];
+
+        const fieldsQuery = '?fields=id,name,mimeType,description,fileExtension,parents,createdTime';
+
+        const filesRes = await Promise.all(filesIds.map(fId => getDriveFileInfo(authResult?.access_token, fId + fieldsQuery)));
+        return await Promise.all(filesRes.map(res => res.json()));
+    }, [authResult?.access_token])
+
+    const getFilesFromShortcuts = useCallback(async shortcutIds => {
+        if (!shortcutIds.length) return [];
+
+        const fieldsQuery = '?fields=id,shortcutDetails';
+
+        const shortcutsRes = await Promise.all(shortcutIds.map(sId => getDriveFileInfo(authResult?.access_token, sId + fieldsQuery)));
+        const shortcuts = await Promise.all(shortcutsRes.map(res => res.json()));
+        const targetFiles = shortcuts.filter(s => s.shortcutDetails?.targetId).map(s => s.shortcutDetails.targetId)
+
+        return await getFilesDetails(targetFiles);
+    }, [authResult?.access_token, getFilesDetails])
+
     const mapFileFromDocument = useCallback(doc => {
         return {
             ...doc,
@@ -65,35 +92,48 @@ const DocumentImport = () => {
                     : (doc.fileExtension ? 'file' : 'document')),
             selected: '',
             category: '',
-            date: '',
-            processed: doc.type !== 'folder' && doc.mimeType !== 'application/vnd.google-apps.folder',
+            date: doc.createdTime?.split('T')?.[0] || '',
+            processed: false,
             email: pickerUser?.email,
             token: authResult?.access_token
         }
     }, [authResult?.access_token, pickerUser?.email])
 
+    const isFolder = doc => doc.type === 'folder' || doc.mimeType === 'application/vnd.google-apps.folder';
+    const isShortcut = doc => doc.type === 'shortcut' || doc.mimeType === 'application/vnd.google-apps.shortcut';
+
     useEffect(() => {
         if (showSelectFilesModal || !tempFileList.length) return;
 
         if (tempFileList.some(t => !t.processed)) {
-            let [processed, pending] = filterArray(tempFileList, t => t.processed)
+            let [processed, pending] = filterArray(tempFileList, t => t.processed);
+            let [folders, rest] = filterArray(pending, isFolder);
+            let [shortcuts, files] = filterArray(rest, isShortcut);
 
-            getFilesFromParentFolders(
-                pending.map(t => t.id)
-            ).then(fl => setTempFileList([
+            let filesDetails = getFilesDetails(files.map(f => f.id));
+            let filesFromFolders = getFilesFromFolders(folders.map(f => f.id));
+            let filesFromShortcuts = getFilesFromShortcuts(shortcuts.map(s => s.id));
+
+            Promise.all([
+                filesDetails,
+                filesFromFolders,
+                filesFromShortcuts
+            ]).then(([f1, f2, f3]) => setTempFileList([
                 ...processed,
-                ...fl.map(mapFileFromDocument)
+                ...f1?.map(f => { return { ...mapFileFromDocument(f), processed: true } }),
+                ...f2?.map(f => { return { ...mapFileFromDocument(f), processed: !isFolder(f) && !isShortcut(f) } }),
+                ...f3?.map(f => { return { ...mapFileFromDocument(f), processed: !isFolder(f) && !isShortcut(f) } })
             ]))
-        }
-
-        if (!tempFileList.some(t => !t.processed)) {
+        } else {
             setFileList(fl => [
                 ...fl,
-                ...tempFileList.map(mapFileFromDocument)
+                ...tempFileList.filter(d =>
+                    !fl.some(f => f.id === d.id)
+                ).map(mapFileFromDocument)
             ]);
             setTempFileList([]);
         }
-    }, [getFilesFromParentFolders, mapFileFromDocument, showSelectFilesModal, tempFileList]);
+    }, [getFilesDetails, getFilesFromFolders, getFilesFromShortcuts, mapFileFromDocument, showSelectFilesModal, tempFileList]);
 
     useEffect(() => {
         if (!authResult?.access_token) return;
@@ -122,14 +162,14 @@ const DocumentImport = () => {
         if (data.action === 'picked') {
             let files = data?.docs?.filter(d =>
                 !fileList.some(f => f.id === d.id)
-            ).map(mapFileFromDocument);
+            );
 
             if (files.length === 0) return;
 
             if (fileList.length > 0)
                 setShowSelectFilesModal(true);
 
-            setTempFileList(files);
+            setTempFileList(files.map(mapFileFromDocument));
         }
     }
 
