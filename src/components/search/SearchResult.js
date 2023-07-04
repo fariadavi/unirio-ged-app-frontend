@@ -84,7 +84,16 @@ export default function SearchResult({ key, result, deleteDocument }) {
             <p className="contentMatches" dangerouslySetInnerHTML={{ __html: result.searchMatches?.map(s2 => `<p>[...] ${s2}...</p>`).join('') }} />
             <p className="footer">
                 <span>{t('search.results.createdBy')} {result.registeredBy} {t('search.results.createdAt')} {result.formattedRegisteredAt}</span>
-                <span><StatusBadge status={result.status} /></span>
+                <span>
+                    <StatusBadge
+                        status={result.status}
+                        substatus={
+                            result.status !== 'FAILED'
+                                ? undefined
+                                : result.fileName?.length ? 'processing' : 'import'
+                        }
+                    />
+                </span>
             </p>
         </div>
     );

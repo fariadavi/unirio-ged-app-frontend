@@ -33,7 +33,8 @@ const ptBR = {
     'badge.status.pending': 'Pendente',
     'badge.status.processing': 'Processando',
     'badge.status.processed': 'Processado',
-    'badge.status.failed': 'Falha no Processamento',
+    'badge.status.failed.import': 'Falha na importação',
+    'badge.status.failed.processing': 'Falha no processamento',
     'badge.status.empty_content': 'Sem Conteúdo',
 
     // login

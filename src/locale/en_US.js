@@ -32,7 +32,8 @@ const enUS = {
     'badge.status.pending': 'Pending',
     'badge.status.processing': 'Processing',
     'badge.status.processed': 'Processed',
-    'badge.status.failed': 'Failed',
+    'badge.status.failed.import': 'Import failed',
+    'badge.status.failed.processing': 'Processing failed',
     'badge.status.empty_content': 'Empty Content',
 
     // login
