@@ -21,6 +21,7 @@
 .drive-items-list .list-group-item.header .select .dropdown .toggle {
     cursor: pointer;
     width: 1rem;
+    color: #343a40;
 }
 
 .drive-items-list .list-group-item.header .center {
