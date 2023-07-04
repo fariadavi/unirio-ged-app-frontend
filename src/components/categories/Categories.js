@@ -226,7 +226,15 @@ export default function Categories() {
                     handleExpand,
                 }) => {
                     return (
-                        <div {...getNodeProps({ onClick: e => { handleExpand(e); if (isBranch) toggleExpand(element.id, isExpanded); else cancelCategoryEdit(categoryEdit.temp); } })}>
+                        <div {...getNodeProps({
+                            onClick: e => {
+                                handleExpand(e);
+                                if (isBranch)
+                                    toggleExpand(element.id, isExpanded)
+                                else if (categoryEdit)
+                                    cancelCategoryEdit(categoryEdit.temp);
+                            }
+                        })}>
                             <div className="tree-row">
                                 {
                                     !element.fixed
