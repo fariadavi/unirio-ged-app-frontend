@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/unirio-ged-app-frontend/static/css/main.5ff21535.css",
-    "main.js": "/unirio-ged-app-frontend/static/js/main.3a8aad3f.js",
+    "main.css": "/unirio-ged-app-frontend/static/css/main.909efbfc.css",
+    "main.js": "/unirio-ged-app-frontend/static/js/main.0dd79c37.js",
     "index.html": "/unirio-ged-app-frontend/index.html",
-    "main.5ff21535.css.map": "/unirio-ged-app-frontend/static/css/main.5ff21535.css.map",
-    "main.3a8aad3f.js.map": "/unirio-ged-app-frontend/static/js/main.3a8aad3f.js.map"
+    "main.909efbfc.css.map": "/unirio-ged-app-frontend/static/css/main.909efbfc.css.map",
+    "main.0dd79c37.js.map": "/unirio-ged-app-frontend/static/js/main.0dd79c37.js.map"
   },
   "entrypoints": [
-    "static/css/main.5ff21535.css",
-    "static/js/main.3a8aad3f.js"
+    "static/css/main.909efbfc.css",
+    "static/js/main.0dd79c37.js"
   ]
 }
