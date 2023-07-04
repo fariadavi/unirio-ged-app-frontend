@@ -102,7 +102,10 @@ export default function Search() {
                 {canSearchDocs && <SearchBar isSearching={isSearching} onSearch={searchDocs} />}
             </div>
             <div className="search-header">
-                <h1>UNIRIO GED App</h1>
+                <h1>
+                    <img src='/unirio-ged-app-frontend/images/logo_unirio.svg' alt='Logo UNIRIO' width="64" />
+                    <span>UNIRIO GED App</span>
+                </h1>
             </div>
         </div>
     )
