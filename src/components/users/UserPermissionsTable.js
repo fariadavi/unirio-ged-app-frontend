@@ -169,15 +169,13 @@ const UserPermissionsTable = ({ canInviteUsers, canEditUserPermissions, canDelet
                 filterable: true,
                 requiredOnAdd: true,
                 sort: true,
-                type: 'text',
-                width: '240px'
+                type: 'text'
             },
             fullName: {
                 header: t('user.table.headers.username'),
                 editable: false,
                 filterable: true,
-                type: 'text',
-                width: '280px'
+                type: 'text'
             },
             ...Object.fromEntries(
                 permissions.map(perm => [perm, {
@@ -185,7 +183,8 @@ const UserPermissionsTable = ({ canInviteUsers, canEditUserPermissions, canDelet
                     header: t(`user.table.headers.permission.${perm.toLowerCase()}`),
                     // editable: perm !== 'SEARCH_DOCS',
                     filterable: true,
-                    type: 'boolean'
+                    type: 'boolean',
+                    width: (125 + ((7 - permissions.length) * 30)) + 'px'
                 }])
             )
         }

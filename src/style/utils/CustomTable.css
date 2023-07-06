@@ -72,6 +72,7 @@ table.customTable .sort-header {
 
 table.customTable .sort-header > span {
     padding: 0 .25rem;
+    position: absolute;
 }
 
 table.customTable .text-bottom {
