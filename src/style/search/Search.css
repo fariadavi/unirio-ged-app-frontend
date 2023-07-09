@@ -12,7 +12,7 @@
 
 .search-page .search-header {
     align-items: flex-end;
-    flex-grow: 2;
+    flex-grow: 1;
 }
 
 .search-page .search-header h1 {
@@ -32,7 +32,7 @@
 
 .search-page .search-result {
     overflow: hidden;
-    flex-grow: 3;
+    flex-grow: 1;
     margin-top: 4rem;
     z-index: 1;
     scroll-margin-top: 4rem;
@@ -52,9 +52,9 @@
     max-height: 100vh;
 }
 
-.search-page .search-result.active ~ div.search-header {
+/* .search-page .search-result.active ~ div.search-header {
     flex-grow: 0;
-}
+} */
 
 .no-result-message-box {
     margin: auto;
