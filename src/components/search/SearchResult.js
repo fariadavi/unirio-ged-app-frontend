@@ -46,7 +46,7 @@ const Actions = ({ item, deleteAction }) => {
 
     return <div className="actions">
         <span
-            onClick={() => item.mediaType === 'application/pdf' && getDocumentFile(item.id, item.fileName, false)}
+            onClick={() => item.fileName.length && item.mediaType === 'application/pdf' && getDocumentFile(item.id, item.fileName, false)}
             className={item.mediaType === 'application/pdf' ? '' : 'disabled'}
         >
             <Icon icon={getFileIcon(item.mediaType)} tooltip={t('search.results.visualize.tooltip')} />
