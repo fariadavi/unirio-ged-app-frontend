@@ -29,13 +29,13 @@ const ptBR = {
     'customTable.filterRow.boolean.n': '$t(no)',
     'customTable.filterRow.clearBtn.tooltip': 'Limpar todos os filtros',
 
-    // status badge
-    'badge.status.pending': 'Pendente',
-    'badge.status.processing': 'Processando',
-    'badge.status.processed': 'Processado',
-    'badge.status.failed.import': 'Falha na importação',
-    'badge.status.failed.processing': 'Falha no processamento',
-    'badge.status.empty_content': 'Sem Conteúdo',
+    // status
+    'status.pending': 'Pendente',
+    'status.processing': 'Processando',
+    'status.processed': 'Processado',
+    'status.failed_import': 'Falha na importação',
+    'status.failed_processing': 'Falha no processamento',
+    'status.empty_content': 'Sem Conteúdo',
 
     // login
     'loginWithGoogle.buttonText': 'Entre com Google',
@@ -94,10 +94,13 @@ const ptBR = {
     'searchBar.filters.category': '$t(category)',
     'searchBar.filters.date.from': 'Data de',
     'searchBar.filters.date.until': 'até',
+    'searchBar.filters.status': 'Status',
+    'searchBar.filters.status.choose': 'Escolha um status...',
+    'searchBar.filters.status.zeroOptions': 'Nenhum status para filtrar',
     'searchBar.searchButton': 'Pesquisar documentos',
     'searchBar.moreFiltersButton': 'Mais filtros',
     'searchBar.lessFiltersButton': 'Menos filtros',
-    'searchBar.filters.registeredByMe': 'Apenas documentos cadastrados por mim',
+    'searchBar.filters.registeredByMe': 'Cadastrados por mim',
     'search.noResultFound.message.p1': 'Nenhum resultado encontrado',
     'search.noResultFound.message.p2': ' para ',
     'search.noResultFound.message.p3': ' com os filtros especificados.',

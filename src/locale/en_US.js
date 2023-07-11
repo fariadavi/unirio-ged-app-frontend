@@ -28,13 +28,13 @@ const enUS = {
     'customTable.filterRow.boolean.n': '$t(no)',
     'customTable.filterRow.clearBtn.tooltip': 'Clear all filters',
 
-    // status badge
-    'badge.status.pending': 'Pending',
-    'badge.status.processing': 'Processing',
-    'badge.status.processed': 'Processed',
-    'badge.status.failed.import': 'Import failed',
-    'badge.status.failed.processing': 'Processing failed',
-    'badge.status.empty_content': 'Empty Content',
+    // status
+    'status.pending': 'Pending',
+    'status.processing': 'Processing',
+    'status.processed': 'Processed',
+    'status.failed_import': 'Import failed',
+    'status.failed_processing': 'Processing failed',
+    'status.empty_content': 'Empty Content',
 
     // login
     'loginWithGoogle.buttonText': 'Sign in with Google',
@@ -93,10 +93,13 @@ const enUS = {
     'searchBar.filters.category': '$t(category)',
     'searchBar.filters.date.from': 'Date from',
     'searchBar.filters.date.until': 'until',
+    'searchBar.filters.status': 'Status',
+    'searchBar.filters.status.choose': 'Choose a status...',
+    'searchBar.filters.status.zeroOptions': 'No status to filter by',
     'searchBar.searchButton': 'Search Documents',
     'searchBar.moreFiltersButton': 'More filters',
     'searchBar.lessFiltersButton': 'Less filters',
-    'searchBar.filters.registeredByMe': 'Only documents registered by me',
+    'searchBar.filters.registeredByMe': 'Registered by me',
     'search.noResultFound.message.p1': 'No results found',
     'search.noResultFound.message.p2': ' for ',
     'search.noResultFound.message.p3': ' with the specified filters.',

@@ -23,16 +23,21 @@ const Select = ({ className = '', disabled = false, label, name, placeholder, va
             </option>
             {options.length
                 && options.sort((a, b) =>
-                    a[textProperty].localeCompare(b[textProperty])
-                ).map(item =>
-                    <option key={item[idProperty]} value={item[idProperty]}>
-                        {item[textProperty]}
+                    textProperty
+                        ? a[textProperty].localeCompare(b[textProperty])
+                        : a.localeCompare(b)
+                ).map((item, index) =>
+                    <option
+                        key={idProperty ? item[idProperty] : index}
+                        value={idProperty ? item[idProperty] : index + 1}
+                    >
+                        {textProperty ? item[textProperty] : item}
                     </option>
                 )
             }
         </Form.Control>
 
-        <input type="checkbox" className="select-has-value" checked={value && value > 0} readOnly />
+        <input type="checkbox" className="select-has-value" checked={!!value} readOnly />
 
         <span className="clear-input" onClick={() => onChange(name, 0)}>
             <FontAwesomeIcon icon={faTimesCircle} />

@@ -171,14 +171,7 @@ const DocumentForm = () => {
                                 <Form.Label>{t('document.status')}</Form.Label>
 
                                 <Form.Text as="p">
-                                    <StatusBadge
-                                        status={document['status']}
-                                        substatus={
-                                            document['status'] !== 'FAILED'
-                                                ? undefined
-                                                : document['fileName']?.length ? 'processing' : 'import'
-                                        }
-                                    />
+                                    <StatusBadge status={document['status']} />
                                 </Form.Text>
                             </Form.Group>
                         </Form.Row>

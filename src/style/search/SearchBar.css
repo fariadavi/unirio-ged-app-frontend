@@ -10,7 +10,7 @@
 }
 
 .filters-group {
-    max-height: 8rem;
+    max-height: 10rem;
     opacity: 1;
     transition: max-height .25s ease-out, opacity .25s ease-out;
 }
@@ -24,6 +24,10 @@
     max-width: 70%;
 }
 
+.filters-group .status-filter {
+    max-width: 19rem;
+}
+
 .filters-group .custom-input-group {
     display: flex;
     flex-wrap: nowrap;
@@ -31,6 +35,10 @@
     align-items: baseline;
     margin: .25rem;
     width: 100%;
+}
+
+.filters-group .custom-input-group.two-filter-row {
+    gap: 1rem;
 }
 
 .filters-group .custom-input-group label {
@@ -41,6 +49,10 @@
 .filters-group .custom-input-group.date-filter .date-wrapper {
     display: inline-flex;
     margin-right: .5rem;
+}
+
+.filters-group .custom-input-group.user-filter {
+    width: min-content;
 }
 
 .search-actions-group {

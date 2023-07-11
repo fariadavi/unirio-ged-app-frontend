@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Button, Form } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleDown, faAngleUp, faCircleNotch } from '@fortawesome/free-solid-svg-icons'
-import { CategoryFilter, MinMaxDateFilter, TextInputFilter, UserDocumentsFilter } from './SearchBarFilters'
+import { CategoryFilter, MinMaxDateFilter, StatusFilter, TextInputFilter, UserDocumentsFilter } from './SearchBarFilters'
 import '../../style/search/SearchBar.css'
 
 export default function SearchBar({ isSearching, onSearch }) {
@@ -16,7 +16,8 @@ export default function SearchBar({ isSearching, onSearch }) {
         minDate: '',
         maxDate: '',
         category: '',
-        myDocuments: false
+        myDocuments: false,
+        status: ''
     });
 
     const handleFilterChange = (key, value) => {
@@ -33,7 +34,8 @@ export default function SearchBar({ isSearching, onSearch }) {
         filtersObj.category ||
         filtersObj.minDate ||
         filtersObj.maxDate ||
-        filtersObj.myDocuments;
+        filtersObj.myDocuments || 
+        filtersObj.status;
 
     const handleSubmit = e => {
         e.preventDefault();
@@ -64,8 +66,6 @@ export default function SearchBar({ isSearching, onSearch }) {
                     label={t('searchBar.filters.category')}
                     onChange={handleFilterChange}
                     value={filters.category}
-                    placeholder={t('document.form.category.choose')}
-                    unselectOptionLabel={t('none', { context: 'female' })}
                     disabled={!expandedOptions}
                 />
 
@@ -78,12 +78,20 @@ export default function SearchBar({ isSearching, onSearch }) {
                     disabled={!expandedOptions}
                 />
 
-                <UserDocumentsFilter
-                    label={t('searchBar.filters.registeredByMe')}
-                    onClick={handleFilterChange}
-                    value={filters.myDocuments}
-                    disabled={!expandedOptions}
-                />
+                <div className="custom-input-group two-filter-row">
+                    <StatusFilter
+                        label={t('searchBar.filters.status')}
+                        onChange={handleFilterChange}
+                        value={filters.status}
+                        disabled={!expandedOptions}
+                    />
+                    <UserDocumentsFilter
+                        label={t('searchBar.filters.registeredByMe')}
+                        onClick={handleFilterChange}
+                        value={filters.myDocuments}
+                        disabled={!expandedOptions}
+                    />
+                </div>
             </Form.Group>
             <Form.Group className="search-form-group search-actions-group">
                 <div className="search-filters-toggle-box">

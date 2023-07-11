@@ -1,6 +1,7 @@
 import React from 'react'
 import DatePicker from '../util/DatePicker'
 import CategorySelect from '../util/CategorySelect'
+import StatusSelect from '../util/StatusSelect'
 import { Form, InputGroup } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
@@ -22,17 +23,14 @@ export const TextInputFilter = ({ disabled, value, onChange, onSubmit }) =>
         />
     </InputGroup>
 
-export const CategoryFilter = ({ disabled = false, label, onChange, value }) => {
-    return (
-        <CategorySelect
-            className="custom-input-group category-filter"
-            disabled={disabled}
-            label={label}
-            onChange={onChange}
-            value={value}
-        />
-    )
-}
+export const CategoryFilter = ({ disabled = false, label, onChange, value }) =>
+    <CategorySelect
+        className="custom-input-group category-filter"
+        disabled={disabled}
+        label={label}
+        onChange={onChange}
+        value={value}
+    />
 
 export const MinMaxDateFilter = ({ disabled = false, labelFromDate, labelUntilDate, onChange, minDateValue, maxDateValue }) =>
     <div className="custom-input-group date-filter">
@@ -62,3 +60,12 @@ export const UserDocumentsFilter = ({ disabled = false, label, value, onClick })
             value={value}
         />
     </div>
+
+export const StatusFilter = ({ disabled = false, label, onChange, value }) =>
+    <StatusSelect
+        className="custom-input-group status-filter"
+        disabled={disabled}
+        label={label}
+        onChange={onChange}
+        value={value}
+    />

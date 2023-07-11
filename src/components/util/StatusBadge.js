@@ -2,17 +2,16 @@ import React from 'react'
 import { Badge } from 'react-bootstrap'
 import { useTranslation } from 'react-i18next'
 
-export default function StatusBadge({ status, substatus = undefined }) {
+export default function StatusBadge({ status = '' }) {
     const { t } = useTranslation();
 
-    status = status || ''
-
-    let badgeVariant
+    let badgeVariant;
     switch (status) {
         case 'PROCESSED':
             badgeVariant = 'success'
             break;
-        case 'FAILED':
+        case 'FAILED_IMPORT':
+        case 'FAILED_PROCESSING':
             badgeVariant = 'danger'
             break;
         case 'PROCESSING':
@@ -27,7 +26,9 @@ export default function StatusBadge({ status, substatus = undefined }) {
             break;
     }
 
-    return (<Badge variant={badgeVariant}>
-        {t(`badge.status.${status.toLowerCase()}${!substatus ? '' : ('.' + substatus)}`)}
-    </Badge>)
+    return (
+        <Badge variant={badgeVariant}>
+            {t(`status.${status.toLowerCase()}`)}
+        </Badge>
+    )
 }
