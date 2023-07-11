@@ -224,89 +224,89 @@ export default function Categories() {
                     isDisabled,
                     getNodeProps,
                     handleExpand,
-                }) => {
-                    return (
-                        <div {...getNodeProps({
-                            onClick: e => {
-                                handleExpand(e);
-                                if (isBranch)
-                                    toggleExpand(element.id, isExpanded)
-                                else if (categoryEdit)
-                                    cancelCategoryEdit(categoryEdit.temp);
+                }) => <div {...{
+                    ...getNodeProps({
+                        onClick: e => {
+                            handleExpand(e);
+                            if (isBranch)
+                                toggleExpand(element.id, isExpanded)
+                            else if (categoryEdit)
+                                cancelCategoryEdit(categoryEdit.temp);
+                        }
+                    }),
+                    role: element.fixed ? 'header' : ''
+                }}>
+                        <div className="tree-row">
+                            {
+                                !element.fixed
+                                    ? isBranch
+                                        ? <ArrowIcon isOpen={isExpanded} />
+                                        : <ListIcon />
+                                    : <ActionBtn
+                                        className="icon-wrapper add-category"
+                                        icon={faPlusCircle}
+                                        onClick={() => addNewCategoryToList(0, true)}
+                                        tooltip={t('customButtons.add.tooltip')}
+                                    />
                             }
-                        })}>
-                            <div className="tree-row">
-                                {
-                                    !element.fixed
-                                        ? isBranch
-                                            ? <ArrowIcon isOpen={isExpanded} />
-                                            : <ListIcon />
-                                        : <ActionBtn
-                                            className="icon-wrapper add-category"
+                            {categoryEdit?.id !== element.id
+                                ? <>
+                                    <span className="name">{element.name}</span>
+                                    <div className="btns actions">
+                                        <ActionBtn
+                                            className={element.id < 0 ? 'hide' : ''}
                                             icon={faPlusCircle}
-                                            onClick={() => addNewCategoryToList(0, true)}
+                                            onClick={() => addNewCategoryToList(element.id, isExpanded)}
                                             tooltip={t('customButtons.add.tooltip')}
                                         />
-                                }
-                                {categoryEdit?.id !== element.id
-                                    ? <>
-                                        <span className="name">{element.name}</span>
-                                        <div className="btns actions">
-                                            <ActionBtn
-                                                className={element.id < 0 ? 'hide' : ''}
-                                                icon={faPlusCircle}
-                                                onClick={() => addNewCategoryToList(element.id, isExpanded)}
-                                                tooltip={t('customButtons.add.tooltip')}
-                                            />
-                                            <ActionBtn
-                                                className={element.id < 0 ? 'hide' : ''}
-                                                icon={faPen}
-                                                onClick={() => editCategory(element.id, element.name)}
-                                                tooltip={t('customButtons.edit.tooltip')}
-                                            />
-                                            <ActionBtn
-                                                className={element.id < 0 || element.children?.length > 0 ? 'hide' : ''}
-                                                icon={faTrash}
-                                                onClick={() => deleteCategory(element)}
-                                                tooltip={t('customButtons.delete.tooltip')}
-                                            />
-                                        </div>
-                                    </>
-                                    : <div className="edit-category">
-                                        <Form.Control
-                                            defaultValue={categoryEdit.name}
-                                            onBlur={e => {
-                                                if (e.currentTarget?.parentElement?.parentElement?.parentElement === e.relatedTarget) return;
-                                                cancelCategoryEdit(categoryEdit.temp);
-                                            }}
-                                            onChange={e => setCategoryEdit({ ...categoryEdit, name: e.currentTarget.value })}
-                                            onClick={e => e.stopPropagation()}
-                                            onKeyDown={e => {
-                                                e.stopPropagation();
-                                                if (e.code === "Enter") updateCategoryName(categoryEdit.temp);
-                                                if (e.code === "Escape") cancelCategoryEdit(categoryEdit.temp);
-                                            }}
-                                            name={`input-${element.id}`}
-                                            ref={inputRef}
-                                            type="text"
-                                            size="sm" />
-                                        <div className="btns">
-                                            <ActionBtn
-                                                // className={!categoryEdit.name ? 'hide' : ''}
-                                                icon={faCheckCircle}
-                                                onClick={() => updateCategoryName(categoryEdit.temp)}
-                                                tooltip={t('customButtons.confirm.tooltip')}
-                                            />
-                                        </div>
+                                        <ActionBtn
+                                            className={element.id < 0 ? 'hide' : ''}
+                                            icon={faPen}
+                                            onClick={() => editCategory(element.id, element.name)}
+                                            tooltip={t('customButtons.edit.tooltip')}
+                                        />
+                                        <ActionBtn
+                                            className={element.id < 0 || element.children?.length > 0 ? 'hide' : ''}
+                                            icon={faTrash}
+                                            onClick={() => deleteCategory(element)}
+                                            tooltip={t('customButtons.delete.tooltip')}
+                                        />
                                     </div>
-                                }
-                                {!element.fixed && !element.temp && element.id !== categoryEdit?.id &&
-                                    <span className="doc-count">{element.numDocs || 0} docs</span>
-                                }
-                            </div>
+                                </>
+                                : <div className="edit-category">
+                                    <Form.Control
+                                        defaultValue={categoryEdit.name}
+                                        onBlur={e => {
+                                            if (e.currentTarget?.parentElement?.parentElement?.parentElement === e.relatedTarget) return;
+                                            cancelCategoryEdit(categoryEdit.temp);
+                                        }}
+                                        onChange={e => setCategoryEdit({ ...categoryEdit, name: e.currentTarget.value })}
+                                        onClick={e => e.stopPropagation()}
+                                        onKeyDown={e => {
+                                            e.stopPropagation();
+                                            if (e.code === "Enter") updateCategoryName(categoryEdit.temp);
+                                            if (e.code === "Escape") cancelCategoryEdit(categoryEdit.temp);
+                                        }}
+                                        name={`input-${element.id}`}
+                                        ref={inputRef}
+                                        type="text"
+                                        size="sm" />
+                                    <div className="btns">
+                                        <ActionBtn
+                                            // className={!categoryEdit.name ? 'hide' : ''}
+                                            icon={faCheckCircle}
+                                            onClick={() => updateCategoryName(categoryEdit.temp)}
+                                            tooltip={t('customButtons.confirm.tooltip')}
+                                        />
+                                    </div>
+                                </div>
+                            }
+                            {!element.fixed && !element.temp && element.id !== categoryEdit?.id &&
+                                <span className="doc-count">{element.numDocs || 0} docs</span>
+                            }
                         </div>
-                    );
-                }}
+                    </div>
+                }
             />
 
         </div>

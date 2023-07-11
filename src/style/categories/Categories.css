@@ -1,5 +1,5 @@
 .categories-page {
-    width: 50%;
+    max-width: 800px;
 }
 
 ul, li {
@@ -10,7 +10,14 @@ ul, li {
     cursor: pointer;
 }
 
-.tree-node:hover {
+.tree-node[role="header"] {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: row-reverse;
+    padding-right: .5rem;
+}
+
+.tree-node:not([role="header"]):hover {
     background-color: rgba(0, 0, 0, .1);
     border-radius: .25rem;
 }
@@ -65,7 +72,7 @@ ul, li {
 }
 
 .tree-node .btns,
-.tree-node:hover .actions {
+.tree-node:not([role="header"]):hover .actions {
     display: inline-flex;
     gap: 0.25rem;
     margin-left: 0.5rem;
