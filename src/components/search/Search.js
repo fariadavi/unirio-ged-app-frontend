@@ -103,7 +103,7 @@ export default function Search() {
             </div>
             <div className="search-header">
                 <h1>
-                    <img src='/unirio-ged-app-frontend/images/logo_unirio.svg' alt='Logo UNIRIO' width="64" />
+                    <img src='/images/logo_unirio.svg' alt='Logo UNIRIO' width="64" />
                     <span>UNIRIO GED App</span>
                 </h1>
             </div>
