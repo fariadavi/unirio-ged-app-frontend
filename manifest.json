@@ -18,7 +18,7 @@
       "type": "image/png"
     }
   ],
-  "start_url": "/unirio-ged-app-frontend/public",
+  "start_url": "/public",
   "display": "standalone",
   "theme_color": "#000000",
   "background_color": "#ffffff"
