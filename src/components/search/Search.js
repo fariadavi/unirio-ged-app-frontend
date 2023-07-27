@@ -6,6 +6,7 @@ import SearchBar from './SearchBar'
 import SearchResultList from './SearchResultList'
 import NoResultMessage from './NoResultMessage'
 import '../../style/search/Search.css'
+import { AppTitle } from '../util/AppTitle'
 
 export default function Search() {
     const { t } = useTranslation();
@@ -102,10 +103,7 @@ export default function Search() {
                 {canSearchDocs && <SearchBar isSearching={isSearching} onSearch={searchDocs} />}
             </div>
             <div className="search-header">
-                <h1>
-                    <img src='/images/logo_unirio.svg' alt='Logo UNIRIO' width="64" />
-                    <span>UNIRIO GED App</span>
-                </h1>
+                <AppTitle />
             </div>
         </div>
     )

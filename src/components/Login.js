@@ -4,6 +4,7 @@ import { Container } from 'react-bootstrap'
 import { AuthContext } from '../contexts/AuthContext'
 import { Redirect } from 'react-router-dom'
 import { getLocalItem, LANG_KEY } from '../utils/localStorageManager'
+import { AppTitle } from './util/AppTitle'
 
 export default function Login() {
     const { authLoading, authenticated, handleAuthentication, handleAuthLogout } = useContext(AuthContext);    
@@ -25,7 +26,7 @@ export default function Login() {
             style={{ minHeight: "100vh" }}
         >
             <div className="d-flex flex-column align-item justify-content-center">
-                <h1 style={{ paddingBottom: '.5rem' }}>UNIRIO GED App</h1>
+                <AppTitle />
                 <div className="d-flex align-item justify-content-center">
                     <GoogleLogin
                         onSuccess={handleAuthentication}

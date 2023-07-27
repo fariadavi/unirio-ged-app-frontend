@@ -1,0 +1,14 @@
+.app-title {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    user-select: none;
+}
+
+.app-title > img.hide-logo {
+    display: none;
+}
+
+.app-title > span {
+    padding: 1rem;
+}

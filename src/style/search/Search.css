@@ -15,17 +15,6 @@
     flex-grow: 1;
 }
 
-.search-page .search-header h1 {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    user-select: none;
-}
-
-.search-page .search-header h1 span {
-    padding: 1rem;
-}
-
 .search-page .search-bar {
     flex-grow: 0;
 }
