@@ -2,7 +2,10 @@ import React from 'react'
 import '../../style/utils/AppTitle.css'
 
 export const AppTitle = () =>
-    <h1 className='app-title hide-logo'>
-        <img src='/images/logo_unirio.svg' alt='Logo UNIRIO' width="64" />
-        <span>UNIRIO GED App</span>
-    </h1>
+    <div className="app-title">
+        <img src='/images/logo_unirio.svg' alt='Logo UNIRIO' width="112" />
+        <div className="title-text">
+            <h1>UNIRIO GED App</h1>
+            <h6>Sistema de Gestão de Documentos da UNIRIO</h6>
+        </div>
+    </div>

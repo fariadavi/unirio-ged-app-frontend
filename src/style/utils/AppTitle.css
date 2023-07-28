@@ -2,13 +2,19 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    user-select: none;
+    margin: 2rem;
 }
 
 .app-title > img.hide-logo {
     display: none;
 }
 
-.app-title > span {
-    padding: 1rem;
+.app-title > .title-text {
+    margin-left: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.app-title > .title-text > h6 {
+    margin-bottom: -0.5rem;
 }
