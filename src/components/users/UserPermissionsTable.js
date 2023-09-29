@@ -85,7 +85,7 @@ const UserPermissionsTable = ({ canInviteUsers, canEditUserPermissions, canDelet
         }
 
         return res.ok;
-    }, [editUserPermissionsWithNewUserData, users, permissions, type, loadUsers, user?.id, setLoggedUserInfo])
+    }, [type, permissions, user?.id, users, loadUsers, setLoggedUserInfo, editUserPermissionsWithNewUserData])
 
     const batchEditUsersPermissions = useCallback(async editedUserEntries => {
         const res = await batchUpdateUsersPermissions(
@@ -96,7 +96,8 @@ const UserPermissionsTable = ({ canInviteUsers, canEditUserPermissions, canDelet
                         getSpecificUserPermissions(users, userId, permissions),
                         userNewData
                     )
-                ]))
+                ])),
+                type
         );
 
         if (res.ok) {
@@ -107,7 +108,7 @@ const UserPermissionsTable = ({ canInviteUsers, canEditUserPermissions, canDelet
         }
 
         return res.ok;
-    }, [permissions, user, users, loadUsers, setLoggedUserInfo, editUserPermissionsWithNewUserData])
+    }, [type, permissions, user?.id, users, loadUsers, setLoggedUserInfo, editUserPermissionsWithNewUserData])
 
     const removeUserFromDepartment = useCallback(async userId => {
         const res = await deleteUser(userId)

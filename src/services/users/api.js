@@ -20,8 +20,8 @@ const updateUserPermissions = async (userId, permissionsArray, type) =>
         body: JSON.stringify(permissionsArray)
     })
 
-const batchUpdateUsersPermissions = async permissionsUpdateMap =>
-    await rq(`/users/permission`, {
+const batchUpdateUsersPermissions = async (permissionsUpdateMap, type) =>
+    await rq(`/users/permission${type ? `?type=${type}` : ''}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(permissionsUpdateMap)
