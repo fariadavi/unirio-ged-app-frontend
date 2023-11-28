@@ -5,10 +5,11 @@ import rq from '../../services/api'
 import DocumentImport from './DocumentImport'
 import DatePicker from '../util/DatePicker'
 import CategorySelect from '../util/CategorySelect'
-import PageNotFound from '../invalid/PageNotFound';
+import PageNotFound from '../invalid/PageNotFound'
 import StatusBadge from '../util/StatusBadge'
-import GlobalSpinner from '../util/GlobalSpinner';
-import { Button, Col, Form } from 'react-bootstrap'
+import GlobalSpinner from '../util/GlobalSpinner'
+import LoadButton from '../util/LoadButton'
+import { Col, Form } from 'react-bootstrap'
 import { Redirect, Route, Switch, useParams, useRouteMatch } from 'react-router-dom'
 import { validateField, validateObject } from '../util/Validation.js'
 import '../../style/documents/DocumentDetails.css'
@@ -17,7 +18,9 @@ const DocumentForm = () => {
     const { t } = useTranslation();
     const { docId } = useParams();
     const { user, department, checkPermission } = useContext(UserContext);
-    const [loadingDoc, setLoadingDoc] = useState(!!docId);
+    const [isLoadingDoc, setLoadingDoc] = useState(!!docId);
+    const [isSavingDoc, setSavingDoc] = useState(false);
+    const [isDeletingDoc, setDeletingDoc] = useState(false);
     const [redirect, setRedirect] = useState(null);
     const [validation, setValidation] = useState({});
     const initialDocumentValues = useMemo(() => ({
@@ -86,6 +89,8 @@ const DocumentForm = () => {
     }
 
     const submitDocumentForm = () => {
+        setSavingDoc(true);
+
         let { file, ...doc } = document;
         doc = {
             ...doc,
@@ -111,20 +116,23 @@ const DocumentForm = () => {
             body: formData
         }).then(res => {
             if (res.ok) return res.json()
-        }).then(doc => { if (doc) setRedirect(`/documents/${doc.id}`) });
+        }).then(doc => { if (doc) setRedirect(`/documents/${doc.id}`); setSavingDoc(false); });
     }
 
     const handleDelete = () => {
+        setDeletingDoc(true);
+
         rq(`/documents/${docId}`, { method: 'DELETE' })
             .then(res => {
                 if (!res.ok) return;
+                setDeletingDoc(false);
                 window.alert(`Document '${docId}' deleted`);
                 setRedirect(checkPermission('ADD_DOCS') ? '/documents/new' : '/');
             });
     }
 
     return (
-        redirect ? <Redirect to={redirect} /> : loadingDoc ? <GlobalSpinner />
+        redirect ? <Redirect to={redirect} /> : isLoadingDoc ? <GlobalSpinner />
             : (docId && document?.tenant?.toLowerCase() !== department?.acronym?.toLowerCase()) || (docId && validation.invalidDocument) ||
                 (!docId && !checkPermission('ADD_DOCS')) || (docId && document.registeredById !== user.id && !checkPermission('EDIT_DOCS_OTHERS'))
                 ? <PageNotFound />
@@ -220,17 +228,17 @@ const DocumentForm = () => {
 
                         <div className="buttons">
                             {docId && (document.registeredById === user.id || checkPermission('DELETE_DOCS_OTHERS')) &&
-                                <Button variant="danger" onClick={handleDelete}>
-                                    {t('document.form.deleteButton')}
-                                </Button>}
+                                <LoadButton
+                                    btnText={t('document.form.deleteButton')}
+                                    isLoading={isDeletingDoc}
+                                    onClick={handleDelete}
+                                    variant="danger" />}
 
-                            <Button
+                            <LoadButton
+                                btnText={t(`document.form.${docId ? 'updateButton' : 'submitButton'}`)}
                                 className="border-color-blue bg-color-blue"
-                                variant="primary"
-                                type="submit"
-                            >
-                                {t(`document.form.${docId ? 'updateButton' : 'submitButton'}`)}
-                            </Button>
+                                isLoading={isSavingDoc}
+                                type="submit" />
                         </div>
                     </Form >
                 </div >

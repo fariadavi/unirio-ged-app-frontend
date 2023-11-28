@@ -3,8 +3,9 @@ import { UserContext } from '../../contexts/UserContext'
 import { useTranslation } from 'react-i18next'
 import { Button, Form } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faAngleDown, faAngleUp, faCircleNotch } from '@fortawesome/free-solid-svg-icons'
+import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons'
 import { CategoryFilter, MinMaxDateFilter, StatusFilter, TextInputFilter, UserDocumentsFilter } from './SearchBarFilters'
+import LoadButton from '../util/LoadButton'
 import '../../style/search/SearchBar.css'
 
 export default function SearchBar({ isSearching, onSearch }) {
@@ -103,15 +104,11 @@ export default function SearchBar({ isSearching, onSearch }) {
                         <FontAwesomeIcon className="append" icon={expandedOptions ? faAngleUp : faAngleDown} />
                     </Button>
                 </div>
-                <Button
-                    className="search-btn border-color-blue bg-color-blue"
-                    disabled={isSearching}
-                    variant="primary"
-                    type="submit">
-                    {!isSearching
-                        ? t('searchBar.searchButton')
-                        : <FontAwesomeIcon icon={faCircleNotch} className="faSpin" />}
-                </Button>
+                <LoadButton 
+                    btnText={t('searchBar.searchButton')}
+                    className="border-color-blue bg-color-blue search-btn" 
+                    isLoading={isSearching} 
+                    type="submit" />
             </Form.Group>
         </Form>
     )

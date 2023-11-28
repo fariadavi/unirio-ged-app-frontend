@@ -82,7 +82,7 @@ const enUS = {
     'document.form.file.choose': 'Choose file',
     'document.form.file.placeholder': 'No file selected',
     'document.form.deleteButton': 'Delete',
-    'document.form.updateButton': 'Update',
+    'document.form.updateButton': 'Save Changes',
     'document.form.submitButton': 'Submit',
     'document.form.validation.fileRequired': 'You must attach a file',
     'document.form.validation.invalidFileType': 'File selected does not have a valid type',

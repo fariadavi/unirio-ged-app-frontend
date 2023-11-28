@@ -28,6 +28,16 @@ body {
     z-index: 9999;
  }
 
+ .loadBtn {
+    position: relative;
+ }
+
+ .loadBtn .faSpin {
+    position: absolute;
+    height: 1.5rem;
+    left: calc(50% - 0.5rem);
+ }
+
 /* Colors */
 
 .btn-primary {

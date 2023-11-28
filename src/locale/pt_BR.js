@@ -83,7 +83,7 @@ const ptBR = {
     'document.form.file.choose': 'Escolha o arquivo',
     'document.form.file.placeholder': 'Nenhum arquivo selecionado',
     'document.form.deleteButton': 'Excluir',
-    'document.form.updateButton': 'Atualizar',
+    'document.form.updateButton': 'Salvar Alterações',
     'document.form.submitButton': 'Enviar',
     'document.form.validation.fileRequired': 'Deve anexar um arquivo',
     'document.form.validation.invalidFileType': 'O tipo de arquivo enviado não é válido',
