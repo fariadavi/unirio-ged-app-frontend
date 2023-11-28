@@ -2,6 +2,7 @@ import React, { useContext, useLayoutEffect, useState } from 'react'
 import { Redirect, Route, useLocation } from 'react-router-dom'
 import { AuthContext } from '../contexts/AuthContext'
 import { UserContext } from '../contexts/UserContext'
+import GlobalSpinner from './util/GlobalSpinner';
 
 export default function PrivateRoute({ component, ...options }) {
     const { user, logoutUser, checkPermissionForPaths } = useContext(UserContext);
@@ -33,6 +34,6 @@ export default function PrivateRoute({ component, ...options }) {
                 : <Route {...options} component={component} />
             : !token
                 ? <Redirect to="/login" />
-                : <h1>Loading User...</h1>
+                : <GlobalSpinner />
     );
 }

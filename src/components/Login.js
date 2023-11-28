@@ -5,6 +5,7 @@ import { AuthContext } from '../contexts/AuthContext'
 import { Redirect } from 'react-router-dom'
 import { getLocalItem, LANG_KEY } from '../utils/localStorageManager'
 import { AppTitle } from './util/AppTitle'
+import GlobalSpinner from './util/GlobalSpinner';
 
 export default function Login() {
     const { authLoading, authenticated, handleAuthentication, handleAuthLogout } = useContext(AuthContext);    
@@ -20,7 +21,7 @@ export default function Login() {
         authenticated 
         ? <Redirect to="/" />
         : authLoading
-            ? <h1>Loading...</h1> //TODO replace this with a spinner
+            ? <GlobalSpinner />
             : <Container
             className="d-flex align-item justify-content-center"
             style={{ minHeight: "100vh" }}

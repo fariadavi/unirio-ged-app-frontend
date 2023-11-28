@@ -19,6 +19,15 @@ body {
     }
 }
 
+.loadOverlay {
+    height: 3rem !important;
+    width: 3rem !important;
+    position: fixed;
+    top: calc(50% - 1.5rem);
+    left: calc(50% - 1.5rem);
+    z-index: 9999;
+ }
+
 /* Colors */
 
 .btn-primary {
