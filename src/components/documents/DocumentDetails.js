@@ -7,6 +7,7 @@ import DatePicker from '../util/DatePicker'
 import CategorySelect from '../util/CategorySelect'
 import PageNotFound from '../invalid/PageNotFound';
 import StatusBadge from '../util/StatusBadge'
+import GlobalSpinner from '../util/GlobalSpinner';
 import { Button, Col, Form } from 'react-bootstrap'
 import { Redirect, Route, Switch, useParams, useRouteMatch } from 'react-router-dom'
 import { validateField, validateObject } from '../util/Validation.js'
@@ -16,6 +17,7 @@ const DocumentForm = () => {
     const { t } = useTranslation();
     const { docId } = useParams();
     const { user, department, checkPermission } = useContext(UserContext);
+    const [loadingDoc, setLoadingDoc] = useState(!!docId);
     const [redirect, setRedirect] = useState(null);
     const [validation, setValidation] = useState({});
     const initialDocumentValues = useMemo(() => ({
@@ -33,9 +35,11 @@ const DocumentForm = () => {
 
     useEffect(() => {
         if (docId && docId !== document.id) {
+            setLoadingDoc(true);
+
             rq(`/documents/${docId}`, { method: 'GET' })
                 .then(res => { if (res.ok) return res.json(); else setValidation({ invalidDocument: true }); })
-                .then(doc => { if (doc) setDocument({ ...doc, file: { name: doc.fileName, size: -1 } }) });
+                .then(doc => { if (doc) setDocument({ ...doc, file: { name: doc.fileName, size: -1 } }); setLoadingDoc(false); });
 
         } else if (!docId && document.id) {
             setDocument(initialDocumentValues);
@@ -120,8 +124,7 @@ const DocumentForm = () => {
     }
 
     return (
-        redirect
-            ? <Redirect to={redirect} />
+        redirect ? <Redirect to={redirect} /> : loadingDoc ? <GlobalSpinner />
             : (docId && document?.tenant?.toLowerCase() !== department?.acronym?.toLowerCase()) || (docId && validation.invalidDocument) ||
                 (!docId && !checkPermission('ADD_DOCS')) || (docId && document.registeredById !== user.id && !checkPermission('EDIT_DOCS_OTHERS'))
                 ? <PageNotFound />
