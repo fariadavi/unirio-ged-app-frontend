@@ -5,7 +5,8 @@ import { CustomTableAddRow, CustomTableFilterRow } from './CustomTableExtraRows'
 import { CustomTableDataField } from './CustomTableDataField'
 import TablePagination from '../TablePagination'
 import { Icon } from '../CustomIcon'
-import { faSortAlphaDown, faSortAlphaDownAlt, faSortAmountDown, faSortAmountDownAlt } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCircleNotch, faSortAlphaDown, faSortAlphaDownAlt, faSortAmountDown, faSortAmountDownAlt } from '@fortawesome/free-solid-svg-icons'
 import '../../../style/utils/CustomTable.css'
 
 const CustomTable = ({ actions = { filter: {} }, columns = {}, data = [], domain, pageSize = 10 }) => {
@@ -18,6 +19,7 @@ const CustomTable = ({ actions = { filter: {} }, columns = {}, data = [], domain
     const [sortProperty, setSortProperty] = useState();
     const [sortDirection, setSortDirection] = useState('ASC');
     const [currentPage, setCurrentPage] = useState(1);
+    const [actionOnDataList, setActionOnDataList] = useState([]);
 
     useEffect(() => {
         setShowAddRow(false);
@@ -90,6 +92,8 @@ const CustomTable = ({ actions = { filter: {} }, columns = {}, data = [], domain
 
     const confirmEditData = async dataId => {
         if (!actions.edit?.disabled && actions.edit?.callbackFn) {
+            setActionOnDataList(ids => [...ids, dataId]);
+
             const dataRow = editingRows[dataId];
             const dataRowEntries = Object.entries(dataRow);
             const result =
@@ -108,6 +112,8 @@ const CustomTable = ({ actions = { filter: {} }, columns = {}, data = [], domain
 
                 if (result) console.log('Edit successful')
             } else console.log('Edit failed')
+
+            setActionOnDataList(ids => ids.filter(id => id !== dataId));
         }
     }
 
@@ -118,6 +124,8 @@ const CustomTable = ({ actions = { filter: {} }, columns = {}, data = [], domain
 
     const confirmBatchEdit = async () => {
         if (!actions.batchEdit?.disabled && actions.batchEdit?.callbackFn) {
+            setActionOnDataList(ids => [...ids, ...Object.keys(editingRows)]);
+
             const dataRows = Object.entries(editingRows);
             const result =
                 dataRows.length
@@ -137,6 +145,8 @@ const CustomTable = ({ actions = { filter: {} }, columns = {}, data = [], domain
 
                 if (result) console.log('Batch edit successful')
             } else console.log('Batch edit failed')
+        
+            setActionOnDataList([]);
         }
     }
 
@@ -150,9 +160,13 @@ const CustomTable = ({ actions = { filter: {} }, columns = {}, data = [], domain
 
     const deleteData = async dataId => {
         if (!actions.delete?.disabled && actions.delete.callbackFn) {
+            setActionOnDataList(ids => [...ids, dataId]);
+
             const result = await actions.delete.callbackFn(dataId)
             if (result) console.log('Delete successful')
             else console.log('Delete failed')
+
+            setActionOnDataList(ids => ids.filter(id => id !== dataId));
         }
     }
 
@@ -288,16 +302,18 @@ const CustomTable = ({ actions = { filter: {} }, columns = {}, data = [], domain
                                 {!!Object.keys(actions).some(k => !actions[k]?.disabled) &&
                                     <td>
                                         <div className="actions spaced">
-                                            <CustomTableBodyActions
-                                                actions={actions}
-                                                dataId={dataRow.id}
-                                                isBatchEditing={isBatchEditing}
-                                                isEditingRow={!!editingRow}
-                                                onClickEditBtn={dataId => toggleEditData(dataId)}
-                                                onClickConfirmEditBtn={dataId => confirmEditData(dataId)}
-                                                onClickCancelEditBtn={dataId => toggleEditData(dataId)}
-                                                onClickDeleteBtn={dataId => deleteData(dataId)}
-                                            />
+                                            {actionOnDataList.some(id => id?.toString() === dataRow.id?.toString())
+                                                ? <FontAwesomeIcon icon={faCircleNotch} className="faSpin" style={{ marginTop: '.25rem' }} />
+                                                : <CustomTableBodyActions
+                                                    actions={actions}
+                                                    dataId={dataRow.id}
+                                                    isBatchEditing={isBatchEditing}
+                                                    isEditingRow={!!editingRow}
+                                                    onClickEditBtn={dataId => toggleEditData(dataId)}
+                                                    onClickConfirmEditBtn={dataId => confirmEditData(dataId)}
+                                                    onClickCancelEditBtn={dataId => toggleEditData(dataId)}
+                                                    onClickDeleteBtn={dataId => deleteData(dataId)}
+                                                />}
                                         </div>
                                     </td>
                                 }

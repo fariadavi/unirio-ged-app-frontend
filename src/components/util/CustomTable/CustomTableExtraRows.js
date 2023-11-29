@@ -4,6 +4,8 @@ import { Form } from 'react-bootstrap'
 import { AddButton, ClearButton } from '../CustomButtons'
 import { validateField } from '../Validation'
 import { CustomTableBooleanFilter, CustomTableTextFilter } from './CustomTableFilters'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCircleNotch } from '@fortawesome/free-solid-svg-icons'
 
 const CustomTableAddRow = ({
     columns,
@@ -15,6 +17,7 @@ const CustomTableAddRow = ({
     const { t } = useTranslation();
     const [newDataRow, setNewDataRow] = useState({});
     const [newDataRowValidation, setNewDataRowValidation] = useState({});
+    const [isAddingData, setAddingData] = useState(false);
 
     const defaultTextFieldPlaceholder = t('customTable.addRow.text.placeholder')
     const i18nAddButtonTooltipKey = t(`${domain}.customTable.addRow.addBtn.tooltip`, '')
@@ -33,7 +36,7 @@ const CustomTableAddRow = ({
         setNewDataRowValidation({ ...newDataRowValidation, [key]: validateField(`${domain}.${key}`, value) })
     }
 
-    const addNewDataRow = newDataRow => {
+    const addNewDataRow = async newDataRow => {
         const emptyValuesForRequiredFields = Object.entries(columns)
             .filter(([key, config]) => config?.requiredOnAdd && !newDataRow[key]?.length)
 
@@ -48,7 +51,11 @@ const CustomTableAddRow = ({
             .filter(([key, config]) => config?.requiredOnAdd)
             .every(([key, config]) => newDataRowValidation[key] === '')
         ) {
-            onAdd(newDataRow);
+            setAddingData(true);
+
+            await onAdd(newDataRow);
+
+            setAddingData(false);
 
             setNewDataRow({});
             setNewDataRowValidation({});
@@ -74,7 +81,7 @@ const CustomTableAddRow = ({
                             <div className={config.class}>
                                 <Form.Group className="textbox">
                                     <Form.Control
-                                        disabled={disabled}
+                                        disabled={disabled || isAddingData}
                                         placeholder={t(`${domain}.customTable.addRow.${key}.placeholder`, defaultTextFieldPlaceholder)}
                                         onChange={e => updateNewRowData(key, e.target.value)}
                                         onKeyPress={e => e.code === 'Enter' && addNewDataRow(newDataRow)}
@@ -99,11 +106,13 @@ const CustomTableAddRow = ({
             <td>
                 {!disabled &&
                     <div className="actions spaced">
-                        <AddButton
-                            icon={addBtnIcon}
-                            i18nTooltipKey={i18nAddButtonTooltipKey}
-                            onClick={() => addNewDataRow(newDataRow)}
-                        />
+                        {isAddingData
+                            ? <FontAwesomeIcon icon={faCircleNotch} className="faSpin" style={{ marginTop: '.25rem' }} />
+                            : <AddButton
+                                icon={addBtnIcon}
+                                i18nTooltipKey={i18nAddButtonTooltipKey}
+                                onClick={() => addNewDataRow(newDataRow)}
+                            />}
                     </div>
                 }
             </td>
