@@ -229,16 +229,18 @@ const DocumentForm = () => {
                         <div className="buttons">
                             {docId && (document.registeredById === user.id || checkPermission('DELETE_DOCS_OTHERS')) &&
                                 <LoadButton
-                                    btnText={t('document.form.deleteButton')}
                                     isLoading={isDeletingDoc}
                                     onClick={handleDelete}
-                                    variant="danger" />}
+                                    variant="danger">
+                                    {t('document.form.deleteButton')}
+                                </LoadButton>}
 
                             <LoadButton
-                                btnText={t(`document.form.${docId ? 'updateButton' : 'submitButton'}`)}
                                 className="border-color-blue bg-color-blue"
                                 isLoading={isSavingDoc}
-                                type="submit" />
+                                type="submit">
+                                {t(`document.form.${docId ? 'updateButton' : 'submitButton'}`)}
+                            </LoadButton>
                         </div>
                     </Form >
                 </div >

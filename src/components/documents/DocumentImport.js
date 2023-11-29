@@ -11,7 +11,9 @@ import DatePicker from '../util/DatePicker'
 import { Icon } from '../util/CustomIcon'
 import { BasicButton, DeleteButton } from '../util/CustomButtons'
 import DocumentImportHeaderDropdown from './DocumentImportHeaderDropdown'
-import { faFileUpload, faSortAlphaDown, faSortAlphaDownAlt } from '@fortawesome/free-solid-svg-icons'
+import LoadButton from '../util/LoadButton'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCircleNotch, faFileUpload, faSortAlphaDown, faSortAlphaDownAlt } from '@fortawesome/free-solid-svg-icons'
 import { faGoogleDrive } from '@fortawesome/free-brands-svg-icons'
 import '../../style/documents/DocumentImport.css'
 
@@ -32,6 +34,8 @@ const DocumentImport = () => {
     const [sortProperty, setSortProperty] = useState('name');
     const [sortDirection, setSortDirection] = useState('ASC');
     const [showSelectFilesModal, setShowSelectFilesModal] = useState(false);
+    const [isSelectingFiles, setSelectingFiles] = useState(false);
+    const [fileIdUploadList, setFileIdUploadList] = useState([]);
 
     useEffect(() => {
         rq('/categories?fullName=true', { method: 'GET' })
@@ -132,6 +136,7 @@ const DocumentImport = () => {
                 ).map(mapFileFromDocument)
             ]);
             setTempFileList([]);
+            setSelectingFiles(false);
         }
     }, [getFilesDetails, getFilesFromFolders, getFilesFromShortcuts, mapFileFromDocument, showSelectFilesModal, tempFileList]);
 
@@ -170,6 +175,10 @@ const DocumentImport = () => {
                 setShowSelectFilesModal(true);
 
             setTempFileList(files.map(mapFileFromDocument));
+        } else if (data.action === 'loaded') {
+            setSelectingFiles(true);
+        } else if (data.action === 'cancel') {
+            setSelectingFiles(false);
         }
     }
 
@@ -188,13 +197,22 @@ const DocumentImport = () => {
         })
 
     const sendSingleFile = async (itemId) => {
+        setFileIdUploadList(fl => [...fl, itemId]);
+
         let success = await uploadFiles(fileList.filter(f => f.id === itemId));
+        setFileIdUploadList(fl => fl.filter(f => f !== itemId));
+        
         if (!success) return;
         setFileList(fl => fl.filter(f => f.id !== itemId));
     }
 
     const sendSelectedFiles = async () => {
+        let selectedFileIds = selectedFiles.map(f => f.id);
+        setFileIdUploadList(fl => [...fl, ...selectedFileIds]);
+
         let success = await uploadFiles(selectedFiles);
+        setFileIdUploadList(fl => fl.filter(f => selectedFileIds.every(f2 => f2 !== f)));
+        
         if (!success) return;
         setFileList(fl => fl.filter(f => !f.selected));
     }
@@ -223,8 +241,10 @@ const DocumentImport = () => {
             body: JSON.stringify(files)
         });
 
-        if (!res.ok)
-            throw new Error();
+        if (!res.ok) {
+            console.error('Error: ' + res);
+            return false;
+        }
 
         const a = await res.text();
         console.log('Success: ' + a);
@@ -358,12 +378,17 @@ const DocumentImport = () => {
                                                 />
                                             </div>
                                             <div className="actions">
-                                                <BasicButton
-                                                    className={validateFilesForUpload([f]) ? 'disabled' : ''}
-                                                    icon={faFileUpload}
-                                                    onClick={() => { if (!validateFilesForUpload([f])) sendSingleFile(f.id) }}
-                                                    tooltip={t('import.table.content.actions.import')} />
-                                                <DeleteButton onClick={() => setFileList(fl => fl.filter(file => file.id !== f.id))} />
+                                                {fileIdUploadList.some(f2 => f2 === f.id) 
+                                                ? <FontAwesomeIcon icon={faCircleNotch} className="faSpin" style={{ marginTop: '.5rem' }} />
+                                                : <>
+                                                        <BasicButton
+                                                            className={validateFilesForUpload([f]) ? 'disabled' : ''}
+                                                            icon={faFileUpload}
+                                                            onClick={() => { if (!validateFilesForUpload([f])) sendSingleFile(f.id) }}
+                                                            tooltip={t('import.table.content.actions.import')} />
+                                                        <DeleteButton onClick={() => setFileList(fl => fl.filter(file => file.id !== f.id))} />
+                                                    </>
+                                                }
                                             </div>
                                         </ListGroup.Item>
                                     )}
@@ -374,10 +399,10 @@ const DocumentImport = () => {
 
                 <div className={`page-btns ${!visibleFileList.length ? 'center' : 'full'}`}>
                     <div className="select-from-drive-btn">
-                        <Button variant="primary" onClick={() => handleOpenPicker()}>
+                        <LoadButton isLoading={isSelectingFiles} onClick={() => handleOpenPicker()}>
                             <Icon icon={faGoogleDrive} />
                             <span>{t('import.page.btns.selectFromDrive')}</span>
-                        </Button>
+                        </LoadButton>
 
                         {!!pickerUser &&
                             <div className="current-user-box">
@@ -398,24 +423,25 @@ const DocumentImport = () => {
                                 className="import-selected-btn"
                                 variant={selectedFiles.length ? 'primary' : 'secondary'}
                                 onClick={() => setFileList(fl => fl.filter(f => !f.selected))}
-                                disabled={selectedFiles.length === 0}
+                                disabled={selectedFiles.length === 0 || fileIdUploadList.length > 0}
                             >
                                 <span>{t('import.page.btns.removeSelected')}</span>
                                 <Badge variant="light">
                                     {selectedFiles.length || ''}
                                 </Badge>
                             </Button>
-                            <Button
+                            <LoadButton
                                 className="import-selected-btn"
                                 variant={selectedFiles.length ? 'primary' : 'secondary'}
                                 onClick={() => sendSelectedFiles()}
                                 disabled={selectedFiles.length === 0}
+                                isLoading={fileIdUploadList.length > 0}
                             >
                                 <span>{t('import.page.btns.importSelected')}</span>
                                 <Badge variant="light">
                                     {selectedFiles.length || ''}
                                 </Badge>
-                            </Button>
+                            </LoadButton>
                         </div>
                     }
                 </div>

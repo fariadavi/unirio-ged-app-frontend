@@ -35,7 +35,7 @@ export default function SearchBar({ isSearching, onSearch }) {
         filtersObj.category ||
         filtersObj.minDate ||
         filtersObj.maxDate ||
-        filtersObj.myDocuments || 
+        filtersObj.myDocuments ||
         filtersObj.status;
 
     const handleSubmit = e => {
@@ -104,11 +104,12 @@ export default function SearchBar({ isSearching, onSearch }) {
                         <FontAwesomeIcon className="append" icon={expandedOptions ? faAngleUp : faAngleDown} />
                     </Button>
                 </div>
-                <LoadButton 
-                    btnText={t('searchBar.searchButton')}
-                    className="border-color-blue bg-color-blue search-btn" 
-                    isLoading={isSearching} 
-                    type="submit" />
+                <LoadButton
+                    className="border-color-blue bg-color-blue search-btn"
+                    isLoading={isSearching}
+                    type="submit">
+                    {t('searchBar.searchButton')}
+                </LoadButton>
             </Form.Group>
         </Form>
     )

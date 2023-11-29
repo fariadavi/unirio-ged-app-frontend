@@ -3,15 +3,17 @@ import { Button } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleNotch } from '@fortawesome/free-solid-svg-icons'
 
-const LoadButton = ({ btnText, isLoading, className, onClick, type, variant = "primary" }) =>
+const LoadButton = ({ children, isLoading, disabled, className, onClick, type, variant = "primary" }) =>
     <Button
         className={className}
-        disabled={isLoading}
+        disabled={disabled || isLoading}
         onClick={onClick}
         variant={variant}
         type={type}>
         <div className="loadBtn">
-            <span style={{ visibility: isLoading ? 'hidden' : 'visible' }}>{btnText}</span>
+            <span style={{ visibility: isLoading ? 'hidden' : 'visible' }}>
+                {children}
+            </span>
             {isLoading && <FontAwesomeIcon icon={faCircleNotch} className="faSpin" />}
         </div>
     </Button>
