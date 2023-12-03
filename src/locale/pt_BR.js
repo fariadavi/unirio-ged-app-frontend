@@ -207,6 +207,7 @@ const ptBR = {
     'import.table.headers.popover.btns.secondary.label': 'Definir para vazios',
     'import.table.content.empty': 'Nenhum documento para importação',
     'import.table.content.actions.import': 'Importar',
+    'import.table.content.validation.info': 'Parece haver um problema com esse arquivo. Por favor remova e adicione-o novamente antes de importar.',
     'import.page.btns.selectFromDrive': 'Selecionar do Google Drive',
     'import.page.btns.switchAccount': 'Trocar Conta',
     'import.page.btns.removeSelected': 'Remover Selecionados',

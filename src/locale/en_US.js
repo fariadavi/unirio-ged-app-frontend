@@ -206,6 +206,7 @@ const enUS = {
     'import.table.headers.popover.btns.secondary.label': 'Set for empty',
     'import.table.content.empty': 'No documents for import',
     'import.table.content.actions.import': 'Import',
+    'import.table.content.validation.info': 'There seems to be a problem with this file. Please remove and add it again before trying to import.',
     'import.page.btns.selectFromDrive': 'Select from Google Drive',
     'import.page.btns.switchAccount': 'Switch Account',
     'import.page.btns.removeSelected': 'Remove Selected',

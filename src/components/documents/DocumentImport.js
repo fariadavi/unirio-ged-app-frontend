@@ -13,7 +13,7 @@ import { BasicButton, DeleteButton } from '../util/CustomButtons'
 import DocumentImportHeaderDropdown from './DocumentImportHeaderDropdown'
 import LoadButton from '../util/LoadButton'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCircleNotch, faFileUpload, faSortAlphaDown, faSortAlphaDownAlt } from '@fortawesome/free-solid-svg-icons'
+import { faCircleNotch, faFileUpload, faSortAlphaDown, faSortAlphaDownAlt, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
 import { faGoogleDrive } from '@fortawesome/free-brands-svg-icons'
 import '../../style/documents/DocumentImport.css'
 
@@ -36,6 +36,7 @@ const DocumentImport = () => {
     const [showSelectFilesModal, setShowSelectFilesModal] = useState(false);
     const [isSelectingFiles, setSelectingFiles] = useState(false);
     const [fileIdUploadList, setFileIdUploadList] = useState([]);
+    const [fileValidationMap, setFileValidationMap] = useState({});
 
     useEffect(() => {
         rq('/categories?fullName=true', { method: 'GET' })
@@ -44,7 +45,10 @@ const DocumentImport = () => {
     }, [department]);
 
     const filterArray = (array, predicate) => {
-        return [array.filter(a => predicate(a)), array.filter(a => !predicate(a))]
+        return [
+            array.filter(a => predicate(a)),
+            array.filter(a => !predicate(a))
+        ]
     }
 
     const queryGoogleDriveFiles = useCallback(async searchQuery => {
@@ -197,44 +201,54 @@ const DocumentImport = () => {
         })
 
     const sendSingleFile = async (itemId) => {
-        setFileIdUploadList(fl => [...fl, itemId]);
+        let fileInArray = fileList.filter(f => f.id === itemId);
+        let invalidFiles = validateFilesForUpload(fileInArray);
+        if (invalidFiles.length > 0) return;
 
-        let success = await uploadFiles(fileList.filter(f => f.id === itemId));
+        setFileIdUploadList(fl => [...fl, itemId]);
+        let success = await uploadFiles(fileInArray);
         setFileIdUploadList(fl => fl.filter(f => f !== itemId));
-        
+
         if (!success) return;
         setFileList(fl => fl.filter(f => f.id !== itemId));
     }
 
     const sendSelectedFiles = async () => {
-        let selectedFileIds = selectedFiles.map(f => f.id);
-        setFileIdUploadList(fl => [...fl, ...selectedFileIds]);
+        let invalidFiles = validateFilesForUpload(selectedFiles);
+        if (invalidFiles.length === selectedFiles.length) return;
 
-        let success = await uploadFiles(selectedFiles);
-        setFileIdUploadList(fl => fl.filter(f => selectedFileIds.every(f2 => f2 !== f)));
-        
+        let validFiles = selectedFiles.filter(f => invalidFiles.every(([invalidId, _]) => invalidId !== f.id));
+        let validFilesIds = validFiles.map(f => f.id);
+
+        setFileIdUploadList(fl => [...fl, ...validFilesIds]);
+        let success = await uploadFiles(validFiles);
+        setFileIdUploadList(fl => fl.filter(f => validFilesIds.every(f2 => f2 !== f)));
+
         if (!success) return;
-        setFileList(fl => fl.filter(f => !f.selected));
+        setFileList(fl => fl.filter(f => !validFilesIds.includes(f.id)));
     }
 
     const validateFilesForUpload = files => {
-        if (files.length <= 0)
-            return 'Error: no file for import.';
+        let validationArray = getFilesValidationArray(files);
+        setFileValidationMap(Object.fromEntries(validationArray));
 
-        if (files.some(f => !f.date || !f.category))
-            return 'Error: all files imported must have date and category set.';
-
-        if (files.some(f => !f.email || !f.token))
-            return 'Error: info missing for file import, please add the files again.';
+        return validationArray;
     }
 
-    const uploadFiles = async (files) => {
-        let validationErrors = validateFilesForUpload(files);
-        if (validationErrors) {
-            console.log(validationErrors);
-            return false;
-        }
+    const getFilesValidationArray = files =>
+        files
+            .map(f => [f.id, getFileValidation(f)])
+            .filter(([_, v]) => v.length > 0)
 
+    const getFileValidation = f => [
+        !f.date ? 'date' : '',
+        !f.category ? 'category' : '',
+        (!f.email || !f.token) ? 'info' : '',
+    ].filter(s => s !== '')
+
+    const isFileValid = file => !getFileValidation(file).length
+
+    const uploadFiles = async (files) => {
         const res = await rq(`/documents/import`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -259,6 +273,16 @@ const DocumentImport = () => {
             ...rest,
             [fileIndex]: { ...file, [property]: value }
         }));
+
+        if (!value || !fileValidationMap[itemId]?.includes(property)) return;
+        setFileValidationMap(fvm => {
+            const { [itemId]: validations, ...rest } = fvm;
+            let newValidations = validations.filter(v => v !== property);
+
+            return newValidations.length > 0
+                ? { ...rest, [itemId]: newValidations }
+                : { ...rest };
+        })
     }
 
     const setPropertyMultipleItems = (property, value, setForAll) => {
@@ -268,6 +292,24 @@ const DocumentImport = () => {
                 : f
         ));
         updateParams({ [property]: '' });
+
+        if (!value) return;
+        setFileValidationMap(fvm => {
+            let itemsWithMissingProperty = Object.entries(fvm).filter(([k, v]) => v.includes(property));
+            if (!itemsWithMissingProperty.length) return fvm;
+
+            let newValidationMap = fvm;
+            itemsWithMissingProperty.forEach(([k, v]) => {
+                const { [k]: _, ...rest } = newValidationMap;
+                let newValidations = v.filter(v => v !== property);
+
+                newValidationMap = newValidations.length > 0
+                    ? { ...rest, [k]: newValidations }
+                    : { ...rest };
+            });
+
+            return newValidationMap;
+        });
     }
 
     const getSortIcon = () =>
@@ -345,7 +387,9 @@ const DocumentImport = () => {
                         {/* body */}
                         {!visibleFileList.length
                             ? <ListGroup.Item key="-1" className="empty">
-                                <span>{t('import.table.content.empty')}</span>
+                                {isSelectingFiles
+                                    ? <FontAwesomeIcon icon={faCircleNotch} className="faSpin" />
+                                    : <span>{t('import.table.content.empty')}</span>}
                             </ListGroup.Item>
                             : <ListGroup variant="flush" className="content">
                                 {visibleFileList
@@ -361,10 +405,22 @@ const DocumentImport = () => {
                                                 onChange={() => setItemProperty(f.id, 'selected', !f.selected)}
                                             />
                                             {filesFromMultipleAccounts && <span>{f.email}</span>}
-                                            <span>{f.name}</span>
+                                            <div className={"column-document-name " + (fileValidationMap[f.id]?.includes('date') ? "import-info-error-box" : "")}>
+                                                <span>{f.name}</span>
+                                                {fileValidationMap[f.id]?.includes('date')
+                                                    ? <>
+                                                        <FontAwesomeIcon icon={faExclamationTriangle} className="faWarn" />
+
+                                                        <span className="import-info-error-msg">
+                                                            {t('import.table.content.validation.info')}
+                                                        </span>
+                                                    </>
+                                                    : <></>}
+                                            </div>
                                             <div>
                                                 <CategorySelect
                                                     categories={categories}
+                                                    isInvalid={fileValidationMap[f.id]?.includes('category')}
                                                     onChange={(_, value) => setItemProperty(f.id, 'category', value)}
                                                     size="sm"
                                                     value={f.category}
@@ -372,19 +428,20 @@ const DocumentImport = () => {
                                             </div>
                                             <div>
                                                 <DatePicker
+                                                    isInvalid={fileValidationMap[f.id]?.includes('date')}
                                                     onChange={(_, value) => setItemProperty(f.id, 'date', value)}
                                                     size="sm"
                                                     value={f.date}
                                                 />
                                             </div>
                                             <div className="actions">
-                                                {fileIdUploadList.some(f2 => f2 === f.id) 
-                                                ? <FontAwesomeIcon icon={faCircleNotch} className="faSpin" style={{ marginTop: '.5rem' }} />
-                                                : <>
+                                                {fileIdUploadList.some(f2 => f2 === f.id)
+                                                    ? <FontAwesomeIcon icon={faCircleNotch} className="faSpin" style={{ marginTop: '.5rem' }} />
+                                                    : <>
                                                         <BasicButton
-                                                            className={validateFilesForUpload([f]) ? 'disabled' : ''}
+                                                            className={!isFileValid(f) ? 'disabled' : ''}
                                                             icon={faFileUpload}
-                                                            onClick={() => { if (!validateFilesForUpload([f])) sendSingleFile(f.id) }}
+                                                            onClick={() => { if (isFileValid(f)) sendSingleFile(f.id) }}
                                                             tooltip={t('import.table.content.actions.import')} />
                                                         <DeleteButton onClick={() => setFileList(fl => fl.filter(file => file.id !== f.id))} />
                                                     </>

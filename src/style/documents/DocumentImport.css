@@ -148,3 +148,27 @@
 .modal.selectFilesModal .modal-footer .btn:first-of-type {
     margin-right: auto;
 }
+
+.faWarn {
+    color: red;
+    margin-left: .5rem;
+}
+
+.column-document-name {
+    position: relative;
+    top: -.25rem;
+    transition: top 50ms linear;
+    line-height: 2.25rem;
+}
+
+.import-info-error-box {
+    top: -.75rem;
+}
+
+.import-info-error-msg {
+    position: absolute;
+    left: 0;
+    top: 1.25rem;
+    font-size: small;
+    color: red;
+}

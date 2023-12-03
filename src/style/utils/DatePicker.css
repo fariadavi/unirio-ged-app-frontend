@@ -43,3 +43,7 @@
 .custom-date-picker input[type=date].form-control-lg::-webkit-calendar-picker-indicator {
     top: 0.875rem;
 }
+
+.custom-date-picker input.form-control.is-invalid {
+    background-position: right calc(0.375em + 2.1875rem) center;
+}
