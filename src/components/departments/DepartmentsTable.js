@@ -16,9 +16,12 @@ const DepartmentsTable = ({ canAddDept, canEditDept, canDeleteDept }) => {
     const { t } = useTranslation();
     const [departments, setDepartments] = useState([]);
     const { department, user, setLoggedUserInfo } = useContext(UserContext);
+    const [isLoading, setLoading] = useState(true);
 
     const loadDepartments = useCallback(async () => {
+        setLoading(true);
         const res = await getDepartments();
+        setLoading(false);
 
         if (res.ok) setDepartments(await res.json());
     }, [])
@@ -161,6 +164,7 @@ const DepartmentsTable = ({ canAddDept, canEditDept, canDeleteDept }) => {
         actions={actions}
         columns={columns}
         data={data}
+        isLoadingData={isLoading}
         domain="departments"
     />)
 }

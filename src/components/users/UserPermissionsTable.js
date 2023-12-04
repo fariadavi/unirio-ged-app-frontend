@@ -18,9 +18,12 @@ const UserPermissionsTable = ({ canInviteUsers, canEditUserPermissions, canDelet
     const [users, setUsers] = useState([]);
     const [permissions, setPermissions] = useState([]);
     const { department, user, setLoggedUserInfo } = useContext(UserContext);
+    const [isLoading, setLoading] = useState(true);
 
     const loadUsers = useCallback(async () => {
+        setLoading(true);
         const res = await getUsers(type);
+        setLoading(false);
 
         if (res.ok) setUsers(await res.json());
     }, [type])
@@ -207,6 +210,7 @@ const UserPermissionsTable = ({ canInviteUsers, canEditUserPermissions, canDelet
         actions={actions}
         columns={columns}
         data={data}
+        isLoadingData={isLoading}
         domain={`userPermissions`}
     />)
 

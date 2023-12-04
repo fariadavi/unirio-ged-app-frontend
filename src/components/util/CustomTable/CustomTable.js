@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleNotch, faSortAlphaDown, faSortAlphaDownAlt, faSortAmountDown, faSortAmountDownAlt } from '@fortawesome/free-solid-svg-icons'
 import '../../../style/utils/CustomTable.css'
 
-const CustomTable = ({ actions = { filter: {} }, columns = {}, data = [], domain, pageSize = 10 }) => {
+const CustomTable = ({ actions = { filter: {} }, columns = {}, data = [], domain, isLoadingData = false, pageSize = 10 }) => {
     const [showAddRow, setShowAddRow] = useState(false);
     const [showFilterRow, setShowFilterRow] = useState(false);
     const [isBatchEditing, setBatchEditing] = useState(false);
@@ -145,7 +145,7 @@ const CustomTable = ({ actions = { filter: {} }, columns = {}, data = [], domain
 
                 if (result) console.log('Batch edit successful')
             } else console.log('Batch edit failed')
-        
+
             setActionOnDataList([]);
         }
     }
@@ -252,74 +252,80 @@ const CustomTable = ({ actions = { filter: {} }, columns = {}, data = [], domain
                         filterMap={filterMap}
                         onFilter={(filter, value) => filterData(filter, value)}
                     />}
-                {data
-                    .filter(dataRow => !filteredRowIds.includes(dataRow.id))
-                    .sort((a, b) => {
-                        switch (columns?.[sortProperty]?.type) {
-                            case 'boolean':
-                                return (a[sortProperty] === b[sortProperty])
-                                    ? 0 : a[sortProperty]
-                                        ? sortDirection === 'ASC' ? -1 : 1
-                                        : sortDirection === 'ASC' ? 1 : -1;
-                            case 'text':
-                                return sortDirection === 'ASC'
-                                    ? a[sortProperty].localeCompare(b[sortProperty])
-                                    : b[sortProperty].localeCompare(a[sortProperty]);
-                            case 'number':
-                                return sortDirection === 'ASC'
-                                    ? a[sortProperty] - b[sortProperty]
-                                    : b[sortProperty] - a[sortProperty]
-                            default:
-                                return sortDirection === 'ASC'
-                                    ? a.id - b.id
-                                    : b.id - a.id
-                        }
-                    })
-                    .slice(
-                        (currentPage - 1) * pageSize,
-                        (currentPage * pageSize) < (data.length - filteredRowIds.length)
-                            ? (currentPage * pageSize)
-                            : (data.length - filteredRowIds.length)
-                    )
-                    .map(dataRow => {
-                        const editingRow = editingRows[dataRow.id?.toString()];
-
-                        return (
-                            <tr key={dataRow.id}>
-                                {Object.entries(columns).map(([key, config]) =>
-                                    <td key={key}>
-                                        <div className={config?.class}>
-                                            <CustomTableDataField
-                                                disguise={config?.disguise?.[dataRow[key]]}
-                                                isEditing={(isBatchEditing || !!editingRow) && config?.editable !== false}
-                                                onChange={value => setEditData(dataRow.id, key, value)}
-                                                type={config?.type}
-                                                value={editingRow?.[key] === undefined ? dataRow[key] : editingRow[key]}
-                                            />
-                                        </div>
-                                    </td>
-                                )}
-                                {!!Object.keys(actions).some(k => !actions[k]?.disabled) &&
-                                    <td>
-                                        <div className="actions spaced">
-                                            {actionOnDataList.some(id => id?.toString() === dataRow.id?.toString())
-                                                ? <FontAwesomeIcon icon={faCircleNotch} className="faSpin" style={{ marginTop: '.25rem' }} />
-                                                : <CustomTableBodyActions
-                                                    actions={actions}
-                                                    dataId={dataRow.id}
-                                                    isBatchEditing={isBatchEditing}
-                                                    isEditingRow={!!editingRow}
-                                                    onClickEditBtn={dataId => toggleEditData(dataId)}
-                                                    onClickConfirmEditBtn={dataId => confirmEditData(dataId)}
-                                                    onClickCancelEditBtn={dataId => toggleEditData(dataId)}
-                                                    onClickDeleteBtn={dataId => deleteData(dataId)}
-                                                />}
-                                        </div>
-                                    </td>
-                                }
-                            </tr>
+                {isLoadingData
+                    ? <tr>
+                        <td colSpan={Object.keys(columns).length + (Object.keys(actions).some(k => !actions[k]?.disabled) ? 1 : 0)}>
+                            <FontAwesomeIcon icon={faCircleNotch} className="faSpin" style={{ width: '100%' }} />
+                        </td>
+                    </tr>
+                    : data
+                        .filter(dataRow => !filteredRowIds.includes(dataRow.id))
+                        .sort((a, b) => {
+                            switch (columns?.[sortProperty]?.type) {
+                                case 'boolean':
+                                    return (a[sortProperty] === b[sortProperty])
+                                        ? 0 : a[sortProperty]
+                                            ? sortDirection === 'ASC' ? -1 : 1
+                                            : sortDirection === 'ASC' ? 1 : -1;
+                                case 'text':
+                                    return sortDirection === 'ASC'
+                                        ? a[sortProperty].localeCompare(b[sortProperty])
+                                        : b[sortProperty].localeCompare(a[sortProperty]);
+                                case 'number':
+                                    return sortDirection === 'ASC'
+                                        ? a[sortProperty] - b[sortProperty]
+                                        : b[sortProperty] - a[sortProperty]
+                                default:
+                                    return sortDirection === 'ASC'
+                                        ? a.id - b.id
+                                        : b.id - a.id
+                            }
+                        })
+                        .slice(
+                            (currentPage - 1) * pageSize,
+                            (currentPage * pageSize) < (data.length - filteredRowIds.length)
+                                ? (currentPage * pageSize)
+                                : (data.length - filteredRowIds.length)
                         )
-                    })}
+                        .map(dataRow => {
+                            const editingRow = editingRows[dataRow.id?.toString()];
+
+                            return (
+                                <tr key={dataRow.id}>
+                                    {Object.entries(columns).map(([key, config]) =>
+                                        <td key={key}>
+                                            <div className={config?.class}>
+                                                <CustomTableDataField
+                                                    disguise={config?.disguise?.[dataRow[key]]}
+                                                    isEditing={(isBatchEditing || !!editingRow) && config?.editable !== false}
+                                                    onChange={value => setEditData(dataRow.id, key, value)}
+                                                    type={config?.type}
+                                                    value={editingRow?.[key] === undefined ? dataRow[key] : editingRow[key]}
+                                                />
+                                            </div>
+                                        </td>
+                                    )}
+                                    {!!Object.keys(actions).some(k => !actions[k]?.disabled) &&
+                                        <td>
+                                            <div className="actions spaced">
+                                                {actionOnDataList.some(id => id?.toString() === dataRow.id?.toString())
+                                                    ? <FontAwesomeIcon icon={faCircleNotch} className="faSpin" style={{ marginTop: '.25rem' }} />
+                                                    : <CustomTableBodyActions
+                                                        actions={actions}
+                                                        dataId={dataRow.id}
+                                                        isBatchEditing={isBatchEditing}
+                                                        isEditingRow={!!editingRow}
+                                                        onClickEditBtn={dataId => toggleEditData(dataId)}
+                                                        onClickConfirmEditBtn={dataId => confirmEditData(dataId)}
+                                                        onClickCancelEditBtn={dataId => toggleEditData(dataId)}
+                                                        onClickDeleteBtn={dataId => deleteData(dataId)}
+                                                    />}
+                                            </div>
+                                        </td>
+                                    }
+                                </tr>
+                            )
+                        })}
             </tbody>
         </Table>
         <TablePagination
