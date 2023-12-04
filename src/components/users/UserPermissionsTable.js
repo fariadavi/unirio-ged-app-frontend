@@ -17,8 +17,10 @@ const UserPermissionsTable = ({ canInviteUsers, canEditUserPermissions, canDelet
     const { t } = useTranslation();
     const [users, setUsers] = useState([]);
     const [permissions, setPermissions] = useState([]);
-    const { department, user, setLoggedUserInfo } = useContext(UserContext);
+    const { department, user, userLoading, setLoggedUserInfo } = useContext(UserContext);
     const [isLoading, setLoading] = useState(true);
+
+    useEffect(() => { if (userLoading) setLoading(true) }, [userLoading]);
 
     const loadUsers = useCallback(async () => {
         setLoading(true);

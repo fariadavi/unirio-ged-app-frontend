@@ -68,13 +68,15 @@ const Actions = ({ element, isExpanded, savingElements, addNewCategoryToList, ed
 
 export default function Categories() {
     const { t } = useTranslation();
-    const { department } = useContext(UserContext);
+    const { department, userLoading } = useContext(UserContext);
     const [expandedIds, setExpandedIds] = useState([]);
     const [categories, setCategories] = useState([{ "id": 0, "children": [], "parent": null }]);
     const [categoryEdit, setCategoryEdit] = useState(null);
     const [inputRef, setInputFocus] = useFocus();
     const [isLoading, setLoading] = useState(true);
     const [savingElements, setSavingElements] = useState([]);
+
+    useEffect(() => { if (userLoading) setLoading(true) }, [userLoading]);
 
     useEffect(() => {
         setLoading(true);

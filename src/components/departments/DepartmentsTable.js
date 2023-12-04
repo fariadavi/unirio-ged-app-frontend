@@ -15,8 +15,10 @@ import { faChevronRight, faEdit } from '@fortawesome/free-solid-svg-icons'
 const DepartmentsTable = ({ canAddDept, canEditDept, canDeleteDept }) => {
     const { t } = useTranslation();
     const [departments, setDepartments] = useState([]);
-    const { department, user, setLoggedUserInfo } = useContext(UserContext);
+    const { department, user, userLoading, setLoggedUserInfo } = useContext(UserContext);
     const [isLoading, setLoading] = useState(true);
+
+    useEffect(() => { if (userLoading) setLoading(true) }, [userLoading]);
 
     const loadDepartments = useCallback(async () => {
         setLoading(true);
@@ -26,7 +28,7 @@ const DepartmentsTable = ({ canAddDept, canEditDept, canDeleteDept }) => {
         if (res.ok) setDepartments(await res.json());
     }, [])
 
-    useEffect(() => loadDepartments(), [loadDepartments])
+    useEffect(() => loadDepartments(), [loadDepartments, department])
 
     const addNewDepartment = useCallback(async departmentData => {
         const res = await insertDepartment(

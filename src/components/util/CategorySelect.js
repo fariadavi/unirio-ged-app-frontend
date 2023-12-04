@@ -7,9 +7,11 @@ import Select from './Select'
 
 const CategorySelect = ({ categories = undefined, disabled = false, className, label, name = 'category', onChange, isValid, isInvalid, size, validationMessage, value }) => {
     const { t } = useTranslation();
-    const { department } = useContext(UserContext);
+    const { department, userLoading } = useContext(UserContext);
     const [cats, setCats] = useState([]);
     const [isLoading, setLoading] = useState(true);
+
+    useEffect(() => { if (userLoading) setLoading(true) }, [userLoading]);
 
     useEffect(() => {
         setLoading(true);
