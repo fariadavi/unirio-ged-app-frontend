@@ -241,7 +241,7 @@ const DocumentImport = () => {
             .filter(([_, v]) => v.length > 0)
 
     const getFileValidation = f => [
-        !f.date ? 'date' : '',
+        // !f.date ? 'date' : '',
         !f.category ? 'category' : '',
         (!f.email || !f.token) ? 'info' : '',
     ].filter(s => s !== '')
