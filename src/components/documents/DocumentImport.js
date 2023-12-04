@@ -405,9 +405,9 @@ const DocumentImport = () => {
                                                 onChange={() => setItemProperty(f.id, 'selected', !f.selected)}
                                             />
                                             {filesFromMultipleAccounts && <span>{f.email}</span>}
-                                            <div className={"column-document-name " + (fileValidationMap[f.id]?.includes('date') ? "import-info-error-box" : "")}>
+                                            <div className={"column-document-name " + (fileValidationMap[f.id]?.includes('info') ? "import-info-error-box" : "")}>
                                                 <span>{f.name}</span>
-                                                {fileValidationMap[f.id]?.includes('date')
+                                                {fileValidationMap[f.id]?.includes('info')
                                                     ? <>
                                                         <FontAwesomeIcon icon={faExclamationTriangle} className="faWarn" />
 
