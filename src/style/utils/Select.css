@@ -29,3 +29,15 @@
     cursor: pointer;
     opacity: 1;
 }
+
+.select-inner-wrapper .loading-input {
+    position: absolute;
+    left: 1rem;
+    top: 0;
+    line-height: 2.375rem;
+}
+
+.select-inner-wrapper {
+    position: relative;
+    width: 100%;
+}

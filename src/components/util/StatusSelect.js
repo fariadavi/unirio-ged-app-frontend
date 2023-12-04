@@ -7,12 +7,15 @@ import Select from './Select'
 const StatusSelect = ({ statuses = undefined, disabled = false, className, label, name = 'status', onChange, isValid, isInvalid, size, validationMessage, value }) => {
     const { t } = useTranslation();
     const [statusList, setStatusList] = useState([]);
+    const [isLoading, setLoading] = useState(true);
 
     useEffect(() => {
+        setLoading(true);
+
         rq('/documents/status', { method: 'GET' })
             .then(res => { if (res.ok) return res.json() })
-            .then(s => s.map(s1 => { return { id: s1, name: t(`status.${s1.toLowerCase()}`)}}))
-            .then(c => setStatusList(c));
+            .then(s => s.map(s1 => { return { id: s1, name: t(`status.${s1.toLowerCase()}`) } }))
+            .then(c => { setStatusList(c); setLoading(false); });
     }, [t]);
 
     return <Select
@@ -29,6 +32,7 @@ const StatusSelect = ({ statuses = undefined, disabled = false, className, label
         textProperty="name"
         value={value}
         size={size}
+        isLoading={isLoading}
     >
         {isInvalid
             ? <Form.Control.Feedback type="invalid">

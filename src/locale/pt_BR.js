@@ -28,6 +28,7 @@ const ptBR = {
     'customTable.filterRow.boolean.y': '$t(yes)',
     'customTable.filterRow.boolean.n': '$t(no)',
     'customTable.filterRow.clearBtn.tooltip': 'Limpar todos os filtros',
+    'select.loading': 'Carregando...',
 
     // status
     'status.pending': 'Pendente',

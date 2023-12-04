@@ -27,6 +27,7 @@ const enUS = {
     'customTable.filterRow.boolean.y': '$t(yes)',
     'customTable.filterRow.boolean.n': '$t(no)',
     'customTable.filterRow.clearBtn.tooltip': 'Clear all filters',
+    'select.loading': 'Loading...',
 
     // status
     'status.pending': 'Pending',

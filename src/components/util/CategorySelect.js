@@ -9,14 +9,19 @@ const CategorySelect = ({ categories = undefined, disabled = false, className, l
     const { t } = useTranslation();
     const { department } = useContext(UserContext);
     const [cats, setCats] = useState([]);
+    const [isLoading, setLoading] = useState(true);
 
     useEffect(() => {
-        if (!categories)
+        setLoading(true);
+
+        if (!categories) {
             rq('/categories?fullName=true', { method: 'GET' })
                 .then(res => { if (res.ok) return res.json() })
-                .then(c => setCats(c));
-        else
+                .then(c => { setCats(c); setLoading(false); });
+        } else {
             setCats(categories);
+            setLoading(false);
+        }
     }, [categories, department]);
 
     return <Select
@@ -33,6 +38,7 @@ const CategorySelect = ({ categories = undefined, disabled = false, className, l
         textProperty="fullName"
         value={value}
         size={size}
+        isLoading={isLoading}
     >
         {isInvalid
             ? <Form.Control.Feedback type="invalid">
