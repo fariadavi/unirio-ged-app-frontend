@@ -14,9 +14,8 @@ const StatusSelect = ({ statuses = undefined, disabled = false, className, label
 
         rq('/documents/status', { method: 'GET' })
             .then(res => { if (res.ok) return res.json() })
-            .then(s => s.map(s1 => { return { id: s1, name: t(`status.${s1.toLowerCase()}`) } }))
             .then(c => { setStatusList(c); setLoading(false); });
-    }, [t]);
+    }, []);
 
     return <Select
         className={className}
@@ -26,7 +25,7 @@ const StatusSelect = ({ statuses = undefined, disabled = false, className, label
         isValid={isValid}
         isInvalid={isInvalid}
         onChange={onChange}
-        options={statusList}
+        options={statusList.map(s1 => { return { id: s1, name: t(`status.${s1.toLowerCase()}`) } })}
         placeholder={t('searchBar.filters.status.choose')}
         noOptionsLabel={t('searchBar.filters.status.zeroOptions')}
         textProperty="name"
