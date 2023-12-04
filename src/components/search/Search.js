@@ -68,13 +68,12 @@ export default function Search() {
         ).finally(() => setSearching(false));
     }
 
-    const handleDelete = docId => {
-        rq(`/documents/${docId}`, { method: 'DELETE' })
-            .then(res => {
-                if (!res.ok) return
-                window.alert(`Document '${docId}' deleted`)
-                setDocs(docs.filter(x => x.id !== docId))
-            });
+    const handleDelete = async docId => {
+        const res = await rq(`/documents/${docId}`, { method: 'DELETE' });
+        if (!res.ok) return;
+        
+        window.alert(`Document '${docId}' deleted`);
+        setDocs(docs.filter(x => x.id !== docId));
     }
 
     useEffect(() => { setDocs([]); setSearching(null); setSearchSuccess(false); }, [department]);
