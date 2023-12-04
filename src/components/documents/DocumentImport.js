@@ -39,6 +39,8 @@ const DocumentImport = () => {
     const [fileValidationMap, setFileValidationMap] = useState({});
 
     useEffect(() => {
+        setFileList(fl => fl.map(f => { return { ...f, category: '' }}));
+
         rq('/categories?fullName=true', { method: 'GET' })
             .then(res => { if (res.ok) return res.json() })
             .then(cats => setCategories(cats));
