@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { UserContext } from '../../contexts/UserContext'
+import { NotificationContext } from '../../contexts/NotificationContext.js'
 import rq from '../../services/api'
 import DocumentImport from './DocumentImport'
 import DatePicker from '../util/DatePicker'
@@ -12,12 +13,14 @@ import LoadButton from '../util/LoadButton'
 import { Col, Form } from 'react-bootstrap'
 import { Redirect, Route, Switch, useParams, useRouteMatch } from 'react-router-dom'
 import { validateField, validateObject } from '../util/Validation.js'
+import { NotificationType } from '../notification/Notifications'
 import '../../style/documents/DocumentDetails.css'
 
 const DocumentForm = () => {
     const { t } = useTranslation();
     const { docId } = useParams();
     const { user, department, checkPermission } = useContext(UserContext);
+    const { pushNotification } = useContext(NotificationContext);
     const [isLoadingDoc, setLoadingDoc] = useState(!!docId);
     const [isSavingDoc, setSavingDoc] = useState(false);
     const [isDeletingDoc, setDeletingDoc] = useState(false);
@@ -126,7 +129,9 @@ const DocumentForm = () => {
             .then(res => {
                 if (!res.ok) return;
                 setDeletingDoc(false);
-                window.alert(`Document '${docId}' deleted`);
+                
+                pushNotification(NotificationType.SUCCESS, 'document.actions.delete.success', { id: docId });
+
                 setRedirect(checkPermission('ADD_DOCS') ? '/documents/new' : '/');
             });
     }

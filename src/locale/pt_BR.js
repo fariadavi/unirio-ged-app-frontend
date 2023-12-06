@@ -79,6 +79,8 @@ const ptBR = {
     'document.category': '$t(category)',
     'document.registeredBy': 'Cadastrado por',
     'document.date': 'Data do Documento',
+    'document.actions.delete.success': 'Documento \'{{id}}\' excluído com sucesso!',
+    'document.actions.delete.fail': 'Falha ao excluir o documento \'{{id}}\'. Por favor, tente novamente mais tarde.\nCaso o problema persista, entre em contato com os administradores do sistema.',
     
     // document form
     'document.form.add.title': 'Novo Documento',
@@ -126,6 +128,7 @@ const ptBR = {
     'search.results.count': 'resultados',
     'search.results.page': 'Página',
     'search.results.page.of': 'de',
+    'search.validation.noParameters': 'Preencha ao menos um campo para realizar a busca.',
     
     // user
     'user.name': 'Nome de usuário',

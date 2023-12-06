@@ -1,16 +1,19 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { UserContext } from '../../contexts/UserContext'
+import { NotificationContext } from '../../contexts/NotificationContext'
 import { useTranslation } from 'react-i18next'
 import { Button, Form } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons'
 import { CategoryFilter, MinMaxDateFilter, StatusFilter, TextInputFilter, UserDocumentsFilter } from './SearchBarFilters'
+import { NotificationType } from '../notification/Notifications'
 import LoadButton from '../util/LoadButton'
 import '../../style/search/SearchBar.css'
 
 export default function SearchBar({ isSearching, onSearch }) {
     const { t } = useTranslation();
     const { department } = useContext(UserContext);
+    const { pushNotification } = useContext(NotificationContext);
     const [expandedOptions, setExpandedOptions] = useState(false);
     const [filters, setFilters] = useState({
         text: '',
@@ -47,7 +50,7 @@ export default function SearchBar({ isSearching, onSearch }) {
 
             setFilters({ ...filters, text: textQuery });
         } else {
-            window.alert('fill at least one input')
+            pushNotification(NotificationType.WARNING, 'search.validation.noParameters')
         }
     }
 

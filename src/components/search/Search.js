@@ -1,17 +1,18 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { UserContext } from '../../contexts/UserContext'
-import { useTranslation } from 'react-i18next'
+import { NotificationContext } from '../../contexts/NotificationContext'
 import rq from '../../services/api'
 import AppTitle from '../util/AppTitle'
 import SearchBar from './SearchBar'
 import SearchResultList from './SearchResultList'
 import NoResultMessage from './NoResultMessage'
+import { NotificationType } from '../notification/Notifications'
 import '../../style/search/Search.css'
 
 export default function Search() {
-    const { t } = useTranslation();
     const tableRef = useRef(null);
     const { checkPermission, department } = useContext(UserContext);
+    const { pushNotification } = useContext(NotificationContext);
     const [canSearchDocs] = useState(checkPermission('SEARCH_DOCS'));
     const [isSearching, setSearching] = useState(false);
     const [isSearchSuccess, setSearchSuccess] = useState(false);
@@ -35,7 +36,7 @@ export default function Search() {
         url += `q=${encodeURI(queryString)}`;
 
         rq(url, { method: "GET" }
-        ).then(res => { if (res.ok) { setCurrentQuery(url); return res.json() } else { window.alert('Error searching documents') } }
+        ).then(res => { if (res.ok) { setCurrentQuery(url); return res.json() } else { pushNotification(NotificationType.ERROR, 'search.error'); } }
         ).then(result => {
             if (result) {
                 setCurrentPage(result.page || 0);
@@ -44,7 +45,7 @@ export default function Search() {
                 setSearchSuccess(true);
             }
         }
-        ).catch(err => { setSearchSuccess(false); window.alert(t('search.error')); }
+        ).catch(err => { setSearchSuccess(false); pushNotification(NotificationType.ERROR, 'search.error'); }
         ).finally(() => setSearching(false));
     }
 
@@ -52,7 +53,7 @@ export default function Search() {
         setSearching(true);
 
         rq(`${currentQuery}&page=${page}&pageSize=${pageSize}`, { method: "GET" }
-        ).then(res => { if (res.ok) { return res.json() } else { window.alert('Error searching documents') } }
+        ).then(res => { if (res.ok) { return res.json() } else { pushNotification(NotificationType.ERROR, 'search.error'); } }
         ).then(result => {
             if (result) {
                 setCurrentPage(result.page || 0);
@@ -64,16 +65,24 @@ export default function Search() {
                     tableRef.current.scrollIntoView({ block: 'start', behavior: 'smooth' });
             }
         }
-        ).catch(err => { setSearchSuccess(false); window.alert(t('search.error')); }
+        ).catch(err => { setSearchSuccess(false); pushNotification(NotificationType.ERROR, 'search.error'); }
         ).finally(() => setSearching(false));
     }
 
     const handleDelete = async docId => {
-        const res = await rq(`/documents/${docId}`, { method: 'DELETE' });
-        if (!res.ok) return;
-        
-        window.alert(`Document '${docId}' deleted`);
-        setDocs(docs.filter(x => x.id !== docId));
+        try {
+            const res = await rq(`/documents/${docId}`, { method: 'DELETE' });
+            if (!res.ok) {
+                pushNotification(NotificationType.ERROR, 'document.actions.delete.fail', { id: docId });
+                return; 
+            }
+    
+            pushNotification(NotificationType.SUCCESS, 'document.actions.delete.success', { id: docId });
+    
+            setDocs(docs.filter(x => x.id !== docId));
+        } catch (e) {
+            pushNotification(NotificationType.ERROR, 'document.actions.delete.fail', { id: docId });
+        }
     }
 
     useEffect(() => { setDocs([]); setSearching(null); setSearchSuccess(false); }, [department]);

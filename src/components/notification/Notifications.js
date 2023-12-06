@@ -37,7 +37,7 @@ export const Notification = ({ id, header, body, type = NotificationType.SUCCESS
             setShowToast(show => !show);
             setTimeout(() => removeNotification(id), 200);
         }}
-        delay={3000}
+        delay={5000}
         className={`notification notification${type}`}
         autohide
     >

@@ -78,6 +78,8 @@ const enUS = {
     'document.category': '$t(category)',
     'document.registeredBy': 'Registered by',
     'document.date': 'Document Date',
+    'document.actions.delete.success': 'Successfully deleted document \'{{id}}\'!',
+    'document.actions.delete.fail': 'Failed to delete document \'{{id}}\'. Please try again later.\nIf the problem persists, contact the system administrators.',
 
     // document form
     'document.form.add.title': 'New Document',
@@ -125,6 +127,7 @@ const enUS = {
     'search.results.count': 'results',
     'search.results.page': 'Page',
     'search.results.page.of': 'of',
+    'search.validation.noParameters': 'Fill at least one field to perform a search.',
     
     // user
     'user.name': 'User Name',
