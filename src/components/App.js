@@ -7,7 +7,7 @@ import { HashRouter as Router, Route } from 'react-router-dom'
 import PrivateRoute from './PrivateRoute'
 import Login from './Login'
 import Home from './Home'
-import NotificationList from './notification/NotificationList'
+import { NotificationList } from './notification/Notifications'
 import '../style/App.css'
 
 export default function App() {

@@ -5,8 +5,8 @@ const NotificationContext = createContext();
 function NotificationProvider({ children }) {
     const [notifications, setNotifications] = useState([]);
 
-    const pushNotification = (message, header) =>
-        setNotifications(nList => [...nList, { id: crypto.randomUUID(), header: header, body: message }]);
+    const pushNotification = (type, message, messageParams, header) =>
+        setNotifications(nList => [...nList, { id: crypto.randomUUID(), header: header, body: { message: message, params: messageParams}, type: type }]);
 
     const removeNotification = id =>
         setNotifications(nList => nList.filter(n => n.id !== id));

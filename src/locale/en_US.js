@@ -37,6 +37,12 @@ const enUS = {
     'status.failed_processing': 'Processing failed',
     'status.empty_content': 'Empty Content',
 
+    // notifications
+    'notifications.header.default.success': 'Sucess',
+    'notifications.header.default.warning': 'Warning',
+    'notifications.header.default.error': 'Error',
+    'notifications.header.default.info': 'Information',
+
     // login
     'loginWithGoogle.buttonText': 'Sign in with Google',
 

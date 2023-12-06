@@ -38,6 +38,12 @@ const ptBR = {
     'status.failed_processing': 'Falha no processamento',
     'status.empty_content': 'Sem Conteúdo',
 
+    // notifications
+    'notifications.header.default.success': 'Sucesso',
+    'notifications.header.default.warning': 'Atenção',
+    'notifications.header.default.error': 'Erro',
+    'notifications.header.default.info': 'Informação',
+
     // login
     'loginWithGoogle.buttonText': 'Entre com Google',
 
