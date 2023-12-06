@@ -2,19 +2,21 @@ import React, { useContext } from 'react'
 import { GoogleLogin } from '@react-oauth/google'
 import { Container } from 'react-bootstrap'
 import { AuthContext } from '../contexts/AuthContext'
+import { NotificationContext } from '../contexts/NotificationContext'
+import { NotificationType } from './notification/Notifications'
 import { Redirect } from 'react-router-dom'
 import { getLocalItem, LANG_KEY } from '../utils/localStorageManager'
 import AppTitle from './util/AppTitle'
 import GlobalSpinner from './util/GlobalSpinner'
 
 export default function Login() {
-    const { authLoading, authenticated, handleAuthentication, handleAuthLogout } = useContext(AuthContext);    
+    const { authLoading, authenticated, handleAuthentication, handleAuthLogout } = useContext(AuthContext);   
+    const { pushNotification } = useContext(NotificationContext); 
 
 	const handleAuthenticationFail = () => {
 		handleAuthLogout();
 
-		// TODO handle failure show error msg to user 
-		console.log('login failed');
+        pushNotification(NotificationType.ERROR, 'rq.fail.unexpectedError');
 	}
 
     return (

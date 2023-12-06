@@ -1,12 +1,20 @@
-import React, { createContext, useState } from 'react'
+import React, { createContext, useCallback, useState } from 'react'
 
 const NotificationContext = createContext();
 
 function NotificationProvider({ children }) {
     const [notifications, setNotifications] = useState([]);
 
-    const pushNotification = (type, message, messageParams, header) =>
-        setNotifications(nList => [...nList, { id: crypto.randomUUID(), header: header, body: { message: message, params: messageParams}, type: type }]);
+    const pushNotification = useCallback((type, message, messageParams, header) =>
+        setNotifications(nList => [
+            ...nList,
+            {
+                id: crypto.randomUUID(),
+                header: header,
+                body: { message: message, params: messageParams },
+                type: type
+            }])
+        , []);
 
     const removeNotification = id =>
         setNotifications(nList => nList.filter(n => n.id !== id));

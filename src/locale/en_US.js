@@ -45,6 +45,10 @@ const enUS = {
 
     // login
     'loginWithGoogle.buttonText': 'Sign in with Google',
+    'login.fail.userNotFound': 'User not found.',
+    
+    //rq
+    'rq.fail.unexpectedError': 'An unexpected error has ocurred. Please try again later.\nIf the problem persists, contact the system administrators.',
 
     // pageNotFound
     'pageNotFound.title': '404',

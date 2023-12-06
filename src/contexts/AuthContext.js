@@ -1,5 +1,7 @@
-import React, { createContext, useCallback, useLayoutEffect, useRef, useState } from 'react'
+import React, { createContext, useCallback, useContext, useLayoutEffect, useRef, useState } from 'react'
 import { SERVER_TOKEN_KEY, getLocalItem, setLocalItem, removeLocalItem } from '../utils/localStorageManager'
+import { NotificationContext } from './NotificationContext'
+import { NotificationType } from '../components/notification/Notifications'
 import { getTokenDetails } from '../utils/jwtHelper'
 import rq from '../services/api.js'
 import { useLocation } from 'react-router-dom'
@@ -7,6 +9,7 @@ import { useLocation } from 'react-router-dom'
 const AuthContext = createContext();
 
 function AuthProvider({ children }) {
+	const { pushNotification } = useContext(NotificationContext);
 	const [token, setToken] = useState(getLocalItem(SERVER_TOKEN_KEY));
 	const [authLoading, setAuthLoading] = useState(false);
 	const location = useLocation();
@@ -42,6 +45,12 @@ function AuthProvider({ children }) {
 			setToken(serverToken);
 			setAutoLogoutTimer(serverToken);
 		} catch (err) {
+			pushNotification(NotificationType.ERROR,
+				err.message && err.message === '404'
+					? 'login.fail.userNotFound'
+					: 'rq.fail.unknownError'
+			);
+
 			handleAuthLogout();
 		}
 

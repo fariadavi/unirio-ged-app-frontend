@@ -13,17 +13,17 @@ import '../style/App.css'
 export default function App() {
 	return (
 		<Router>
-			<AuthProvider>
-				<UserProvider>
-					<GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID}>
-						<NotificationProvider>
+			<NotificationProvider>
+				<AuthProvider>
+					<UserProvider>
+						<GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID}>
 							<Route path="/login" component={Login} />
 							<PrivateRoute path="*" component={Home} />
 							<NotificationList />
-						</NotificationProvider>
-					</GoogleOAuthProvider>
-				</UserProvider>
-			</AuthProvider>
+						</GoogleOAuthProvider>
+					</UserProvider>
+				</AuthProvider>
+			</NotificationProvider>
 		</Router>
 	)
 }

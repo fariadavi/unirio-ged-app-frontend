@@ -46,6 +46,11 @@ const ptBR = {
 
     // login
     'loginWithGoogle.buttonText': 'Entre com Google',
+    'login.fail.userNotFound': 'Usuário não encontrado.',
+    
+    //rq
+    'rq.fail.unexpectedError': 'Ocorreu um erro inesperado. Por favor, tente novamente em breve.\nCaso o problema persista, entre em contato com os administradores do sistema.',
+
 
     // pageNotFound
     'pageNotFound.title': '404',
