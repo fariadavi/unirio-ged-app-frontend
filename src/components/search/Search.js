@@ -2,11 +2,11 @@ import React, { useContext, useEffect, useRef, useState } from 'react'
 import { UserContext } from '../../contexts/UserContext'
 import { useTranslation } from 'react-i18next'
 import rq from '../../services/api'
+import AppTitle from '../util/AppTitle'
 import SearchBar from './SearchBar'
 import SearchResultList from './SearchResultList'
 import NoResultMessage from './NoResultMessage'
 import '../../style/search/Search.css'
-import { AppTitle } from '../util/AppTitle'
 
 export default function Search() {
     const { t } = useTranslation();

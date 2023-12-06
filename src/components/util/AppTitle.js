@@ -1,7 +1,7 @@
 import React from 'react'
 import '../../style/utils/AppTitle.css'
 
-export const AppTitle = () =>
+const AppTitle = () =>
     <div className="app-title">
         <img src='/images/logo_unirio.svg' alt='Logo UNIRIO' width="112" />
         <div className="title-text">
@@ -9,3 +9,5 @@ export const AppTitle = () =>
             <h6>Sistema de Gestão de Documentos da UNIRIO</h6>
         </div>
     </div>
+
+export default AppTitle;

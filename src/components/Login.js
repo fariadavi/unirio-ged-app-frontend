@@ -4,8 +4,8 @@ import { Container } from 'react-bootstrap'
 import { AuthContext } from '../contexts/AuthContext'
 import { Redirect } from 'react-router-dom'
 import { getLocalItem, LANG_KEY } from '../utils/localStorageManager'
-import { AppTitle } from './util/AppTitle'
-import GlobalSpinner from './util/GlobalSpinner';
+import AppTitle from './util/AppTitle'
+import GlobalSpinner from './util/GlobalSpinner'
 
 export default function Login() {
     const { authLoading, authenticated, handleAuthentication, handleAuthLogout } = useContext(AuthContext);    
