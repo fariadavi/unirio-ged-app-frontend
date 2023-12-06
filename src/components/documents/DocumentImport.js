@@ -1,6 +1,7 @@
 import React, { useCallback, useContext, useEffect, useReducer, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { UserContext } from '../../contexts/UserContext'
+import { NotificationContext } from '../../contexts/NotificationContext'
 import { getLocalItem, LANG_KEY } from '../../utils/localStorageManager'
 import { getDriveFileInfo, getDriveFiles, getGoogleUserInfo } from '../../services/util/api'
 import rq from '../../services/api'
@@ -15,12 +16,14 @@ import LoadButton from '../util/LoadButton'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleNotch, faFileUpload, faSortAlphaDown, faSortAlphaDownAlt, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
 import { faGoogleDrive } from '@fortawesome/free-brands-svg-icons'
+import { NotificationType } from '../notification/Notifications'
 import '../../style/documents/DocumentImport.css'
 
 const DocumentImport = () => {
     const { t } = useTranslation();
     const [openPicker, authResult] = useDrivePicker();
     const { department } = useContext(UserContext);
+    const { pushNotification } = useContext(NotificationContext);
     const [pickerUser, setPickerUser] = useState();
     const [categories, setCategories] = useState([]);
     const [tempFileList, setTempFileList] = useState([]);
@@ -251,20 +254,21 @@ const DocumentImport = () => {
     const isFileValid = file => !getFileValidation(file).length
 
     const uploadFiles = async (files) => {
-        const res = await rq(`/documents/import`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(files)
-        });
+        try {
+            const res = await rq(`/documents/import`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(files)
+            });
 
-        if (!res.ok) {
-            console.error('Error: ' + res);
-            return false;
+            if (!res.ok) throw new Error();
+
+            await res.text();
+            pushNotification(NotificationType.INFO, 'document.import.upload.success');
+            return true;
+        } catch (err) {
+            pushNotification(NotificationType.ERROR, 'document.import.upload.fail');
         }
-
-        const a = await res.text();
-        console.log('Success: ' + a);
-        return true;
     }
 
     const setItemProperty = (itemId, property, value) => {

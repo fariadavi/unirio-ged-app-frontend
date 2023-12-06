@@ -89,6 +89,8 @@ const enUS = {
     'document.actions.update.fail': 'Failed to update document \'{{id}}\'. $t(rq.fail.pleaseTryAgainLater)',
     'document.actions.delete.success': 'Successfully deleted document \'{{id}}\'!',
     'document.actions.delete.fail': 'Failed to delete document \'{{id}}\'. $t(rq.fail.pleaseTryAgainLater)',
+    'document.import.upload.success': 'Selected documents were succesfully uploaded to the server and will be imported on the background.',
+    'document.import.upload.fail': 'Failed to upload selected documents to the server. $t(rq.fail.pleaseTryAgainLater)',
 
     // document form
     'document.form.add.title': 'New Document',

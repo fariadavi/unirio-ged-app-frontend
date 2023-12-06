@@ -91,6 +91,8 @@ const ptBR = {
     'document.actions.update.fail': 'Falha ao atualizar o documento \'{{id}}\'. $t(rq.fail.pleaseTryAgainLater)',
     'document.actions.delete.success': 'Documento \'{{id}}\' excluído com sucesso!',
     'document.actions.delete.fail': 'Falha ao excluir o documento \'{{id}}\'. $t(rq.fail.pleaseTryAgainLater)',
+    'document.import.upload.success': 'Os documentos selecionados foram enviados com sucesso ao servidor e serão importados em segundo plano.',
+    'document.import.upload.fail': 'Falha ao enviar os documentos selecionados ao servidor. $t(rq.fail.pleaseTryAgainLater)',
     
     // document form
     'document.form.add.title': 'Novo Documento',
