@@ -118,22 +118,36 @@ const DocumentForm = () => {
             headers: { 'Accept': 'application/json' },
             body: formData
         }).then(res => {
-            if (res.ok) return res.json()
-        }).then(doc => { if (doc) setRedirect(`/documents/${doc.id}`); setSavingDoc(false); });
+            if (!res.ok) throw new Error();
+            return res.json()
+        }).then(doc => {
+            if (doc) {
+                pushNotification(NotificationType.SUCCESS, `document.actions.${isEdit ? 'update' : 'add'}.success`, { id: doc.id });
+                setRedirect(`/documents/${doc.id}`);
+            }
+            setSavingDoc(false);
+        }).catch(err => {
+            pushNotification(NotificationType.ERROR, `document.actions.${isEdit ? 'update' : 'add'}.fail`, { id: isEdit ? docId : null });
+            setSavingDoc(false);
+        });
     }
 
     const handleDelete = () => {
         setDeletingDoc(true);
 
-        rq(`/documents/${docId}`, { method: 'DELETE' })
-            .then(res => {
-                if (!res.ok) return;
-                setDeletingDoc(false);
-                
-                pushNotification(NotificationType.SUCCESS, 'document.actions.delete.success', { id: docId });
+        rq(`/documents/${docId}`, {
+            method: 'DELETE'
+        }).then(res => {
+            if (!res.ok) throw new Error();
+            setDeletingDoc(false);
 
-                setRedirect(checkPermission('ADD_DOCS') ? '/documents/new' : '/');
-            });
+            pushNotification(NotificationType.SUCCESS, 'document.actions.delete.success', { id: docId });
+
+            setRedirect(checkPermission('ADD_DOCS') ? '/documents/new' : '/');
+        }).catch(err => {
+            pushNotification(NotificationType.ERROR, 'document.actions.delete.fail', { id: docId });
+            setDeletingDoc(false);
+        });
     }
 
     return (

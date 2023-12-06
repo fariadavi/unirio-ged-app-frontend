@@ -48,7 +48,8 @@ const enUS = {
     'login.fail.userNotFound': 'User not found.',
     
     //rq
-    'rq.fail.unexpectedError': 'An unexpected error has ocurred. Please try again later.\nIf the problem persists, contact the system administrators.',
+    'rq.fail.pleaseTryAgainLater': 'Please try again later.\nIf the problem persists, contact the system administrators.',
+    'rq.fail.unexpectedError': 'An unexpected error has ocurred. $t(rq.fail.pleaseTryAgainLater)',
 
     // pageNotFound
     'pageNotFound.title': '404',
@@ -82,8 +83,12 @@ const enUS = {
     'document.category': '$t(category)',
     'document.registeredBy': 'Registered by',
     'document.date': 'Document Date',
+    'document.actions.add.success': 'Successfully created document \'{{id}}\'!',
+    'document.actions.add.fail': 'Failed to create document. $t(rq.fail.pleaseTryAgainLater)',
+    'document.actions.update.success': 'Successfully updated document \'{{id}}\'!',
+    'document.actions.update.fail': 'Failed to update document \'{{id}}\'. $t(rq.fail.pleaseTryAgainLater)',
     'document.actions.delete.success': 'Successfully deleted document \'{{id}}\'!',
-    'document.actions.delete.fail': 'Failed to delete document \'{{id}}\'. Please try again later.\nIf the problem persists, contact the system administrators.',
+    'document.actions.delete.fail': 'Failed to delete document \'{{id}}\'. $t(rq.fail.pleaseTryAgainLater)',
 
     // document form
     'document.form.add.title': 'New Document',

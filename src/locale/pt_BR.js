@@ -49,7 +49,8 @@ const ptBR = {
     'login.fail.userNotFound': 'Usuário não encontrado.',
     
     //rq
-    'rq.fail.unexpectedError': 'Ocorreu um erro inesperado. Por favor, tente novamente em breve.\nCaso o problema persista, entre em contato com os administradores do sistema.',
+    'rq.fail.pleaseTryAgainLater': 'Por favor, tente novamente mais tarde.\nCaso o problema persista, entre em contato com os administradores do sistema.',
+    'rq.fail.unexpectedError': 'Ocorreu um erro inesperado. $t(rq.fail.pleaseTryAgainLater)',
 
 
     // pageNotFound
@@ -84,8 +85,12 @@ const ptBR = {
     'document.category': '$t(category)',
     'document.registeredBy': 'Cadastrado por',
     'document.date': 'Data do Documento',
+    'document.actions.add.success': 'Documento \'{{id}}\' cadastrado com sucesso!',
+    'document.actions.add.fail': 'Falha ao cadastrar o documento. $t(rq.fail.pleaseTryAgainLater)',
+    'document.actions.update.success': 'Documento \'{{id}}\' atualizado com sucesso!',
+    'document.actions.update.fail': 'Falha ao atualizar o documento \'{{id}}\'. $t(rq.fail.pleaseTryAgainLater)',
     'document.actions.delete.success': 'Documento \'{{id}}\' excluído com sucesso!',
-    'document.actions.delete.fail': 'Falha ao excluir o documento \'{{id}}\'. Por favor, tente novamente mais tarde.\nCaso o problema persista, entre em contato com os administradores do sistema.',
+    'document.actions.delete.fail': 'Falha ao excluir o documento \'{{id}}\'. $t(rq.fail.pleaseTryAgainLater)',
     
     // document form
     'document.form.add.title': 'Novo Documento',
