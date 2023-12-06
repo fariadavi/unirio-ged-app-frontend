@@ -1,0 +1,31 @@
+.notification-list {
+    position: absolute;
+    top: 5rem;
+    right: 2rem;
+    width: 30rem;
+    max-width: 84vw;
+    min-width: none; 
+    z-index: 9999;
+}
+
+.notification-list .notification {
+    max-width: none;
+    width: 100%;
+}
+
+/* left: 30vw;
+    width: 40vw;
+    max-width: 36rem;
+    min-width: 20rem; 
+    
+@media (max-width: 800px) {
+    .home-container .toast {
+        left: calc(50vw - 10rem);
+    }
+}
+
+@media (min-width: 1400px) {
+    .home-container .toast {
+        left: calc(50vw - 18rem);
+    }
+} */

@@ -1,8 +1,8 @@
 import React from 'react'
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom'
 import NavBar from './NavBar'
 import Search from './search/Search'
-import PageNotFound from './invalid/PageNotFound';
+import PageNotFound from './invalid/PageNotFound'
 import Categories from './categories/Categories'
 import Departments from './departments/Departments'
 import Users from './users/Users'
