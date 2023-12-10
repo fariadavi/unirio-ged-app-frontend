@@ -8,8 +8,8 @@ const ptBR = {
     'document_plural': 'Documentos',
     'category': 'Categoria',
     'category_plural': 'Categorias',
-    'department': 'Departmento',
-    'department_plural': 'Departmentos',
+    'department': 'Departamento',
+    'department_plural': 'Departamentos',
     'user': 'Usuário',
     'user_plural': 'Usuários',
 
@@ -148,7 +148,7 @@ const ptBR = {
 
     // department management
     // user permission page
-    'users.department.page.header': 'Usuários do departmento',
+    'users.department.page.header': 'Usuários do departamento',
     'users.system.page.header': 'Usuários do sistema',
 
     // user table
@@ -191,7 +191,7 @@ const ptBR = {
 
     // system management
     // departments page
-    'departments.page.header': 'Departmentos',
+    'departments.page.header': 'Departamentos',
 
     // departments table
     // headers
@@ -213,7 +213,7 @@ const ptBR = {
     'departments.customTable.filterRow.name.placeholder': 'Filtrar pelo nome do departamento',
     
     // table data
-    'departments.table.data.isCurrentDept.y': 'Departmento atual',
+    'departments.table.data.isCurrentDept.y': 'Departamento atual',
 
     // categories
     'categories.page.title': 'Categorias',
