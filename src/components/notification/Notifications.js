@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
 import { NotificationContext } from '../../contexts/NotificationContext'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 import { Toast } from 'react-bootstrap'
 import '../../style/utils/Notification.css'
 import { Icon } from '../util/CustomIcon'
@@ -48,7 +48,13 @@ export const Notification = ({ id, header, body, type = NotificationType.SUCCESS
             </strong>
         </Toast.Header>
         {body && body.message
-            ? <Toast.Body>{t(body.message, body.params)}</Toast.Body>
+            ? <Toast.Body>
+                <Trans
+                    i18nKey={body.message}
+                    values={body.params}
+                    components={{ italic: <i />, bold: <strong /> }}
+                />
+            </Toast.Body>
             : <></>}
     </Toast>
 }

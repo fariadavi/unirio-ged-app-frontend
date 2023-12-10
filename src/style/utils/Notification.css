@@ -24,6 +24,7 @@
 }
 
 .notification-list .notification .toast-body {
+    color: #6c757d;
     white-space: pre-line;
 }
 
@@ -54,4 +55,8 @@
 .notification-list .notification.notificationInfo .toast-header .icon {
     color: #0086d5;
     border-top-color: #0086d5;
+}
+
+.notification-list .notification .toast-body strong {
+    font-weight: 500;
 }
