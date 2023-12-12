@@ -276,7 +276,7 @@ const enUS = {
     'import.page.btns.switchAccount': 'Switch Account',
     'import.page.btns.removeSelected': 'Remove Selected',
     'import.page.btns.importSelected': 'Import Selected',
-    'import.warningModal.title': '$t(category)',
+    'import.warningModal.title': '$t(notifications.header.default.warning)',
     'import.warningModal.body.line1': 'There are items in the list for import.',
     'import.warningModal.body.line2': 'Do you want to append the new items to the list or replace them?',
     'import.warningModal.btns.cancel': 'Cancel',

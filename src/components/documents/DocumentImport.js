@@ -349,7 +349,6 @@ const DocumentImport = () => {
     return (
         <div className="header-n-table-div">
             <h1>{t('import.page.title')}</h1>
-            {!!tempFileList.length && "Loading..."}
             <div>
                 <div className="drive-items-list">
                     <ListGroup variant="flush" className={filesFromMultipleAccounts ? 'col6' : 'col5'}>
@@ -527,8 +526,8 @@ const DocumentImport = () => {
                 backdrop="static"
                 className="selectFilesModal"
                 show={showSelectFilesModal}
-                onEscapeKeyDown={() => { setTempFileList([]); setShowSelectFilesModal(false); }}
-                onHide={() => { setTempFileList([]); setShowSelectFilesModal(false); }}
+                onEscapeKeyDown={() => { setTempFileList([]); setShowSelectFilesModal(false); setSelectingFiles(false); }}
+                onHide={() => { setTempFileList([]); setShowSelectFilesModal(false); setSelectingFiles(false); }}
             >
                 <Modal.Header closeButton={true}>
                     <h5 className="title">{t('import.warningModal.title')}</h5>
@@ -539,7 +538,7 @@ const DocumentImport = () => {
                     {t('import.warningModal.body.line2')}
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={() => { setTempFileList([]); setShowSelectFilesModal(false); }}>
+                    <Button variant="secondary" onClick={() => { setTempFileList([]); setShowSelectFilesModal(false); setSelectingFiles(false); }}>
                         {t('import.warningModal.btns.cancel')}
                     </Button>
                     <Button variant="primary" onClick={() => { setShowSelectFilesModal(false); }}>

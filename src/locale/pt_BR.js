@@ -277,7 +277,7 @@ const ptBR = {
     'import.page.btns.switchAccount': 'Trocar Conta',
     'import.page.btns.removeSelected': 'Remover Selecionados',
     'import.page.btns.importSelected': 'Importar Selecionados',
-    'import.warningModal.title': '$t(category)',
+    'import.warningModal.title': '$t(notifications.header.default.warning)',
     'import.warningModal.body.line1': 'Existem itens na lista para importação.',
     'import.warningModal.body.line2': 'Deseja acrescentar os novos itens ou substituí-los?',
     'import.warningModal.btns.cancel': 'Cancelar',
