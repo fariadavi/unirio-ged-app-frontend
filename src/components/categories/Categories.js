@@ -1,13 +1,15 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { UserContext } from '../../contexts/UserContext'
+import { NotificationContext } from '../../contexts/NotificationContext'
+import { NetworkContext } from '../../contexts/NetworkContext'
 import { useTranslation } from 'react-i18next'
-import rq from '../../services/api'
 import TreeView from 'react-accessible-treeview'
 import { Form } from 'react-bootstrap'
 import { Icon } from '../util/CustomIcon'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCheckCircle, faChevronDown, faChevronRight, faCircle, faCircleNotch, faPen, faPlusCircle, faTrash } from '@fortawesome/free-solid-svg-icons'
 import '../../style/categories/Categories.css'
+import { NotificationType } from '../notification/Notifications'
 
 const useFocus = () => {
     const htmlElRef = useRef(null)
@@ -58,7 +60,7 @@ const Actions = ({ element, isExpanded, savingElements, addNewCategoryToList, ed
                 tooltip={t('customButtons.edit.tooltip')}
             />
             <ActionBtn
-                className={element.id < 0 || element.children?.length > 0 ? 'hide' : ''}
+                // className={element.id < 0 || element.children?.length > 0 ? 'hide' : ''}
                 icon={faTrash}
                 onClick={async () => { setLoading(true); await deleteCategory(element); setLoading(false); }}
                 tooltip={t('customButtons.delete.tooltip')}
@@ -69,6 +71,8 @@ const Actions = ({ element, isExpanded, savingElements, addNewCategoryToList, ed
 export default function Categories() {
     const { t } = useTranslation();
     const { department, userLoading } = useContext(UserContext);
+    const { pushNotification } = useContext(NotificationContext);
+    const { rq } = useContext(NetworkContext);
     const [expandedIds, setExpandedIds] = useState([]);
     const [categories, setCategories] = useState([{ "id": 0, "children": [], "parent": null }]);
     const [categoryEdit, setCategoryEdit] = useState(null);
@@ -90,7 +94,7 @@ export default function Categories() {
                     { id: -1, name: ' ', children: [], parent: 0, fixed: true }
                 ]); setLoading(false);
             });
-    }, [department]);
+    }, [rq, department]);
 
     const toggleExpand = (id, isExpanded) =>
         isExpanded
@@ -177,7 +181,7 @@ export default function Categories() {
 
     const addCategory = (id, name, parent) => {
         if (!name) return;
-            
+
         setSavingElements(e => [...e, id]);
 
         rq(`/categories`, {
@@ -185,38 +189,52 @@ export default function Categories() {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ name: name, parent: parent > 0 ? parent : null })
         }).then(res => {
-            if (res.ok) return res.json();
+            if (!res.ok) {
+                pushNotification(NotificationType.ERROR, 'categories.add.fail', { name: name });
+                throw Error();
+            }
 
-            console.error(res);
-            //error feedback
-
+            pushNotification(NotificationType.SUCCESS, 'categories.add.success', { name: name });
+            return res.json();
+        }).then(cat => {
+            setCategories(cats =>
+                cats.map(c => c.id === id
+                    ? { ...c, id: cat.id }
+                    : c.children.some(c2 => c2 === id)
+                        ? { ...c, children: c.children.map(c2 => c2 === id ? cat.id : c2) }
+                        : c
+                )
+            );
+        }).catch(err => {
             removeCategoryFromList(id, parent);
-        }).then(cat => { setCategories(cats =>
-            cats.map(c => c.id === id
-                ? { ...c, id: cat.id }
-                : c.children.some(c2 => c2 === id)
-                    ? { ...c, children: c.children.map(c2 => c2 === id ? cat.id : c2) }
-                    : c
-            )
-        ); setSavingElements(e => e.filter(e2 => e2 !== id)); });
+        }).finally(() => {
+            setSavingElements(e => e.filter(e2 => e2 !== id));
+        });
     }
 
     const updateCategory = (id, name, originalName, originalIndex) => {
         if (!name) return;
 
         setSavingElements(e => [...e, id]);
-            
+
         rq(`/categories/${id}`, {
             method: 'PATCH',
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ name: name })
         }).then(res => {
-            setSavingElements(e => e.filter(e2 => e2 !== id));
-            if (res.ok) return;
+            if (!res.ok) {
+                if (res.status === 412)
+                    return res.json();
 
-            console.error(res);
-            //error feedback
+                pushNotification(NotificationType.ERROR, 'categories.update.fail', { oldName: originalName, newName: name });
+                throw Error();
+            }
 
+            pushNotification(NotificationType.SUCCESS, 'categories.update.success', { oldName: originalName, newName: name });
+        }).then(res => {
+            if (res.i18nMsgKey)
+                pushNotification(NotificationType.ERROR, `categories.update.${res.i18nMsgKey}`, { oldName: originalName, newName: name });
+        }).catch(err => {
             setCategories(cats =>
                 cats.map(c => c.id === id
                     ? { ...c, name: originalName }
@@ -231,22 +249,29 @@ export default function Categories() {
                         }
                         : c
                 ));
-        })
+        }).finally(() => {
+            setSavingElements(e => e.filter(e2 => e2 !== id));
+        });
     }
 
     const deleteCategory = async element => {
-        if (element.temp || categories.some(c => c.parent === element.id)) return;
+        // if (element.temp || categories.some(c => c.parent === element.id)) return;
 
         await rq(`/categories/${element.id}`, {
             method: 'DELETE'
         }).then(res => {
             if (!res.ok) {
-                console.error(res);
-                //error feedback
-                return;
+                if (res.status === 412)
+                    return res.json();
+                else
+                    pushNotification(NotificationType.ERROR, 'categories.delete.fail', { name: element.name });
             }
 
+            pushNotification(NotificationType.SUCCESS, 'categories.delete.success', { name: element.name });
             removeCategoryFromList(element.id, element.parent);
+        }).then(res => {
+            if (res.i18nMsgKey)
+                pushNotification(NotificationType.ERROR, `categories.delete.${res.i18nMsgKey}`, { name: element.name })
         });
     }
 

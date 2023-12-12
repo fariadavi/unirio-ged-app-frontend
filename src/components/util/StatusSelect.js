@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
+import { NetworkContext } from '../../contexts/NetworkContext'
 import { useTranslation } from 'react-i18next'
-import rq from '../../services/api'
 import { Form } from 'react-bootstrap'
 import Select from './Select'
 
 const StatusSelect = ({ statuses = undefined, disabled = false, className, label, name = 'status', onChange, isValid, isInvalid, size, validationMessage, value }) => {
     const { t } = useTranslation();
+    const { rq } = useContext(NetworkContext);
     const [statusList, setStatusList] = useState([]);
     const [isLoading, setLoading] = useState(true);
 
@@ -15,7 +16,7 @@ const StatusSelect = ({ statuses = undefined, disabled = false, className, label
         rq('/documents/status', { method: 'GET' })
             .then(res => { if (res.ok) return res.json() })
             .then(c => { setStatusList(c); setLoading(false); });
-    }, []);
+    }, [rq]);
 
     return <Select
         className={className}

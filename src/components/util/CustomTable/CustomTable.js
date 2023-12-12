@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleNotch, faSortAlphaDown, faSortAlphaDownAlt, faSortAmountDown, faSortAmountDownAlt } from '@fortawesome/free-solid-svg-icons'
 import '../../../style/utils/CustomTable.css'
 
-const CustomTable = ({ actions = { filter: {} }, columns = {}, data = [], domain, isLoadingData = false, pageSize = 10 }) => {
+const CustomTable = ({ actions = { filter: {} }, columns = {}, data = [], domain, isLoadingData = false, pageSize = 10, style={} }) => {
     const [showAddRow, setShowAddRow] = useState(false);
     const [showFilterRow, setShowFilterRow] = useState(false);
     const [isBatchEditing, setBatchEditing] = useState(false);
@@ -109,9 +109,7 @@ const CustomTable = ({ actions = { filter: {} }, columns = {}, data = [], domain
             if (result) {
                 const { [dataId]: _, ...newEditingFields } = editingRows
                 setEditingRows(newEditingFields)
-
-                if (result) console.log('Edit successful')
-            } else console.log('Edit failed')
+            }
 
             setActionOnDataList(ids => ids.filter(id => id !== dataId));
         }
@@ -142,9 +140,7 @@ const CustomTable = ({ actions = { filter: {} }, columns = {}, data = [], domain
             if (result) {
                 setEditingRows({});
                 setBatchEditing(false);
-
-                if (result) console.log('Batch edit successful')
-            } else console.log('Batch edit failed')
+            }
 
             setActionOnDataList([]);
         }
@@ -152,9 +148,7 @@ const CustomTable = ({ actions = { filter: {} }, columns = {}, data = [], domain
 
     const addData = async newData => {
         if (!actions.add?.disabled && actions.add.callbackFn) {
-            const result = await actions.add.callbackFn(newData)
-            if (result) console.log('Add successful')
-            else console.log('Add failed')
+            await actions.add.callbackFn(newData)
         }
     }
 
@@ -162,9 +156,7 @@ const CustomTable = ({ actions = { filter: {} }, columns = {}, data = [], domain
         if (!actions.delete?.disabled && actions.delete.callbackFn) {
             setActionOnDataList(ids => [...ids, dataId]);
 
-            const result = await actions.delete.callbackFn(dataId)
-            if (result) console.log('Delete successful')
-            else console.log('Delete failed')
+            await actions.delete.callbackFn(dataId)
 
             setActionOnDataList(ids => ids.filter(id => id !== dataId));
         }
@@ -194,7 +186,7 @@ const CustomTable = ({ actions = { filter: {} }, columns = {}, data = [], domain
         )
 
     return (<>
-        <Table className="customTable" striped size="sm">
+        <Table className="customTable" striped size="sm" style={style}>
             <thead>
                 <tr>
                     {Object.entries(columns).map(([key, config]) =>

@@ -1,12 +1,14 @@
 import React, { useContext, useState } from 'react'
 import { UserContext } from '../../contexts/UserContext'
+import { NotificationContext } from '../../contexts/NotificationContext'
+import { NetworkContext } from '../../contexts/NetworkContext'
 import { useTranslation } from 'react-i18next'
-import rq from '../../services/api'
 import { Icon } from '../util/CustomIcon'
 import { Link } from 'react-router-dom'
 import { faCircleNotch, faDownload, faEdit, faFilePdf, faFileAlt, faTrash, faFileExcel } from '@fortawesome/free-solid-svg-icons'
 import StatusBadge from '../util/StatusBadge'
 import '../../style/search/SearchResult.css'
+import { NotificationType } from '../notification/Notifications'
 
 const getFileIcon = mediaType => {
     switch (mediaType) {
@@ -20,43 +22,56 @@ const getFileIcon = mediaType => {
     }
 }
 
-const getDocumentFile = async (docId, fileName, isDownload) => {
-    const res = await rq(`/documents/${docId}/download`, { method: 'GET' });
-    if (!res.ok) return;
-
-    const blob = await res.blob();
-    var blobUrl = window.URL.createObjectURL(blob);
-
-    if (isDownload) {
-        const anchor = document.createElement('a');
-        anchor.download = fileName;
-        anchor.target = "_blank";
-        anchor.href = blobUrl;
-        anchor.click();
-    } else {
-        window.open(blobUrl, '_blank');
-    }
-
-    window.URL.revokeObjectURL(blobUrl);
-}
-
 const Actions = ({ item, deleteAction }) => {
     const { t } = useTranslation();
     const { user, checkPermission } = useContext(UserContext);
+    const { pushNotification } = useContext(NotificationContext);
+    const { rq } = useContext(NetworkContext);
     const [isLoading, setLoading] = useState(false);
+
+    const getDocumentFile = async (docId, fileName, isDownload) => {
+        const res = await rq(`/documents/${docId}/download`, { method: 'GET' });
+        if (!res.ok) {
+            pushNotification(NotificationType.ERROR, 'documents.actions.download.fail', { name: fileName });
+            return;
+        }
+
+        const blob = await res.blob();
+        var blobUrl = window.URL.createObjectURL(blob);
+
+        if (isDownload) {
+            const anchor = document.createElement('a');
+            anchor.download = fileName;
+            anchor.target = "_blank";
+            anchor.href = blobUrl;
+            anchor.click();
+        } else {
+            window.open(blobUrl, '_blank');
+        }
+
+        window.URL.revokeObjectURL(blobUrl);
+    }
 
     return <div className="actions">
         {isLoading
             ? <Icon icon={faCircleNotch} className="faSpin" />
             : <>
                 <span
-                    onClick={async () => { setLoading(true); if (item.fileName.length && item.mediaType === 'application/pdf') await getDocumentFile(item.id, item.fileName, false); setLoading(false); }}
+                    onClick={() => {
+                        if (!item.fileName?.length || item.mediaType !== 'application/pdf') return;
+                        setLoading(true);
+                        getDocumentFile(item.id, item.fileName, false).finally(() => setLoading(false))
+                    }}
                     className={item.mediaType === 'application/pdf' ? '' : 'disabled'}
                 >
                     <Icon icon={getFileIcon(item.mediaType)} tooltip={t('search.results.visualize.tooltip')} />
                 </span>
                 <span
-                    onClick={async () => { setLoading(true); if (item.fileName.length) await getDocumentFile(item.id, item.fileName, true); setLoading(false); }}
+                    onClick={() => {
+                        if (!item.fileName?.length) return;
+                        setLoading(true);
+                        getDocumentFile(item.id, item.fileName, true).finally(() => setLoading(false))
+                    }}
                     className={item.fileName.length ? '' : 'disabled'}
                 >
                     <Icon icon={faDownload} tooltip={t('search.results.download.tooltip')} />
@@ -66,7 +81,10 @@ const Actions = ({ item, deleteAction }) => {
                         <Icon icon={faEdit} tooltip={t('search.results.edit.tooltip')} />
                     </Link>}
                 {(item.registeredById === user.id || checkPermission('DELETE_DOCS_OTHERS'))
-                    && <span onClick={async () => { setLoading(true); await deleteAction(item.id); setLoading(false); }}>
+                    && <span onClick={() => {
+                        setLoading(true);
+                        deleteAction(item).finally(() => setLoading(false));
+                    }}>
                         <Icon icon={faTrash} tooltip={t('search.results.delete.tooltip')} />
                     </span>}
             </>}

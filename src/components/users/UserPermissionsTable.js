@@ -9,26 +9,31 @@ import {
     insertUser,
     updateUserPermissions
 } from '../../services/users/api'
+import { NetworkContext } from '../../contexts/NetworkContext'
 import CustomTable from '../util/CustomTable/CustomTable'
 import { Icon } from '../util/CustomIcon'
 import { faUserCheck, faQuestion, faPaperPlane, faUserPlus, faEdit } from '@fortawesome/free-solid-svg-icons'
+import { NotificationContext } from '../../contexts/NotificationContext'
+import { NotificationType } from '../notification/Notifications'
 
 const UserPermissionsTable = ({ canInviteUsers, canEditUserPermissions, canDeleteUsers, type }) => {
     const { t } = useTranslation();
     const [users, setUsers] = useState([]);
     const [permissions, setPermissions] = useState([]);
     const { department, user, userLoading, setLoggedUserInfo } = useContext(UserContext);
+    const { pushNotification } = useContext(NotificationContext);
+    const { rq } = useContext(NetworkContext);
     const [isLoading, setLoading] = useState(true);
 
     useEffect(() => { if (userLoading) setLoading(true) }, [userLoading]);
 
     const loadUsers = useCallback(async () => {
         setLoading(true);
-        const res = await getUsers(type);
+        const res = await getUsers(rq, type);
         setLoading(false);
 
         if (res.ok) setUsers(await res.json());
-    }, [type])
+    }, [rq, type])
 
     useEffect(() => loadUsers(), [loadUsers, department, type])
 
@@ -38,19 +43,44 @@ const UserPermissionsTable = ({ canInviteUsers, canEditUserPermissions, canDelet
             return;
         }
 
-        const res = await getPermissions(type);
+        const res = await getPermissions(rq, type);
         if (res.ok) setPermissions(await res.json());
-    }, [canEditUserPermissions, type])
+    }, [rq, canEditUserPermissions, type])
 
     useEffect(() => loadPermissions(), [loadPermissions, type])
 
     const addNewUser = useCallback(async userData => {
-        const res = await insertUser(userData.email);
+        const res = await insertUser(rq, userData.email);
 
-        if (res.ok) await loadUsers();
+        if (!res.ok) {
+            let inviteFail = 'invite.fail';
+            if (res.status === 406) {
+                let err = await res.json();
+                inviteFail = `invite.${err.i18nMsgKey}`
+            }
 
+            pushNotification(
+                NotificationType.ERROR,
+                `users.${type}.${inviteFail}`,
+                { 
+                    user: userData.email, 
+                    dept: type === 'system' ? null : department?.acronym
+                }
+            );
+            return false;
+        }
+
+        pushNotification(
+            NotificationType.SUCCESS,
+            `users.${type}.invite.success`,
+            { 
+                user: userData.email, 
+                dept: type === 'system' ? null : department?.acronym
+            }
+        );
+        await loadUsers();
         return res.ok;
-    }, [loadUsers])
+    }, [rq, pushNotification, type, department, loadUsers])
 
     const getSpecificUserPermissions = (allUsers, userId, possiblePermissions) =>
         allUsers
@@ -76,6 +106,7 @@ const UserPermissionsTable = ({ canInviteUsers, canEditUserPermissions, canDelet
 
     const editUserPermissions = useCallback(async (userId, userNewData) => {
         const res = await updateUserPermissions(
+            rq,
             userId,
             editUserPermissionsWithNewUserData(
                 getSpecificUserPermissions(users, userId, permissions),
@@ -84,16 +115,41 @@ const UserPermissionsTable = ({ canInviteUsers, canEditUserPermissions, canDelet
             type
         );
 
-        if (res.ok) {
-            await loadUsers();
-            if (user?.id === Number(userId)) setLoggedUserInfo();
+        if (!res.ok) {
+            let i18nMsgKey = `users.${type}.edit.fail`;
+            if (res.status === 406 || res.status === 412) {
+                let err = await res.json();
+                i18nMsgKey = `users.${type}.edit.${err.i18nMsgKey}`;
+            }
+
+            pushNotification(
+                NotificationType.ERROR,
+                i18nMsgKey,
+                {
+                    user: users.filter(u => u.id === userId)?.[0]?.email,
+                    dept: type === 'system' ? null : department?.acronym
+                }
+            );
+            return false;
         }
 
+        pushNotification(
+            NotificationType.SUCCESS,
+            `users.${type}.edit.success`,
+            {
+                user: users.filter(u => u.id === userId)?.[0]?.email,
+                dept: type === 'system' ? null : department?.acronym
+            }
+        );
+
+        if (user?.id === Number(userId)) setLoggedUserInfo();
+        await loadUsers();
         return res.ok;
-    }, [type, permissions, user?.id, users, loadUsers, setLoggedUserInfo, editUserPermissionsWithNewUserData])
+    }, [rq, type, permissions, user?.id, users, department?.acronym, pushNotification, loadUsers, setLoggedUserInfo, editUserPermissionsWithNewUserData])
 
     const batchEditUsersPermissions = useCallback(async editedUserEntries => {
         const res = await batchUpdateUsersPermissions(
+            rq,
             Object.fromEntries(
                 editedUserEntries.map(([userId, userNewData]) => [
                     userId,
@@ -102,29 +158,65 @@ const UserPermissionsTable = ({ canInviteUsers, canEditUserPermissions, canDelet
                         userNewData
                     )
                 ])),
-                type
+            type
         );
 
-        if (res.ok) {
-            await loadUsers();
-
-            if (editedUserEntries.some(([userId]) => user?.id === Number(userId)))
-                setLoggedUserInfo();
+        if (!res.ok) {
+            pushNotification(
+                NotificationType.ERROR,
+                `users.${type}.batchEdit.fail`,
+                { dept: type === 'system' ? null : department?.acronym }
+            );
+            return false;
         }
 
+        pushNotification(
+            res.status === 206 ? NotificationType.WARNING : NotificationType.SUCCESS,
+            `users.${type}.batchEdit.${res.status === 206 ? 'partial' : 'success'}`,
+            { dept: type === 'system' ? null : department?.acronym }
+        );
+
+        await loadUsers();
+
+        if (editedUserEntries.some(([userId]) => user?.id === Number(userId)))
+            setLoggedUserInfo();
         return res.ok;
-    }, [type, permissions, user?.id, users, loadUsers, setLoggedUserInfo, editUserPermissionsWithNewUserData])
+    }, [rq, type, permissions, user?.id, users, department?.acronym, pushNotification, loadUsers, setLoggedUserInfo, editUserPermissionsWithNewUserData])
 
     const removeUserFromDepartment = useCallback(async userId => {
-        const res = await deleteUser(userId)
+        const res = await deleteUser(rq, userId)
 
-        if (res.ok) {
-            await loadUsers();
-            if (user?.id === Number(userId)) setLoggedUserInfo();
+        if (!res.ok) {
+            let i18nMsgKey = `users.${type}.delete.fail`;
+            if (res.status === 406 || res.status === 412) {
+                let err = await res.json();
+                i18nMsgKey = `users.${type}.delete.${err.i18nMsgKey}`;
+            }
+
+            pushNotification(
+                NotificationType.ERROR,
+                i18nMsgKey,
+                {
+                    user: users.filter(u => u.id === userId)?.[0]?.email,
+                    dept: type === 'system' ? null : department?.acronym
+                }
+            );
+            return false;
         }
 
+        pushNotification(
+            NotificationType.SUCCESS,
+            `users.${type}.delete.success`,
+            {
+                user: users.filter(u => u.id === userId)?.[0]?.email,
+                dept: type === 'system' ? null : department?.acronym
+            }
+        );
+
+        await loadUsers();
+        if (user?.id === Number(userId)) setLoggedUserInfo();
         return res.ok;
-    }, [user, loadUsers, setLoggedUserInfo])
+    }, [rq, type, user, users, department?.acronym, pushNotification, loadUsers, setLoggedUserInfo])
 
     const actions = {
         add: {
@@ -214,6 +306,7 @@ const UserPermissionsTable = ({ canInviteUsers, canEditUserPermissions, canDelet
         data={data}
         isLoadingData={isLoading}
         domain={`userPermissions`}
+        style={{ minWidth: (75 + ((permissions.length - 2) * 3)) + 'rem' }}
     />)
 
 }

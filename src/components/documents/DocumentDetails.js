@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { UserContext } from '../../contexts/UserContext'
 import { NotificationContext } from '../../contexts/NotificationContext.js'
-import rq from '../../services/api'
+import { NetworkContext } from '../../contexts/NetworkContext.js'
 import DocumentImport from './DocumentImport'
 import DatePicker from '../util/DatePicker'
 import CategorySelect from '../util/CategorySelect'
@@ -21,6 +21,7 @@ const DocumentForm = () => {
     const { docId } = useParams();
     const { user, department, checkPermission } = useContext(UserContext);
     const { pushNotification } = useContext(NotificationContext);
+    const { rq } = useContext(NetworkContext);
     const [isLoadingDoc, setLoadingDoc] = useState(!!docId);
     const [isSavingDoc, setSavingDoc] = useState(false);
     const [isDeletingDoc, setDeletingDoc] = useState(false);
@@ -44,14 +45,22 @@ const DocumentForm = () => {
             setLoadingDoc(true);
 
             rq(`/documents/${docId}`, { method: 'GET' })
-                .then(res => { if (res.ok) return res.json(); else setValidation({ invalidDocument: true }); })
-                .then(doc => { if (doc) setDocument({ ...doc, file: { name: doc.fileName, size: -1 } }); setLoadingDoc(false); });
+                .then(res => {
+                    if (res.ok) return res.json();
+
+                    setValidation({ invalidDocument: true });
+                })
+                .then(doc => {
+                    if (doc)
+                        setDocument({ ...doc, file: { name: doc.fileName, size: -1 } });
+                    setLoadingDoc(false);
+                });
 
         } else if (!docId && document.id) {
             setDocument(initialDocumentValues);
             setValidation({});
         }
-    }, [docId, document.id, initialDocumentValues]);
+    }, [docId, document.id, initialDocumentValues, rq]);
 
     const setDocumentValue = (key, value) => {
         setValidation({ ...validation, [key]: validateField(key, value) });
@@ -118,18 +127,22 @@ const DocumentForm = () => {
             headers: { 'Accept': 'application/json' },
             body: formData
         }).then(res => {
-            if (!res.ok) throw new Error();
-            return res.json()
+            if (res.ok) return res.json();
+
+            pushNotification(
+                NotificationType.ERROR,
+                `document.actions.${isEdit ? 'update' : 'add'}.fail`,
+                { name: docInfo.title }
+            )
         }).then(doc => {
-            if (doc) {
-                pushNotification(NotificationType.SUCCESS, `document.actions.${isEdit ? 'update' : 'add'}.success`, { id: doc.id });
-                setRedirect(`/documents/${doc.id}`);
-            }
-            setSavingDoc(false);
-        }).catch(err => {
-            pushNotification(NotificationType.ERROR, `document.actions.${isEdit ? 'update' : 'add'}.fail`, { id: isEdit ? docId : null });
-            setSavingDoc(false);
-        });
+            pushNotification(
+                NotificationType.SUCCESS,
+                `document.actions.${isEdit ? 'update' : 'add'}.success`,
+                { name: docInfo.title }
+            );
+
+            setRedirect(`/documents/${doc.id}`);
+        }).finally(() => setSavingDoc(false));
     }
 
     const handleDelete = () => {
@@ -138,16 +151,14 @@ const DocumentForm = () => {
         rq(`/documents/${docId}`, {
             method: 'DELETE'
         }).then(res => {
-            if (!res.ok) throw new Error();
-            setDeletingDoc(false);
+            if (!res.ok) {
+                pushNotification(NotificationType.ERROR, 'document.actions.delete.fail', { name: document.title });
+                return;
+            }
 
-            pushNotification(NotificationType.SUCCESS, 'document.actions.delete.success', { id: docId });
-
+            pushNotification(NotificationType.SUCCESS, 'document.actions.delete.success', { name: document.title });
             setRedirect(checkPermission('ADD_DOCS') ? '/documents/new' : '/');
-        }).catch(err => {
-            pushNotification(NotificationType.ERROR, 'document.actions.delete.fail', { id: docId });
-            setDeletingDoc(false);
-        });
+        }).finally(() => setDeletingDoc(false));
     }
 
     return (

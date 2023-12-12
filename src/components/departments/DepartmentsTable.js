@@ -1,6 +1,8 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { UserContext } from '../../contexts/UserContext'
+import { NotificationContext } from '../../contexts/NotificationContext'
+import { NetworkContext } from '../../contexts/NetworkContext'
 import {
     batchUpdateDepartments,
     deleteDepartment,
@@ -11,57 +13,83 @@ import {
 import CustomTable from '../util/CustomTable/CustomTable'
 import { Icon } from '../util/CustomIcon'
 import { faChevronRight, faEdit } from '@fortawesome/free-solid-svg-icons'
+import { NotificationType } from '../notification/Notifications'
 
 const DepartmentsTable = ({ canAddDept, canEditDept, canDeleteDept }) => {
     const { t } = useTranslation();
     const [departments, setDepartments] = useState([]);
     const { department, user, userLoading, setLoggedUserInfo } = useContext(UserContext);
+    const { pushNotification } = useContext(NotificationContext);
+    const { rq } = useContext(NetworkContext);
     const [isLoading, setLoading] = useState(true);
 
     useEffect(() => { if (userLoading) setLoading(true) }, [userLoading]);
 
     const loadDepartments = useCallback(async () => {
         setLoading(true);
-        const res = await getDepartments();
+        const res = await getDepartments(rq);
         setLoading(false);
 
         if (res.ok) setDepartments(await res.json());
-    }, [])
+    }, [rq])
 
     useEffect(() => loadDepartments(), [loadDepartments, department])
 
     const addNewDepartment = useCallback(async departmentData => {
         const res = await insertDepartment(
+            rq,
             departmentData.acronym?.trim(),
             departmentData.name?.trim()
         );
 
-        if (res.ok) {
-            await loadDepartments();
-            setLoggedUserInfo();
+        if (!res.ok) {
+            pushNotification(NotificationType.ERROR, 'departments.add.fail', { acronym: departmentData.acronym });
+            return false;
         }
 
+        pushNotification(NotificationType.SUCCESS, 'departments.add.success', { acronym: departmentData.acronym });
+
+        await loadDepartments();
+        setLoggedUserInfo();
         return res.ok;
-    }, [loadDepartments, setLoggedUserInfo])
+    }, [rq, pushNotification, loadDepartments, setLoggedUserInfo])
 
     const editDepartment = useCallback(async (departmentId, departmentData) => {
         const res = await updateDepartment(
+            rq,
             departmentId,
             departmentData.acronym?.trim(),
             departmentData.name?.trim()
         );
 
-        if (res.ok) {
-            await loadDepartments();
-            if (user?.departments?.some(dept => dept.id === Number(departmentId)))
-                setLoggedUserInfo();
+        if (!res.ok) {
+            let i18nKey = 'departments.edit.fail';
+            if (res.status === 406) {
+                let err = await res.json();
+                i18nKey = `departments.edit.${err.i18nMsgKey}`;
+            }
+
+            pushNotification(
+                NotificationType.ERROR,
+                i18nKey,
+                {
+                    acronym: departmentData.acronym,
+                    oldAcronym: departments.filter(d => d.id === departmentId)?.[0]?.acronym
+                });
+            return false;
         }
 
+        pushNotification(NotificationType.SUCCESS, 'departments.edit.success', { acronym: departmentData.acronym });
+
+        await loadDepartments();
+        if (user?.departments?.some(dept => dept.id === Number(departmentId)))
+            setLoggedUserInfo();
         return res.ok;
-    }, [user, loadDepartments, setLoggedUserInfo])
+    }, [rq, user, departments, pushNotification, loadDepartments, setLoggedUserInfo])
 
     const batchEditDepartments = useCallback(async editedDepartmentEntries => {
         const res = await batchUpdateDepartments(
+            rq,
             editedDepartmentEntries
                 .map(([deptId, deptData]) => {
                     return {
@@ -71,30 +99,49 @@ const DepartmentsTable = ({ canAddDept, canEditDept, canDeleteDept }) => {
                     }
                 }));
 
-        if (res.ok) {
-            await loadDepartments();
-            if (editedDepartmentEntries
-                .some(([deptId]) =>
-                    user?.departments?.some(dept => dept.id === Number(deptId))
-                ))
-                setLoggedUserInfo();
+        if (!res.ok) {
+            pushNotification(NotificationType.ERROR, 'departments.batchEdit.fail');
+            return false;
         }
 
+        pushNotification(
+            res.status === 206 ? NotificationType.WARNING : NotificationType.SUCCESS,
+            `departments.batchEdit.${res.status === 206 ? 'partial' : 'success'}`
+        );
+
+        await loadDepartments();
+        if (editedDepartmentEntries
+            .some(([deptId]) =>
+                user?.departments?.some(dept => dept.id === Number(deptId))
+            ))
+            setLoggedUserInfo();
         return res.ok;
-    }, [user, loadDepartments, setLoggedUserInfo])
+    }, [rq, user, pushNotification, loadDepartments, setLoggedUserInfo])
 
     const removeDepartment = useCallback(async departmentId => {
-        const res = await deleteDepartment(departmentId);
+        const res = await deleteDepartment(rq, departmentId);
 
-        if (res.ok) {
-            await loadDepartments();
-
-            if (user?.departments?.some(dept => dept.id === Number(departmentId)))
-                setLoggedUserInfo();
+        if (!res.ok) {
+            pushNotification(
+                NotificationType.ERROR,
+                'departments.delete.fail',
+                { acronym: departments.filter(d => d.id === departmentId)?.[0]?.acronym }
+            );
+            return false;
         }
 
+        pushNotification(
+            NotificationType.SUCCESS,
+            'departments.delete.success',
+            { acronym: departments.filter(d => d.id === departmentId)?.[0]?.acronym }
+        );
+
+        await loadDepartments();
+
+        if (user?.departments?.some(dept => dept.id === Number(departmentId)))
+            setLoggedUserInfo();
         return res.ok;
-    }, [user, loadDepartments, setLoggedUserInfo])
+    }, [rq, user, departments, pushNotification, loadDepartments, setLoggedUserInfo])
 
     const actions = {
         add: {

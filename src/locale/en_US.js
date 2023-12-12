@@ -46,9 +46,10 @@ const enUS = {
     // login
     'loginWithGoogle.buttonText': 'Sign in with Google',
     'login.fail.userNotFound': 'User not found.',
+    'login.fail.unknownError': 'Unknown error on login. $t(rq.fail.pleaseTryAgainLater)',
     
     //rq
-    'rq.fail.pleaseTryAgainLater': 'Please try again later.\nIf the problem persists, contact the system administrators.',
+    'rq.fail.pleaseTryAgainLater': 'Please try again later.\n\nIf the problem persists, contact the system administrators.',
     'rq.fail.unexpectedError': 'An unexpected error has ocurred. $t(rq.fail.pleaseTryAgainLater)',
 
     // pageNotFound
@@ -83,12 +84,13 @@ const enUS = {
     'document.category': '$t(category)',
     'document.registeredBy': 'Registered by',
     'document.date': 'Document Date',
-    'document.actions.add.success': 'Successfully created document \'{{id}}\'!',
-    'document.actions.add.fail': 'Failed to create document. $t(rq.fail.pleaseTryAgainLater)',
-    'document.actions.update.success': 'Successfully updated document \'{{id}}\'!',
-    'document.actions.update.fail': 'Failed to update document \'{{id}}\'. $t(rq.fail.pleaseTryAgainLater)',
-    'document.actions.delete.success': 'Successfully deleted document \'{{id}}\'!',
-    'document.actions.delete.fail': 'Failed to delete document \'{{id}}\'. $t(rq.fail.pleaseTryAgainLater)',
+    'document.actions.add.success': 'Successfully created document \'<bold>{{name}}</bold>\'!',
+    'document.actions.add.fail': 'Failed to create document \'<bold>{{name}}</bold>\'. $t(rq.fail.pleaseTryAgainLater)',
+    'document.actions.update.success': 'Successfully updated document \'<bold>{{name}}</bold>\'!',
+    'document.actions.update.fail': 'Failed to update document \'<bold>{{name}}</bold>\'. $t(rq.fail.pleaseTryAgainLater)',
+    'document.actions.delete.success': 'Successfully deleted document \'<bold>{{name}}</bold>\'!',
+    'document.actions.delete.fail': 'Failed to delete document \'<bold>{{name}}</bold>\'. $t(rq.fail.pleaseTryAgainLater)',
+    'documents.actions.download.fail': 'Failed retrieving file \'<bold>{{name}}</bold>\' from server. $t(rq.fail.pleaseTryAgainLater)',
     'document.import.upload.success': 'Selected documents were succesfully uploaded to the server and will be imported on the background.',
     'document.import.upload.fail': 'Failed to upload selected documents to the server. $t(rq.fail.pleaseTryAgainLater)',
 
@@ -143,11 +145,25 @@ const enUS = {
     // user
     'user.name': 'User Name',
     'user.email': 'Email',
+    'user.loggedUserInfo.fail': 'Failed to retrieve user information from server. $t(rq.fail.pleaseTryAgainLater)',
+    'user.changeDepartment.fail': 'Failed to change departments. $t(rq.fail.pleaseTryAgainLater)',
 
     // department management
-    // user permission page
+    // user permission page (department)
     'users.department.page.header': 'Department Users',
-    'users.system.page.header': 'System Users',
+    'users.department.invite.success': 'Succesfully invited user <bold>{{user}}</bold> to departament <bold>{{dept}}</bold>!',
+    'users.department.invite.fail': 'Failed to invite user <bold>{{user}}</bold> to departament <bold>{{dept}}</bold>. $t(rq.fail.pleaseTryAgainLater)',
+    'users.department.invite.exception.userAlreadyInvited': 'User <bold>{{user}}</bold> already has access to departament <bold>{{dept}}</bold>.',
+    'users.department.edit.success': 'Successfully updated permissions of user <bold>{{user}}</bold> on departament <bold>{{dept}}</bold>!',
+    'users.department.edit.fail': 'Failed to update permissions of user <bold>{{user}}</bold> on departament <bold>{{dept}}</bold>. $t(rq.fail.pleaseTryAgainLater)',
+    'users.department.edit.exception.lastRemainingDeptManager': 'It\'s not possible to remove permission \'<i>$t(user.table.headers.permission.manage_dept_perm)</i>\' from user <bold>{{user}}</bold> on departament <bold>{{dept}}</bold> because that\'s the only user with that permission on this department!\n\nGrant \'<i>$t(user.table.headers.permission.manage_dept_perm)</i>\' permission to other user and then try again.',
+    'users.department.batchEdit.success': 'Successfully updated user permissions on departament <bold>{{dept}}</bold>!',
+    'users.department.batchEdit.partial': 'Partial success.\nSome user permissions couldn\'t be updated.',
+    'users.department.batchEdit.fail': 'Failed to update user permissions on departament <bold>{{dept}}</bold>. $t(rq.fail.pleaseTryAgainLater)',
+    'users.department.batchEdit.exception.lastRemainingDeptManager': 'It was not possible to update all the user permissions because one of the users is the only one in departament <bold>{{dept}}</bold> with permission \'<i>$t(user.table.headers.permission.manage_dept_perm)</i>\'!\n\nGrant \'<i>$t(user.table.headers.permission.manage_dept_perm)</i>\' permission to other user and then try again.',
+    'users.department.delete.success': 'Successfully removed access of <bold>{{user}}</bold> to departament <bold>{{dept}}</bold>!',
+    'users.department.delete.fail': 'Failed to remove access to user <bold>{{user}}</bold> to departament <bold>{{dept}}</bold>. $t(rq.fail.pleaseTryAgainLater)',
+    'users.department.delete.exception.lastRemainingDeptManager': 'It\'s not possible to remove access from user <bold>{{user}}</bold> to departament <bold>{{dept}}</bold> that\'s the only user with \'<i>$t(user.table.headers.permission.manage_dept_perm)</i>\' permission on department <bold>{{dept}}</bold>!\n\nGrant \'<i>$t(user.table.headers.permission.manage_dept_perm)</i>\' permission to other user and then try again.',
 
     // user table
     // headers
@@ -190,6 +206,16 @@ const enUS = {
     // system management
     // departments page
     'departments.page.header': 'Departments',
+    'departments.add.success': 'Successfully created department <bold>{{acronym}}</bold>!',
+    'departments.add.fail': 'Failed to create new department <bold>{{acronym}}</bold>. $t(rq.fail.pleaseTryAgainLater)',
+    'departments.edit.success': 'Successfully updated department <bold>{{acronym}}</bold>!',
+    'departments.edit.fail': 'Failed to update department <bold>{{acronym}}</bold>. $t(rq.fail.pleaseTryAgainLater)',
+    'departments.edit.exception.departmentAcronymLengthOverflow': 'It\'s not possible to update <bold>{{oldAcronym}}</bold>\'s department acronym to <bold>{{acronym}}</bold> because the acronym\'s allowed max length is 5 characters.',
+    'departments.batchEdit.success': 'Successfully updated departments!',
+    'departments.batchEdit.partial': 'Partial success.\nSome departaments couldn\'t be updated.',
+    'departments.batchEdit.fail': 'Failed to update departments. $t(rq.fail.pleaseTryAgainLater)',
+    'departments.delete.success': 'Successfully deleted department <bold>{{acronym}}</bold>!',
+    'departments.delete.fail': 'Failed to delete department <bold>{{acronym}}</bold>. $t(rq.fail.pleaseTryAgainLater)',
 
     // departments table
     // headers
@@ -213,8 +239,26 @@ const enUS = {
     // table data
     'departments.table.data.isCurrentDept.y': 'Current department',
 
+    // user permission page (system)
+    'users.system.page.header': 'System Users',
+    'users.system.edit.success': 'Succesfully updated user <bold>{{user}}</bold> permissions!',
+    'users.system.edit.fail': 'Failed to update user <bold>{{user}}</bold> permissions. $t(rq.fail.pleaseTryAgainLater)',
+    'users.system.edit.exception.lastRemainingSystemManager': 'It\'s not possible to remove permission \'<i>$t(user.table.headers.permission.manage_system_perm)</i>\' from user <bold>{{user}}</bold> because that\'s the only user on the system with that permission!\n\nGrant \'<i>$t(user.table.headers.permission.manage_system_perm)</i>\' permission to other user and then try again.',
+    'users.system.batchEdit.success': 'Successfully updated user permissions!',
+    'users.system.batchEdit.partial': 'Partial success.\nSome user permissions couldn\'t be updated.',
+    'users.system.batchEdit.fail': 'Failed to update user permissions. $t(rq.fail.pleaseTryAgainLater)',
+
     // categories
     'categories.page.title': 'Categories',
+    'categories.add.success': 'Successfully created category \'<bold>{{name}}</bold>\'!',
+    'categories.add.fail': 'Failed to create category \'<bold>{{name}}</bold>\'. $t(rq.fail.pleaseTryAgainLater)',
+    'categories.update.success': 'Successfully renamed category \'<bold>{{oldName}}</bold>\' to \'<bold>{{newName}}</bold>\' com sucesso!',
+    'categories.update.fail': 'Failed to rename category \'<bold>{{oldName}}</bold>\' to \'<bold>{{newName}}</bold>\'. $t(rq.fail.pleaseTryAgainLater)',
+    'categories.update.exception.unnamedCategory': 'It\'s not possible to rename category \'<bold>{{name}}</bold>\' as empty!',
+    'categories.delete.success': 'Successfully deleted category \'<bold>{{name}}</bold>\'!',
+    'categories.delete.fail': 'Failed to delete category \'<bold>{{name}}</bold>\'. $t(rq.fail.pleaseTryAgainLater)',
+    'categories.delete.exception.categoryHasChildren': 'It\'s not possible to delete category \'<bold>{{name}}</bold>\' because there are other subcategories associated to it.',
+    'categories.delete.exception.categoryHasDocuments': 'It\'s not possible to delete category \'<bold>{{name}}</bold>\'because there are other documents associated to it.',
 
     // import from google drive
     'import.page.title': 'Import from Google Drive',
@@ -238,6 +282,12 @@ const enUS = {
     'import.warningModal.btns.cancel': 'Cancel',
     'import.warningModal.btns.append': 'Append',
     'import.warningModal.btns.replace': 'Replace',
+    'import.google.fail': 'Failed to connect to Google. Please, try again later.',
+    'import.google.searchDocuments.fail': 'Failed to retrieve some of the documents from Google Drive. $t(rq.fail.pleaseTryAgainLater)',
+
+    // exception messages
+    'exception.unauthorized': 'Unauthorized access. Please login again.',
+    'exception.resourceNotFound': 'Resource not found in the server.',
 }
 
 export default enUS;

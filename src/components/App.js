@@ -3,6 +3,7 @@ import { UserProvider } from '../contexts/UserContext'
 import { AuthProvider } from '../contexts/AuthContext'
 import { GoogleOAuthProvider } from '@react-oauth/google'
 import { NotificationProvider } from '../contexts/NotificationContext'
+import { NetworkProvider } from '../contexts/NetworkContext'
 import { HashRouter as Router, Route } from 'react-router-dom'
 import PrivateRoute from './PrivateRoute'
 import Login from './Login'
@@ -14,15 +15,17 @@ export default function App() {
 	return (
 		<Router>
 			<NotificationProvider>
-				<AuthProvider>
-					<UserProvider>
-						<GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID}>
-							<Route path="/login" component={Login} />
-							<PrivateRoute path="*" component={Home} />
-							<NotificationList />
-						</GoogleOAuthProvider>
-					</UserProvider>
-				</AuthProvider>
+				<NetworkProvider>
+					<AuthProvider>
+						<UserProvider>
+							<GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID}>
+								<Route path="/login" component={Login} />
+								<PrivateRoute path="*" component={Home} />
+								<NotificationList />
+							</GoogleOAuthProvider>
+						</UserProvider>
+					</AuthProvider>
+				</NetworkProvider>
 			</NotificationProvider>
 		</Router>
 	)

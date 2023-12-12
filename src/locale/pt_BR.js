@@ -47,11 +47,11 @@ const ptBR = {
     // login
     'loginWithGoogle.buttonText': 'Entre com Google',
     'login.fail.userNotFound': 'Usuário não encontrado.',
+    'login.fail.unknownError': 'Erro desconhecido ao realizar o login. $t(rq.fail.pleaseTryAgainLater)',
     
     //rq
-    'rq.fail.pleaseTryAgainLater': 'Por favor, tente novamente mais tarde.\nCaso o problema persista, entre em contato com os administradores do sistema.',
+    'rq.fail.pleaseTryAgainLater': 'Por favor, tente novamente mais tarde.\n\nCaso o problema persista, entre em contato com os administradores do sistema.',
     'rq.fail.unexpectedError': 'Ocorreu um erro inesperado. $t(rq.fail.pleaseTryAgainLater)',
-
 
     // pageNotFound
     'pageNotFound.title': '404',
@@ -85,12 +85,13 @@ const ptBR = {
     'document.category': '$t(category)',
     'document.registeredBy': 'Cadastrado por',
     'document.date': 'Data do Documento',
-    'document.actions.add.success': 'Documento \'{{id}}\' cadastrado com sucesso!',
-    'document.actions.add.fail': 'Falha ao cadastrar o documento. $t(rq.fail.pleaseTryAgainLater)',
-    'document.actions.update.success': 'Documento \'{{id}}\' atualizado com sucesso!',
-    'document.actions.update.fail': 'Falha ao atualizar o documento \'{{id}}\'. $t(rq.fail.pleaseTryAgainLater)',
-    'document.actions.delete.success': 'Documento \'{{id}}\' excluído com sucesso!',
-    'document.actions.delete.fail': 'Falha ao excluir o documento \'{{id}}\'. $t(rq.fail.pleaseTryAgainLater)',
+    'document.actions.add.success': 'Documento \'<bold>{{name}}</bold>\' cadastrado com sucesso!',
+    'document.actions.add.fail': 'Falha ao cadastrar o documento \'<bold>{{name}}</bold>\'. $t(rq.fail.pleaseTryAgainLater)',
+    'document.actions.update.success': 'Documento \'<bold>{{name}}</bold>\' alterado com sucesso!',
+    'document.actions.update.fail': 'Falha ao alterar o documento \'<bold>{{name}}</bold>\'. $t(rq.fail.pleaseTryAgainLater)',
+    'document.actions.delete.success': 'Documento \'<bold>{{name}}</bold>\' excluído com sucesso!',
+    'document.actions.delete.fail': 'Falha ao excluir o documento \'<bold>{{name}}</bold>\'. $t(rq.fail.pleaseTryAgainLater)',
+    'documents.actions.download.fail': 'Falha ao recuperar o arquivo \'<bold>{{name}}</bold>\' do servidor. $t(rq.fail.pleaseTryAgainLater)',
     'document.import.upload.success': 'Os documentos selecionados foram enviados com sucesso ao servidor e serão importados em segundo plano.',
     'document.import.upload.fail': 'Falha ao enviar os documentos selecionados ao servidor. $t(rq.fail.pleaseTryAgainLater)',
     
@@ -145,11 +146,25 @@ const ptBR = {
     // user
     'user.name': 'Nome de usuário',
     'user.email': 'Email',
+    'user.loggedUserInfo.fail': 'Falha ao buscar informações do usuário no servidor. $t(rq.fail.pleaseTryAgainLater)',
+    'user.changeDepartment.fail': 'Falha ao trocar de departamento. $t(rq.fail.pleaseTryAgainLater)',
 
     // department management
-    // user permission page
+    // user permission page (department)
     'users.department.page.header': 'Usuários do departamento',
-    'users.system.page.header': 'Usuários do sistema',
+    'users.department.invite.success': 'Usuário <bold>{{user}}</bold> convidado para o departamento <bold>{{dept}}</bold> com sucesso!',
+    'users.department.invite.fail': 'Falha ao convidar usuário <bold>{{user}}</bold> para o departamento <bold>{{dept}}</bold>. $t(rq.fail.pleaseTryAgainLater)',
+    'users.department.invite.exception.userAlreadyInvited': 'Usuário <bold>{{user}}</bold> já possui acesso ao departamento <bold>{{dept}}</bold>.',
+    'users.department.edit.success': 'Permissões do usuário <bold>{{user}}</bold> no departamento <bold>{{dept}}</bold> atualizadas com sucesso!',
+    'users.department.edit.fail': 'Falha ao atualizar permissões do usuário <bold>{{user}}</bold> no departamento <bold>{{dept}}</bold>. $t(rq.fail.pleaseTryAgainLater)',
+    'users.department.edit.exception.lastRemainingDeptManager': 'Não é possível remover a permissão de \'<i>$t(user.table.headers.permission.manage_dept_perm)</i>\' do usuário <bold>{{user}}</bold> no departamento <bold>{{dept}}</bold> pois este é o único usuário com esta permissão no departamento!\n\nGaranta a permissão de \'<i>$t(user.table.headers.permission.manage_dept_perm)</i>\' a outro usuário e tente novamente.',
+    'users.department.batchEdit.success': 'Permissões dos usuários no departamento <bold>{{dept}}</bold> atualizadas com sucesso!',
+    'users.department.batchEdit.partial': 'Sucesso parcial.\nAlguns usuários não puderam ter suas permissões alteradas.',
+    'users.department.batchEdit.fail': 'Falha ao atualizar permissões dos usuários no departamento <bold>{{dept}}</bold>. $t(rq.fail.pleaseTryAgainLater)',
+    'users.department.batchEdit.exception.lastRemainingDeptManager': 'Não foi possível realizar todas as alterações de permissão pois um dos usuários é o único no departamento <bold>{{dept}}</bold> com a permissão de \'<i>$t(user.table.headers.permission.manage_dept_perm)</i>\'!\n\nGaranta a permissão de \'<i>$t(user.table.headers.permission.manage_dept_perm)</i>\' a outro usuário e tente novamente.',
+    'users.department.delete.success': 'Acesso do usuário <bold>{{user}}</bold> ao departamento <bold>{{dept}}</bold> removido com sucesso!',
+    'users.department.delete.fail': 'Falha ao remover acesso do usuário <bold>{{user}}</bold> no departamento <bold>{{dept}}</bold>. $t(rq.fail.pleaseTryAgainLater)',
+    'users.department.delete.exception.lastRemainingDeptManager': 'Não é possível remover o acesso do usuário <bold>{{user}}</bold> ao departamento <bold>{{dept}}</bold> pois este é o único usuário com a permissão a permissão de \'<i>$t(user.table.headers.permission.manage_dept_perm)</i>\' no departamento!\n\nGaranta a permissão de \'<i>$t(user.table.headers.permission.manage_dept_perm)</i>\' a outro usuário e tente novamente.',
 
     // user table
     // headers
@@ -192,6 +207,16 @@ const ptBR = {
     // system management
     // departments page
     'departments.page.header': 'Departamentos',
+    'departments.add.success': 'Departmento <bold>{{acronym}}</bold> criado com sucesso!',
+    'departments.add.fail': 'Falha ao criar departamento <bold>{{acronym}}</bold>. $t(rq.fail.pleaseTryAgainLater)',
+    'departments.edit.success': 'Departmento <bold>{{acronym}}</bold> atualizado com sucesso!',
+    'departments.edit.fail': 'Falha ao atualizar departmento <bold>{{acronym}}</bold>. $t(rq.fail.pleaseTryAgainLater)',
+    'departments.edit.exception.departmentAcronymLengthOverflow': 'Não foi possível alterar a sigla do departamento <bold>{{oldAcronym}}</bold> para <bold>{{acronym}}</bold> pois o comprimento máximo permitido é de 5 caracteres.',
+    'departments.batchEdit.success': 'Departamentos atualizados com sucesso!',
+    'departments.batchEdit.partial': 'Sucesso parcial.\nAlguns departamentos não puderam ser alterados.',
+    'departments.batchEdit.fail': 'Falha ao atualizar departamentos. $t(rq.fail.pleaseTryAgainLater)',
+    'departments.delete.success': 'Departamento <bold>{{acronym}}</bold> excluído com sucesso!',
+    'departments.delete.fail': 'Falha ao excluir departmento <bold>{{acronym}}</bold>. $t(rq.fail.pleaseTryAgainLater)',
 
     // departments table
     // headers
@@ -215,8 +240,26 @@ const ptBR = {
     // table data
     'departments.table.data.isCurrentDept.y': 'Departamento atual',
 
+    // user permission page (system)
+    'users.system.page.header': 'Usuários do sistema',
+    'users.system.edit.success': 'Permissões do usuário <bold>{{user}}</bold> atualizadas com sucesso!',
+    'users.system.edit.fail': 'Falha ao atualizar permissões do usuário <bold>{{user}}</bold>. $t(rq.fail.pleaseTryAgainLater)',
+    'users.system.edit.exception.lastRemainingSystemManager': 'Não é possível remover a permissão de \'<i>$t(user.table.headers.permission.manage_system_perm)</i>\' do usuário <bold>{{user}}</bold> pois este é o único usuário no sistema com esta permissão!\n\nGaranta a permissão de \'<i>$t(user.table.headers.permission.manage_system_perm)</i>\' a outro usuário e tente novamente.',
+    'users.system.batchEdit.success': 'Permissões dos usuários atualizadas com sucesso!',
+    'users.system.batchEdit.partial': 'Sucesso parcial.\nAlguns usuários não puderam ter suas permissões alteradas.',
+    'users.system.batchEdit.fail': 'Falha ao atualizar permissões dos usuários. $t(rq.fail.pleaseTryAgainLater)',
+
     // categories
     'categories.page.title': 'Categorias',
+    'categories.add.success': 'Categoria \'<bold>{{name}}</bold>\' cadastrada com sucesso!',
+    'categories.add.fail': 'Falha ao cadastrar categoria \'<bold>{{name}}</bold>\'. $t(rq.fail.pleaseTryAgainLater)',
+    'categories.update.success': 'Categoria \'<bold>{{oldName}}</bold>\' renomeada para \'<bold>{{newName}}</bold>\' com sucesso!',
+    'categories.update.fail': 'Falha ao renomear categoria \'<bold>{{oldName}}</bold>\' para \'<bold>{{newName}}</bold>\'. $t(rq.fail.pleaseTryAgainLater)',
+    'categories.update.exception.unnamedCategory': 'Não é possível renomear a categoria \'<bold>{{name}}</bold>\' para um nome vazio!',
+    'categories.delete.success': 'Categoria \'<bold>{{name}}</bold>\' excluída com sucesso!',
+    'categories.delete.fail': 'Falha ao excluir categoria \'<bold>{{name}}</bold>\'. $t(rq.fail.pleaseTryAgainLater)',
+    'categories.delete.exception.categoryHasChildren': 'Não é possível excluir a categoria \'<bold>{{name}}</bold>\' pois existem subcategorias associadas a ela.',
+    'categories.delete.exception.categoryHasDocuments': 'Não é possível excluir a categoria \'<bold>{{name}}</bold>\' pois existem documentos associados a ela.',
 
     // import from google drive
     'import.page.title': 'Importar do Google Drive',
@@ -240,7 +283,12 @@ const ptBR = {
     'import.warningModal.btns.cancel': 'Cancelar',
     'import.warningModal.btns.append': 'Adicionar',
     'import.warningModal.btns.replace': 'Substituir',
+    'import.google.fail': 'Falha ao se conectar com o Google. Por favor, tente mais tarde.',
+    'import.google.searchDocuments.fail': 'Falha ao buscar alguns dos documentos no Google Drive. $t(rq.fail.pleaseTryAgainLater)',
 
+    // exception messages
+    'exception.unauthorized': 'Acesso não autorizado. Por favor, faça o login novamente.',
+    'exception.resourceNotFound': 'Recurso não encontrado no servidor.',
 }
 
 export default ptBR;

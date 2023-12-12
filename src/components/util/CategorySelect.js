@@ -1,13 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { UserContext } from '../../contexts/UserContext'
-import rq from '../../services/api'
+import { NetworkContext } from '../../contexts/NetworkContext'
 import { Form } from 'react-bootstrap'
 import Select from './Select'
 
 const CategorySelect = ({ categories = undefined, disabled = false, className, label, name = 'category', onChange, isValid, isInvalid, size, validationMessage, value }) => {
     const { t } = useTranslation();
     const { department, userLoading } = useContext(UserContext);
+    const { rq } = useContext(NetworkContext);
     const [cats, setCats] = useState([]);
     const [isLoading, setLoading] = useState(true);
 
@@ -24,7 +25,7 @@ const CategorySelect = ({ categories = undefined, disabled = false, className, l
             setCats(categories);
             setLoading(false);
         }
-    }, [categories, department]);
+    }, [rq, categories, department]);
 
     return <Select
         className={className}

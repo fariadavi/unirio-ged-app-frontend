@@ -2,9 +2,9 @@ import React, { useCallback, useContext, useEffect, useReducer, useState } from 
 import { useTranslation } from 'react-i18next'
 import { UserContext } from '../../contexts/UserContext'
 import { NotificationContext } from '../../contexts/NotificationContext'
+import { NetworkContext } from '../../contexts/NetworkContext'
 import { getLocalItem, LANG_KEY } from '../../utils/localStorageManager'
 import { getDriveFileInfo, getDriveFiles, getGoogleUserInfo } from '../../services/util/api'
-import rq from '../../services/api'
 import { Badge, Button, Form, ListGroup, Modal } from 'react-bootstrap'
 import useDrivePicker from 'react-google-drive-picker'
 import CategorySelect from '../util/CategorySelect'
@@ -24,6 +24,7 @@ const DocumentImport = () => {
     const [openPicker, authResult] = useDrivePicker();
     const { department } = useContext(UserContext);
     const { pushNotification } = useContext(NotificationContext);
+    const { rq } = useContext(NetworkContext);
     const [pickerUser, setPickerUser] = useState();
     const [categories, setCategories] = useState([]);
     const [tempFileList, setTempFileList] = useState([]);
@@ -42,12 +43,12 @@ const DocumentImport = () => {
     const [fileValidationMap, setFileValidationMap] = useState({});
 
     useEffect(() => {
-        setFileList(fl => fl.map(f => { return { ...f, category: '' }}));
+        setFileList(fl => fl.map(f => { return { ...f, category: '' } }));
 
         rq('/categories?fullName=true', { method: 'GET' })
             .then(res => { if (res.ok) return res.json() })
             .then(cats => setCategories(cats));
-    }, [department]);
+    }, [rq, department]);
 
     const filterArray = (array, predicate) => {
         return [
@@ -58,7 +59,7 @@ const DocumentImport = () => {
 
     const queryGoogleDriveFiles = useCallback(async searchQuery => {
         const fieldsQuery = '&fields=files(id,name,mimeType,description,fileExtension,parents,createdTime)';
-        const res = await getDriveFiles(authResult?.access_token, searchQuery + fieldsQuery);
+        const res = await getDriveFiles(rq, authResult?.access_token, searchQuery + fieldsQuery);
 
         if (!res.ok)
             throw new Error();
@@ -66,7 +67,7 @@ const DocumentImport = () => {
         const json = await res.json();
 
         return json.files;
-    }, [authResult?.access_token])
+    }, [rq, authResult?.access_token])
 
     const getFilesFromFolders = useCallback(async folderIds => {
         if (!folderIds.length) return [];
@@ -80,21 +81,27 @@ const DocumentImport = () => {
 
         const fieldsQuery = '?fields=id,name,mimeType,description,fileExtension,parents,createdTime';
 
-        const filesRes = await Promise.all(filesIds.map(fId => getDriveFileInfo(authResult?.access_token, fId + fieldsQuery)));
+        const filesRes = await Promise.all(filesIds.map(fId =>
+            getDriveFileInfo(
+                rq,
+                authResult?.access_token, fId + fieldsQuery,
+                () => pushNotification(NotificationType.ERROR, 'import.google.searchDocuments.fail')
+            )
+        ));
         return await Promise.all(filesRes.map(res => res.json()));
-    }, [authResult?.access_token])
+    }, [rq, pushNotification, authResult?.access_token])
 
     const getFilesFromShortcuts = useCallback(async shortcutIds => {
         if (!shortcutIds.length) return [];
 
         const fieldsQuery = '?fields=id,shortcutDetails';
 
-        const shortcutsRes = await Promise.all(shortcutIds.map(sId => getDriveFileInfo(authResult?.access_token, sId + fieldsQuery)));
+        const shortcutsRes = await Promise.all(shortcutIds.map(sId => getDriveFileInfo(rq, authResult?.access_token, sId + fieldsQuery)));
         const shortcuts = await Promise.all(shortcutsRes.map(res => res.json()));
         const targetFiles = shortcuts.filter(s => s.shortcutDetails?.targetId).map(s => s.shortcutDetails.targetId)
 
         return await getFilesDetails(targetFiles);
-    }, [authResult?.access_token, getFilesDetails])
+    }, [rq, authResult?.access_token, getFilesDetails])
 
     const mapFileFromDocument = useCallback(doc => {
         return {
@@ -136,7 +143,10 @@ const DocumentImport = () => {
                 ...f1?.map(f => { return { ...mapFileFromDocument(f), processed: true } }),
                 ...f2?.map(f => { return { ...mapFileFromDocument(f), processed: !isFolder(f) && !isShortcut(f) } }),
                 ...f3?.map(f => { return { ...mapFileFromDocument(f), processed: !isFolder(f) && !isShortcut(f) } })
-            ]))
+            ])).finally(() => {
+                setTempFileList([]);
+                setSelectingFiles(false);
+            })
         } else {
             setFileList(fl => [
                 ...fl,
@@ -153,7 +163,11 @@ const DocumentImport = () => {
         if (!authResult?.access_token) return;
 
         const getPickerUser = async () => {
-            const res = await getGoogleUserInfo(authResult?.access_token);
+            const res = await getGoogleUserInfo(
+                rq,
+                authResult?.access_token,
+                () => pushNotification(NotificationType.ERROR, 'import.google.fail')
+            );
             return res.ok && await res.json();
         }
 
@@ -170,7 +184,7 @@ const DocumentImport = () => {
                 ]
             })
         });
-    }, [authResult]);
+    }, [rq, pushNotification, authResult]);
 
     const pickerCallback = data => {
         if (data.action === 'picked') {
@@ -211,11 +225,13 @@ const DocumentImport = () => {
         if (invalidFiles.length > 0) return;
 
         setFileIdUploadList(fl => [...fl, itemId]);
-        let success = await uploadFiles(fileInArray);
-        setFileIdUploadList(fl => fl.filter(f => f !== itemId));
 
-        if (!success) return;
-        setFileList(fl => fl.filter(f => f.id !== itemId));
+        try {
+            await uploadFiles(fileInArray);
+            setFileList(fl => fl.filter(f => f.id !== itemId));
+        } finally {
+            setFileIdUploadList(fl => fl.filter(f => f !== itemId));
+        }
     }
 
     const sendSelectedFiles = async () => {
@@ -226,11 +242,13 @@ const DocumentImport = () => {
         let validFilesIds = validFiles.map(f => f.id);
 
         setFileIdUploadList(fl => [...fl, ...validFilesIds]);
-        let success = await uploadFiles(validFiles);
-        setFileIdUploadList(fl => fl.filter(f => validFilesIds.every(f2 => f2 !== f)));
 
-        if (!success) return;
-        setFileList(fl => fl.filter(f => !validFilesIds.includes(f.id)));
+        try {
+            await uploadFiles(validFiles);
+            setFileList(fl => fl.filter(f => !validFilesIds.includes(f.id)));
+        } finally {
+            setFileIdUploadList(fl => fl.filter(f => validFilesIds.every(f2 => f2 !== f)));
+        }
     }
 
     const validateFilesForUpload = files => {
@@ -254,21 +272,16 @@ const DocumentImport = () => {
     const isFileValid = file => !getFileValidation(file).length
 
     const uploadFiles = async (files) => {
-        try {
-            const res = await rq(`/documents/import`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(files)
-            });
+        const res = await rq(`/documents/import`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(files)
+        });
 
-            if (!res.ok) throw new Error();
-
-            await res.text();
+        if (res.ok)
             pushNotification(NotificationType.INFO, 'document.import.upload.success');
-            return true;
-        } catch (err) {
-            pushNotification(NotificationType.ERROR, 'document.import.upload.fail');
-        }
+
+        pushNotification(NotificationType.ERROR, 'document.import.upload.fail');
     }
 
     const setItemProperty = (itemId, property, value) => {

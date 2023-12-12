@@ -1,12 +1,16 @@
 import React, { createContext, useCallback, useContext, useLayoutEffect, useState } from 'react'
-import rq from '../services/api.js'
 import { AuthContext } from '../contexts/AuthContext'
-import { reqPermByPath } from '../resources/permission-config.js';
+import { NotificationContext } from './NotificationContext.js'
+import { NetworkContext } from '../contexts/NetworkContext'
+import { NotificationType } from '../components/notification/Notifications.js'
+import { reqPermByPath } from '../resources/permission-config.js'
 
 const UserContext = createContext();
 
 function UserProvider({ children }) {
     const { token, handleAuthLogout } = useContext(AuthContext);
+    const { pushNotification } = useContext(NotificationContext);
+    const { rq } = useContext(NetworkContext);
     const [user, setUser] = useState();
     const [userLoading, setUserLoading] = useState(false);
 
@@ -17,7 +21,7 @@ function UserProvider({ children }) {
 
 
     const checkPermissionForPaths = useCallback((...paths) =>
-        !paths.length || paths.some(path => !reqPermByPath[path]) || 
+        !paths.length || paths.some(path => !reqPermByPath[path]) ||
         checkPermission(...paths.flatMap(path => reqPermByPath[path])), [checkPermission]);
 
     const setLoggedUserInfo = useCallback(async () => {
@@ -26,33 +30,40 @@ function UserProvider({ children }) {
         try {
             const res = await rq('/users/loggedUserInfo', { method: "GET" });
 
-            setUserLoading(false);
-
-            if (!res.ok)
+            if (!res.ok) {
+                pushNotification(NotificationType.ERROR, 'user.loggedUserInfo.fail');
                 throw new Error(res.status);
+            }
 
             setUser(await res.json());
         } catch (err) {
             handleAuthLogout();
-            throw new Error(err);
+        } finally {
+            setUserLoading(false);
         }
-    }, [handleAuthLogout])
+    }, [rq, pushNotification, handleAuthLogout])
 
     const changeDepartment = async deptId => {
         setUserLoading(true);
 
-        const res = await rq(`/users/${user.id}`, {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ currentDepartment: { id: deptId } })
-        });
+        try {
+            const res = await rq(`/users/${user.id}`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ currentDepartment: { id: deptId } })
+            });
 
-        setUserLoading(false);
+            if (!res.ok) {
+                pushNotification(NotificationType.ERROR, 'user.changeDepartment.fail');
+                throw new Error(res.status);
+            }
 
-        if (!res.ok)
-            throw new Error(res.status);
-
-        setLoggedUserInfo();
+            setLoggedUserInfo();
+        } catch (err) {
+            logoutUser();
+        } finally {
+            setUserLoading(false);
+        }
     }
 
     const logoutUser = () => {

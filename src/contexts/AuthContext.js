@@ -1,15 +1,16 @@
 import React, { createContext, useCallback, useContext, useLayoutEffect, useRef, useState } from 'react'
 import { SERVER_TOKEN_KEY, getLocalItem, setLocalItem, removeLocalItem } from '../utils/localStorageManager'
 import { NotificationContext } from './NotificationContext'
+import { NetworkContext } from './NetworkContext'
 import { NotificationType } from '../components/notification/Notifications'
 import { getTokenDetails } from '../utils/jwtHelper'
-import rq from '../services/api.js'
 import { useLocation } from 'react-router-dom'
 
 const AuthContext = createContext();
 
 function AuthProvider({ children }) {
 	const { pushNotification } = useContext(NotificationContext);
+	const { rq } = useContext(NetworkContext);
 	const [token, setToken] = useState(getLocalItem(SERVER_TOKEN_KEY));
 	const [authLoading, setAuthLoading] = useState(false);
 	const location = useLocation();
@@ -36,8 +37,15 @@ function AuthProvider({ children }) {
 				body: credentialResponse.credential
 			})
 
-			if (!res.ok)
-				throw new Error(res.status);
+			if (!res.ok) {
+				pushNotification(NotificationType.ERROR,
+					res.status === '404'
+						? 'login.fail.userNotFound'
+						: 'login.fail.unknownError'
+				);
+
+				throw new Error();
+			}
 
 			const serverToken = await res.text();
 			if (!serverToken) throw new Error();
@@ -45,16 +53,11 @@ function AuthProvider({ children }) {
 			setToken(serverToken);
 			setAutoLogoutTimer(serverToken);
 		} catch (err) {
-			pushNotification(NotificationType.ERROR,
-				err.message && err.message === '404'
-					? 'login.fail.userNotFound'
-					: 'rq.fail.unknownError'
-			);
-
 			handleAuthLogout();
-		}
+		} finally {
+			setAuthLoading(false);
 
-		setAuthLoading(false);
+		}
 	}
 
 	const setAutoLogoutTimer = useCallback(token => {
@@ -91,7 +94,7 @@ function AuthProvider({ children }) {
 			else
 				handleAuthLogout();
 		}
-	}, [location, token, handleAuthLogout, setAutoLogoutTimer]);
+	}, [rq, location, token, handleAuthLogout, setAutoLogoutTimer]);
 
 	return (
 		<AuthContext.Provider value={{ authenticated: token !== null, token, authLoading, handleAuthentication, handleAuthLogout }}>
