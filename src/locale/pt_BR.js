@@ -222,10 +222,10 @@ const ptBR = {
 
     // warning modal
     'departments.warningModal.title': '$t(warning)',
-    'departments.warningModal.body.line1': 'Do you want to permanently delete department <bold>{{name}}</bold> (<bold>{{acronym}}</bold>) and all it\'s contents?',
-    'departments.warningModal.body.line2': 'To confirm type "<bold>$t(delete) {{name}}</bold>" in the textbox below:',
-    'departments.warningModal.btns.cancel': 'Cancel',
-    'departments.warningModal.btns.delete': 'Delete',
+    'departments.warningModal.body.line1': 'Você quer excluir permanentemente o departamento <bold>{{name}}</bold> (<bold>{{acronym}}</bold>) e todos os seus conteúdos?',
+    'departments.warningModal.body.line2': 'Para confirmar digite "<bold>$t(delete) {{name}}</bold>" na caixa de texto a seguir:',
+    'departments.warningModal.btns.cancel': 'Cancelar',
+    'departments.warningModal.btns.delete': 'Excluir',
 
     // departments table
     // headers
