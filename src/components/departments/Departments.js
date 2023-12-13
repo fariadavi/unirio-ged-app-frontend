@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import { UserContext } from '../../contexts/UserContext'
 import DepartmentsTable from './DepartmentsTable'
+import '../../style/departments/Departments.css'
 import '../../style/TablePage.css'
 
 export default function Departments() {

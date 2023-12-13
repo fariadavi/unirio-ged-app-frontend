@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 import { UserContext } from '../../contexts/UserContext'
 import { NotificationContext } from '../../contexts/NotificationContext'
 import { NetworkContext } from '../../contexts/NetworkContext'
@@ -14,6 +14,7 @@ import CustomTable from '../util/CustomTable/CustomTable'
 import { Icon } from '../util/CustomIcon'
 import { faChevronRight, faEdit } from '@fortawesome/free-solid-svg-icons'
 import { NotificationType } from '../notification/Notifications'
+import { Button, Form, Modal } from 'react-bootstrap'
 
 const DepartmentsTable = ({ canAddDept, canEditDept, canDeleteDept }) => {
     const { t } = useTranslation();
@@ -22,6 +23,7 @@ const DepartmentsTable = ({ canAddDept, canEditDept, canDeleteDept }) => {
     const { pushNotification } = useContext(NotificationContext);
     const { rq } = useContext(NetworkContext);
     const [isLoading, setLoading] = useState(true);
+    const [deptBeingDeleted, setDeptBeingDeleted] = useState();
 
     useEffect(() => { if (userLoading) setLoading(true) }, [userLoading]);
 
@@ -43,11 +45,19 @@ const DepartmentsTable = ({ canAddDept, canEditDept, canDeleteDept }) => {
         );
 
         if (!res.ok) {
-            pushNotification(NotificationType.ERROR, 'departments.add.fail', { acronym: departmentData.acronym });
+            pushNotification(
+                NotificationType.ERROR,
+                'departments.add.fail',
+                { name: departmentData.name, acronym: departmentData.acronym }
+            );
             return false;
         }
 
-        pushNotification(NotificationType.SUCCESS, 'departments.add.success', { acronym: departmentData.acronym });
+        pushNotification(
+            NotificationType.SUCCESS,
+            'departments.add.success',
+            { name: departmentData.name, acronym: departmentData.acronym }
+        );
 
         await loadDepartments();
         setLoggedUserInfo();
@@ -62,6 +72,7 @@ const DepartmentsTable = ({ canAddDept, canEditDept, canDeleteDept }) => {
             departmentData.name?.trim()
         );
 
+        let currentDeptData = departments.filter(d => d.id === departmentId)?.[0];
         if (!res.ok) {
             let i18nKey = 'departments.edit.fail';
             if (res.status === 406) {
@@ -73,13 +84,24 @@ const DepartmentsTable = ({ canAddDept, canEditDept, canDeleteDept }) => {
                 NotificationType.ERROR,
                 i18nKey,
                 {
-                    acronym: departmentData.acronym,
-                    oldAcronym: departments.filter(d => d.id === departmentId)?.[0]?.acronym
+                    name: departmentData.name?.trim() || currentDeptData?.name,
+                    acronym: departmentData.acronym?.trim() || currentDeptData?.acronym,
+                    oldName: currentDeptData?.name,
+                    oldAcronym: currentDeptData?.acronym
                 });
             return false;
         }
 
-        pushNotification(NotificationType.SUCCESS, 'departments.edit.success', { acronym: departmentData.acronym });
+
+        pushNotification(
+            NotificationType.SUCCESS,
+            'departments.edit.success',
+            {
+                name: departmentData.name?.trim() || currentDeptData?.name,
+                acronym: departmentData.acronym?.trim() || currentDeptData?.acronym,
+                oldName: currentDeptData?.name,
+                oldAcronym: currentDeptData?.acronym
+            });
 
         await loadDepartments();
         if (user?.departments?.some(dept => dept.id === Number(departmentId)))
@@ -118,14 +140,18 @@ const DepartmentsTable = ({ canAddDept, canEditDept, canDeleteDept }) => {
         return res.ok;
     }, [rq, user, pushNotification, loadDepartments, setLoggedUserInfo])
 
-    const removeDepartment = useCallback(async departmentId => {
-        const res = await deleteDepartment(rq, departmentId);
+    const triggerRemoveDepartment = async departmentId =>
+        setDeptBeingDeleted(departments.filter(d => d.id === departmentId)?.[0]);
+
+    const removeDepartment = useCallback(async (department) => {
+        setDeptBeingDeleted();
+        const res = await deleteDepartment(rq, department.id);
 
         if (!res.ok) {
             pushNotification(
                 NotificationType.ERROR,
                 'departments.delete.fail',
-                { acronym: departments.filter(d => d.id === departmentId)?.[0]?.acronym }
+                { name: department.name, acronym: department.acronym }
             );
             return false;
         }
@@ -133,15 +159,15 @@ const DepartmentsTable = ({ canAddDept, canEditDept, canDeleteDept }) => {
         pushNotification(
             NotificationType.SUCCESS,
             'departments.delete.success',
-            { acronym: departments.filter(d => d.id === departmentId)?.[0]?.acronym }
+            { name: department.name, acronym: department.acronym }
         );
 
         await loadDepartments();
 
-        if (user?.departments?.some(dept => dept.id === Number(departmentId)))
+        if (user?.departments?.some(dept => dept.id === Number(department.id)))
             setLoggedUserInfo();
         return res.ok;
-    }, [rq, user, departments, pushNotification, loadDepartments, setLoggedUserInfo])
+    }, [rq, user, pushNotification, loadDepartments, setLoggedUserInfo])
 
     const actions = {
         add: {
@@ -159,7 +185,7 @@ const DepartmentsTable = ({ canAddDept, canEditDept, canDeleteDept }) => {
         },
         delete: {
             disabled: !canDeleteDept,
-            callbackFn: removeDepartment
+            callbackFn: triggerRemoveDepartment
         },
         filter: {}
     }
@@ -209,13 +235,59 @@ const DepartmentsTable = ({ canAddDept, canEditDept, canDeleteDept }) => {
         }
     })
 
-    return (<CustomTable
-        actions={actions}
-        columns={columns}
-        data={data}
-        isLoadingData={isLoading}
-        domain="departments"
-    />)
+    const isDeleteConfirmationValid = deptBeingDeleted?.confirmation === (t('delete') + ' ' + deptBeingDeleted?.name);
+
+    return <>
+        <CustomTable
+            actions={actions}
+            columns={columns}
+            data={data}
+            isLoadingData={isLoading}
+            domain="departments"
+        />
+
+        <Modal
+            backdrop="static"
+            className="confirm-delete-dept-modal"
+            show={!!deptBeingDeleted}
+            onEscapeKeyDown={() => { setDeptBeingDeleted(); }}
+            onHide={() => { setDeptBeingDeleted(); }}
+        >
+            <Modal.Header closeButton={true}>
+                <h5 className="title">{t('departments.warningModal.title')}</h5>
+            </Modal.Header>
+            <Modal.Body>
+                <Trans
+                    i18nKey='departments.warningModal.body.line1'
+                    values={{ name: deptBeingDeleted?.name, acronym: deptBeingDeleted?.acronym }}
+                    components={{ italic: <i />, bold: <strong /> }}
+                />
+                <br /><br />
+                <Form.Text className="text-muted">
+                    <Trans
+                        i18nKey='departments.warningModal.body.line2'
+                        values={{ name: deptBeingDeleted?.name }}
+                        components={{ italic: <i />, bold: <strong /> }}
+                    />
+                </Form.Text>
+                <Form.Control
+                    type="text" name="title" required
+                    onChange={e => setDeptBeingDeleted(dept => { return { ...dept, confirmation: e.target.value } })}
+                    onKeyDown={e => { if (e.code === "Enter" && isDeleteConfirmationValid) removeDepartment(deptBeingDeleted); }}
+                    isValid={isDeleteConfirmationValid}
+                    isInvalid={deptBeingDeleted?.confirmation?.length > 0 && !isDeleteConfirmationValid}
+                />
+            </Modal.Body>
+            <Modal.Footer>
+                <Button variant="secondary" onClick={() => { setDeptBeingDeleted(); }}>
+                    {t('departments.warningModal.btns.cancel')}
+                </Button>
+                <Button variant="danger" onClick={() => { removeDepartment(deptBeingDeleted); }}>
+                    {t('departments.warningModal.btns.delete')}
+                </Button>
+            </Modal.Footer>
+        </Modal>
+    </>
 }
 
 export default DepartmentsTable;

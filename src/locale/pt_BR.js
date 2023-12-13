@@ -12,6 +12,8 @@ const ptBR = {
     'department_plural': 'Departamentos',
     'user': 'Usuário',
     'user_plural': 'Usuários',
+    'delete': 'excluir',
+    'warning': 'Atenção',
 
     // utils
     'table.actions': 'Ações',
@@ -40,7 +42,7 @@ const ptBR = {
 
     // notifications
     'notifications.header.default.success': 'Sucesso',
-    'notifications.header.default.warning': 'Atenção',
+    'notifications.header.default.warning': '$t(warning)',
     'notifications.header.default.error': 'Erro',
     'notifications.header.default.info': 'Informação',
 
@@ -207,16 +209,23 @@ const ptBR = {
     // system management
     // departments page
     'departments.page.header': 'Departamentos',
-    'departments.add.success': 'Departmento <bold>{{acronym}}</bold> criado com sucesso!',
-    'departments.add.fail': 'Falha ao criar departamento <bold>{{acronym}}</bold>. $t(rq.fail.pleaseTryAgainLater)',
-    'departments.edit.success': 'Departmento <bold>{{acronym}}</bold> atualizado com sucesso!',
-    'departments.edit.fail': 'Falha ao atualizar departmento <bold>{{acronym}}</bold>. $t(rq.fail.pleaseTryAgainLater)',
+    'departments.add.success': 'Departmento <bold>{{name}}</bold> (<bold>{{acronym}}</bold>) criado com sucesso!',
+    'departments.add.fail': 'Falha ao criar departamento <bold>{{name}}</bold> (<bold>{{acronym}}</bold>). $t(rq.fail.pleaseTryAgainLater)',
+    'departments.edit.success': 'Departmento <bold>{{oldName}}</bold> (<bold>{{oldAcronym}}</bold>) alterado para <bold>{{name}}</bold> (<bold>{{acronym}}</bold>) com sucesso!',
+    'departments.edit.fail': 'Falha ao alterar departmento <bold>{{oldName}}</bold> (<bold>{{oldAcronym}}</bold>) para <bold>{{name}}</bold> (<bold>{{acronym}}</bold>). $t(rq.fail.pleaseTryAgainLater)',
     'departments.edit.exception.departmentAcronymLengthOverflow': 'Não foi possível alterar a sigla do departamento <bold>{{oldAcronym}}</bold> para <bold>{{acronym}}</bold> pois o comprimento máximo permitido é de 5 caracteres.',
     'departments.batchEdit.success': 'Departamentos atualizados com sucesso!',
     'departments.batchEdit.partial': 'Sucesso parcial.\nAlguns departamentos não puderam ser alterados.',
     'departments.batchEdit.fail': 'Falha ao atualizar departamentos. $t(rq.fail.pleaseTryAgainLater)',
-    'departments.delete.success': 'Departamento <bold>{{acronym}}</bold> excluído com sucesso!',
-    'departments.delete.fail': 'Falha ao excluir departmento <bold>{{acronym}}</bold>. $t(rq.fail.pleaseTryAgainLater)',
+    'departments.delete.success': 'Departamento <bold>{{name}}</bold> (<bold>{{acronym}}</bold>) excluído com sucesso!',
+    'departments.delete.fail': 'Falha ao excluir departmento <bold>{{name}}</bold> (<bold>{{acronym}}</bold>). $t(rq.fail.pleaseTryAgainLater)',
+
+    // warning modal
+    'departments.warningModal.title': '$t(warning)',
+    'departments.warningModal.body.line1': 'Do you want to permanently delete department <bold>{{name}}</bold> (<bold>{{acronym}}</bold>) and all it\'s contents?',
+    'departments.warningModal.body.line2': 'To confirm type "<bold>$t(delete) {{name}}</bold>" in the textbox below:',
+    'departments.warningModal.btns.cancel': 'Cancel',
+    'departments.warningModal.btns.delete': 'Delete',
 
     // departments table
     // headers

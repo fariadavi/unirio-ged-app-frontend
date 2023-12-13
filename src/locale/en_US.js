@@ -11,6 +11,8 @@ const enUS = {
     'department_plural': 'Departments',
     'user': 'User',
     'user_plural': 'Users',
+    'delete': 'delete',
+    'warning': 'Warning',
 
     // utils
     'table.actions': 'Actions',
@@ -39,7 +41,7 @@ const enUS = {
 
     // notifications
     'notifications.header.default.success': 'Sucess',
-    'notifications.header.default.warning': 'Warning',
+    'notifications.header.default.warning': '$t(warning)',
     'notifications.header.default.error': 'Error',
     'notifications.header.default.info': 'Information',
 
@@ -206,16 +208,23 @@ const enUS = {
     // system management
     // departments page
     'departments.page.header': 'Departments',
-    'departments.add.success': 'Successfully created department <bold>{{acronym}}</bold>!',
-    'departments.add.fail': 'Failed to create new department <bold>{{acronym}}</bold>. $t(rq.fail.pleaseTryAgainLater)',
-    'departments.edit.success': 'Successfully updated department <bold>{{acronym}}</bold>!',
-    'departments.edit.fail': 'Failed to update department <bold>{{acronym}}</bold>. $t(rq.fail.pleaseTryAgainLater)',
+    'departments.add.success': 'Successfully created department <bold>{{name}}</bold> (<bold>{{acronym}}</bold>)!',
+    'departments.add.fail': 'Failed to create new department <bold>{{name}}</bold> (<bold>{{acronym}}</bold>). $t(rq.fail.pleaseTryAgainLater)',
+    'departments.edit.success': 'Successfully updated department <bold>{{oldName}}</bold> (<bold>{{oldAcronym}}</bold>) to <bold>{{name}}</bold> (<bold>{{acronym}}</bold>)!',
+    'departments.edit.fail': 'Failed to update department <bold>{{oldName}}</bold> (<bold>{{oldAcronym}}</bold>) to <bold>{{name}}</bold> (<bold>{{acronym}}</bold>). $t(rq.fail.pleaseTryAgainLater)',
     'departments.edit.exception.departmentAcronymLengthOverflow': 'It\'s not possible to update <bold>{{oldAcronym}}</bold>\'s department acronym to <bold>{{acronym}}</bold> because the acronym\'s allowed max length is 5 characters.',
     'departments.batchEdit.success': 'Successfully updated departments!',
     'departments.batchEdit.partial': 'Partial success.\nSome departaments couldn\'t be updated.',
     'departments.batchEdit.fail': 'Failed to update departments. $t(rq.fail.pleaseTryAgainLater)',
-    'departments.delete.success': 'Successfully deleted department <bold>{{acronym}}</bold>!',
-    'departments.delete.fail': 'Failed to delete department <bold>{{acronym}}</bold>. $t(rq.fail.pleaseTryAgainLater)',
+    'departments.delete.success': 'Successfully deleted department <bold>{{name}}</bold> (<bold>{{acronym}}</bold>)!',
+    'departments.delete.fail': 'Failed to delete department <bold>{{name}}</bold> (<bold>{{acronym}}</bold>). $t(rq.fail.pleaseTryAgainLater)',
+
+    // warning modal
+    'departments.warningModal.title': '$t(warning)',
+    'departments.warningModal.body.line1': 'Do you want to permanently delete department <bold>{{name}}</bold> (<bold>{{acronym}}</bold>) and all it\'s contents?',
+    'departments.warningModal.body.line2': 'To confirm type "<bold>$t(delete) {{name}}</bold>" in the textbox below:',
+    'departments.warningModal.btns.cancel': 'Cancel',
+    'departments.warningModal.btns.delete': 'Delete',
 
     // departments table
     // headers

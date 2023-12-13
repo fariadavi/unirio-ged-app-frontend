@@ -1,0 +1,19 @@
+.modal.confirm-delete-dept-modal .modal-header > .title {
+    margin-bottom: 0;
+}
+
+.modal.confirm-delete-dept-modal .modal-footer {
+    border-top: none;
+}
+
+.modal.confirm-delete-dept-modal .modal-footer .btn:first-of-type {
+    margin-right: auto;
+}
+
+.modal.confirm-delete-dept-modal .modal-dialog {
+    max-width: 50rem;
+}
+
+.modal.confirm-delete-dept-modal .modal-dialog .modal-body {
+    color: #545b62;
+}
