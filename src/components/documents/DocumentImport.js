@@ -278,10 +278,12 @@ const DocumentImport = () => {
             body: JSON.stringify(files)
         });
 
-        if (res.ok)
-            pushNotification(NotificationType.INFO, 'document.import.upload.success');
-
-        pushNotification(NotificationType.ERROR, 'document.import.upload.fail');
+        if (!res.ok) {
+            pushNotification(NotificationType.ERROR, 'document.import.upload.fail');
+            return;
+        }
+        
+        pushNotification(NotificationType.INFO, 'document.import.upload.success');
     }
 
     const setItemProperty = (itemId, property, value) => {
