@@ -26,8 +26,8 @@ export default function NavBar() {
         <Navbar fixed="top" bg="dark" variant="dark" expand="sm">
             <Navbar.Brand>
                 <Link to="/">
-                    <img height='28px' alt='' src='/images/logo_unirio.svg' style={{ margin: '-6px 6px 0 0' }} />
-                    UNIRIO GED App
+                    <img height='36px' alt='' src='/images/logo_unirio.svg' style={{ margin: '-8px 8px 0 0' }} />
+                    READ
                 </Link>
             </Navbar.Brand>
             <Nav className="mr-auto">
