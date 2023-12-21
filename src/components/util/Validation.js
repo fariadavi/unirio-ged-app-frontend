@@ -20,7 +20,7 @@ const validateCategory = categoryId =>
 const validateEmail = email =>
     !email.match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/g)
         ? 'invalidEmailFormat'
-        : !['@edu.unirio.br', '@uniriotec.br'].some(domain => email.includes(domain)) //TODO read valid domains from config file
+        : !['@edu.unirio.br', '@uniriotec.br', '@unirio.br'].some(domain => email.includes(domain)) //TODO read valid domains from config file
             ? 'invalidDomain'
             : ''
 

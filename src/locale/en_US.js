@@ -192,7 +192,7 @@ const enUS = {
     // user invite row
     'userPermissions.customTable.addRow.email.placeholder': 'Enter user mail',
     'userPermissions.customTable.addRow.validation.invalidEmailFormat': 'Invalid email format',
-    'userPermissions.customTable.addRow.validation.invalidDomain': 'Email must belong to one of the following domains: @uniriotec.br or @edu.unirio.br',
+    'userPermissions.customTable.addRow.validation.invalidDomain': 'Email must belong to one of the following domains: @uniriotec.br, @edu.unirio.br or @unirio.br',
     'userPermissions.customTable.addRow.addBtn.tooltip': 'Send Invite',
     
     // filter row

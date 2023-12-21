@@ -193,7 +193,7 @@ const ptBR = {
     // user invite row
     'userPermissions.customTable.addRow.email.placeholder': 'Entre com o email do usuário',
     'userPermissions.customTable.addRow.validation.invalidEmailFormat': 'Email com formato inválido',
-    'userPermissions.customTable.addRow.validation.invalidDomain': 'Email deve pertencer à uma das seguintes organizações: @uniriotec.br ou @edu.unirio.br',
+    'userPermissions.customTable.addRow.validation.invalidDomain': 'Email deve pertencer à uma das seguintes organizações: @uniriotec.br, @edu.unirio.br or @unirio.br',
     'userPermissions.customTable.addRow.addBtn.tooltip': 'Enviar convite',
     
     // filter row
