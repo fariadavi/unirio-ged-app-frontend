@@ -232,7 +232,7 @@ export default function Categories() {
 
             pushNotification(NotificationType.SUCCESS, 'categories.update.success', { oldName: originalName, newName: name });
         }).then(res => {
-            if (res.i18nMsgKey)
+            if (res && res.i18nMsgKey)
                 pushNotification(NotificationType.ERROR, `categories.update.${res.i18nMsgKey}`, { oldName: originalName, newName: name });
         }).catch(err => {
             setCategories(cats =>
@@ -270,7 +270,7 @@ export default function Categories() {
             pushNotification(NotificationType.SUCCESS, 'categories.delete.success', { name: element.name });
             removeCategoryFromList(element.id, element.parent);
         }).then(res => {
-            if (res.i18nMsgKey)
+            if (res && res.i18nMsgKey)
                 pushNotification(NotificationType.ERROR, `categories.delete.${res.i18nMsgKey}`, { name: element.name })
         });
     }
