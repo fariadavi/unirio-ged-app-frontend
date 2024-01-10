@@ -282,7 +282,7 @@ const DepartmentsTable = ({ canAddDept, canEditDept, canDeleteDept }) => {
                 <Button variant="secondary" onClick={() => { setDeptBeingDeleted(); }}>
                     {t('departments.warningModal.btns.cancel')}
                 </Button>
-                <Button variant="danger" onClick={() => { removeDepartment(deptBeingDeleted); }}>
+                <Button variant="danger" disabled={!isDeleteConfirmationValid} onClick={() => { if (isDeleteConfirmationValid) removeDepartment(deptBeingDeleted); }}>
                     {t('departments.warningModal.btns.delete')}
                 </Button>
             </Modal.Footer>
