@@ -73,7 +73,7 @@ const ptBR = {
     'navbar.system': 'Sistema',
     'navbar.system.department': '$t(department_plural)',
     'navbar.system.users': '$t(user_plural)',
-    'navbar.language': 'Linguagem',
+    'navbar.language': 'Idioma',
     'navbar.language.en-US.shortName': 'Inglês',
     'navbar.language.en-US.fullName': 'Inglês Americano',
     'navbar.language.pt-BR.shortName': 'Português',
