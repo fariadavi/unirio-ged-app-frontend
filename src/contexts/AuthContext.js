@@ -39,7 +39,7 @@ function AuthProvider({ children }) {
 
 			if (!res.ok) {
 				pushNotification(NotificationType.ERROR,
-					res.status === '404'
+					res.status === 404
 						? 'login.fail.userNotFound'
 						: 'login.fail.unknownError'
 				);
