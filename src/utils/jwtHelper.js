@@ -1,4 +1,12 @@
-const decodeToken = jwt => jwt ? JSON.parse(window.atob(jwt.split(".")[1])) : null;
+const decodeToken = jwt => {
+    try {
+        return jwt
+            ? JSON.parse(window.atob(jwt.split(".")[1]))
+            : null
+    } catch {
+        return null
+    }
+};
 
 const getTokenExpiration = jwt => decodeToken(jwt)?.exp;
 
@@ -12,7 +20,7 @@ export const getTokenDetails = jwt => {
     return {
         jwt: jwt,
         msUntilTokenExp: millis,
-        isTokenAboutToExpire:  millis < (5 * 60 * 1000), /* 5min */
+        isTokenAboutToExpire: millis < (5 * 60 * 1000), /* 5min */
         isTokenExpired: millis <= 0
     };
 };
