@@ -1,5 +1,4 @@
 import React, { createContext, useCallback, useContext, useLayoutEffect, useRef, useState } from 'react'
-import { SERVER_TOKEN_KEY, getLocalItem, setLocalItem, removeLocalItem } from '../utils/localStorageManager'
 import { NotificationContext } from './NotificationContext'
 import { NetworkContext } from './NetworkContext'
 import { NotificationType } from '../components/notification/Notifications'
@@ -10,8 +9,7 @@ const AuthContext = createContext();
 
 function AuthProvider({ children }) {
 	const { pushNotification } = useContext(NotificationContext);
-	const { rq } = useContext(NetworkContext);
-	const [token, setToken] = useState(getLocalItem(SERVER_TOKEN_KEY));
+	const { rq, token, setToken } = useContext(NetworkContext);
 	const [authLoading, setAuthLoading] = useState(false);
 	const location = useLocation();
 	const timeoutId = useRef(null);
@@ -19,13 +17,12 @@ function AuthProvider({ children }) {
 	const handleAuthLogout = useCallback(() => {
 		setAuthLoading(true);
 
-		removeLocalItem(SERVER_TOKEN_KEY);
 		setToken(null);
 		clearTimeout(timeoutId.current);
 		timeoutId.current = null;
 
 		setAuthLoading(false);
-	}, []);
+	}, [setToken]);
 
 	const handleAuthentication = async credentialResponse => {
 		setAuthLoading(true);
@@ -49,7 +46,7 @@ function AuthProvider({ children }) {
 
 			const serverToken = await res.text();
 			if (!serverToken) throw new Error();
-			setLocalItem(SERVER_TOKEN_KEY, serverToken);
+
 			setToken(serverToken);
 			setAutoLogoutTimer(serverToken);
 		} catch (err) {
@@ -66,7 +63,7 @@ function AuthProvider({ children }) {
 
 		if (timeoutId.current)
 			clearTimeout(timeoutId.current);
-		timeoutId.current = setTimeout(() => handleAuthLogout(), msUntilTokenExp - 1000);
+		timeoutId.current = setTimeout(() => handleAuthLogout(), msUntilTokenExp - (1 * 60 * 1000) /* 1min */);
 	}, [handleAuthLogout]);
 
 	useLayoutEffect(() => {
@@ -79,7 +76,6 @@ function AuthProvider({ children }) {
 
 				const serverToken = await res.text();
 				if (!serverToken) throw new Error();
-				setLocalItem(SERVER_TOKEN_KEY, serverToken);
 				setToken(serverToken);
 				setAutoLogoutTimer(serverToken);
 			} catch (err) {
@@ -94,10 +90,10 @@ function AuthProvider({ children }) {
 			else
 				handleAuthLogout();
 		}
-	}, [rq, location, token, handleAuthLogout, setAutoLogoutTimer]);
+	}, [rq, location, token, setToken, handleAuthLogout, setAutoLogoutTimer]);
 
 	return (
-		<AuthContext.Provider value={{ authenticated: token !== null, token, authLoading, handleAuthentication, handleAuthLogout }}>
+		<AuthContext.Provider value={{ authenticated: token !== null, authLoading, handleAuthentication, handleAuthLogout }}>
 			{children}
 		</AuthContext.Provider>
 	);

@@ -21,6 +21,6 @@ export const getTokenDetails = jwt => {
         jwt: jwt,
         msUntilTokenExp: millis,
         isTokenAboutToExpire: millis < (5 * 60 * 1000), /* 5min */
-        isTokenExpired: millis <= 0
+        isTokenExpired: !millis || millis <= 0
     };
 };

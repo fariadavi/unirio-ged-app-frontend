@@ -15,7 +15,7 @@ const StatusSelect = ({ statuses = undefined, disabled = false, className, label
 
         rq('/documents/status', { method: 'GET' })
             .then(res => { if (res.ok) return res.json() })
-            .then(c => { setStatusList(c); setLoading(false); });
+            .then(c => { if (c) setStatusList(c); setLoading(false); });
     }, [rq]);
 
     return <Select

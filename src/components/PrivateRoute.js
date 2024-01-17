@@ -1,12 +1,12 @@
 import React, { useContext, useLayoutEffect, useState } from 'react'
 import { Redirect, Route, useLocation } from 'react-router-dom'
-import { AuthContext } from '../contexts/AuthContext'
 import { UserContext } from '../contexts/UserContext'
 import GlobalSpinner from './util/GlobalSpinner';
+import { NetworkContext } from '../contexts/NetworkContext';
 
 export default function PrivateRoute({ component, ...options }) {
     const { user, logoutUser, checkPermissionForPaths } = useContext(UserContext);
-    const { token } = useContext(AuthContext);
+    const { token } = useContext(NetworkContext);
     const [redirect, setRedirect] = useState(null);
     const location = useLocation();
 

@@ -6,7 +6,7 @@ import { faCircleNotch } from '@fortawesome/free-solid-svg-icons'
 import { faTimesCircle } from '@fortawesome/free-regular-svg-icons'
 import '../../style/utils/Select.css'
 
-const Select = ({ className = '', disabled = false, label, name, placeholder, value, onChange, options, noOptionsLabel, textProperty, idProperty = 'id', required, isValid, isInvalid, children, size, isLoading = false }) => {
+const Select = ({ className = '', disabled = false, label, name, placeholder, value, onChange, options = [], noOptionsLabel, textProperty, idProperty = 'id', required, isValid, isInvalid, children, size, isLoading = false }) => {
     const { t } = useTranslation();
 
     return <div className={`select-wrapper ${className}`}>

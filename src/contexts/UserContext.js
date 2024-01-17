@@ -8,9 +8,9 @@ import { reqPermByPath } from '../resources/permission-config.js'
 const UserContext = createContext();
 
 function UserProvider({ children }) {
-    const { token, handleAuthLogout } = useContext(AuthContext);
     const { pushNotification } = useContext(NotificationContext);
-    const { rq } = useContext(NetworkContext);
+    const { rq, token } = useContext(NetworkContext);
+    const { handleAuthLogout } = useContext(AuthContext);
     const [user, setUser] = useState();
     const [userLoading, setUserLoading] = useState(false);
 
