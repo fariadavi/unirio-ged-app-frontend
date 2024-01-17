@@ -23,8 +23,8 @@ const NetworkProvider = ({ children }) => {
             const res = await fetch(`${internal ? process.env.REACT_APP_SERVER_URL : ''}${url}`, options);
             if (res.status === 403)
                 pushNotification(NotificationType.ERROR, 'exception.unauthorized');
-            else if (res.status === 404)
-                pushNotification(NotificationType.ERROR, 'exception.resourceNotFound');
+            // else if (res.status === 404)
+            //     pushNotification(NotificationType.ERROR, 'exception.resourceNotFound');
             
             return res;
         } catch (err) {
