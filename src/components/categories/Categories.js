@@ -147,28 +147,32 @@ export default function Categories() {
     const updateCategoryName = shouldRemoveFromList => {
         if (categoryEdit.name) {
             let cat = categories.filter(c => c.id === categoryEdit.id);
-            if (!cat.length) return;
 
-            let originalName = cat[0].name;
-            let originalOrder = categories.filter(c => c.children.some(c2 => c2 === categoryEdit.id))[0].children.indexOf(categoryEdit.id);
-
-            categoryEdit.temp
-                ? addCategory(categoryEdit.id, categoryEdit.name, categoryEdit.parent)
-                : updateCategory(categoryEdit.id, categoryEdit.name, originalName, originalOrder);
-
-            setCategories(cats =>
-                cats.map(c => c.id === categoryEdit.id
-                    ? { ...c, name: categoryEdit.name, temp: false }
-                    : c.children.some(c2 => c2 === categoryEdit.id)
-                        ? {
-                            ...c,
-                            children: [...cats.filter(c2 => c.children.some(c3 => c3 !== categoryEdit.id && c3 === c2.id)), categoryEdit]
-                                .sort((a, b) => a.fixed ? -1 : b.fixed ? 1 : a.name?.localeCompare(b.name))
-                                .map(c2 => c2.id)
-                        }
-                        : c
-                ));
-            shouldRemoveFromList = false;
+            if (!!cat.length) {
+                let originalName = cat[0].name;
+                
+                if (categoryEdit.name !== originalName) {
+                    let originalOrder = categories.filter(c => c.children.some(c2 => c2 === categoryEdit.id))[0].children.indexOf(categoryEdit.id);
+        
+                    categoryEdit.temp
+                        ? addCategory(categoryEdit.id, categoryEdit.name, categoryEdit.parent)
+                        : updateCategory(categoryEdit.id, categoryEdit.name, originalName, originalOrder);
+        
+                    setCategories(cats =>
+                        cats.map(c => c.id === categoryEdit.id
+                            ? { ...c, name: categoryEdit.name, temp: false }
+                            : c.children.some(c2 => c2 === categoryEdit.id)
+                                ? {
+                                    ...c,
+                                    children: [...cats.filter(c2 => c.children.some(c3 => c3 !== categoryEdit.id && c3 === c2.id)), categoryEdit]
+                                        .sort((a, b) => a.fixed ? -1 : b.fixed ? 1 : a.name?.localeCompare(b.name))
+                                        .map(c2 => c2.id)
+                                }
+                                : c
+                        ));
+                    shouldRemoveFromList = false;
+                }
+            }
         }
 
         cancelCategoryEdit(shouldRemoveFromList);
