@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleNotch, faSortAlphaDown, faSortAlphaDownAlt, faSortAmountDown, faSortAmountDownAlt } from '@fortawesome/free-solid-svg-icons'
 import '../../../style/utils/CustomTable.css'
 
-const CustomTable = ({ actions = { filter: {} }, columns = {}, data = [], domain, isLoadingData = false, pageSize = 10, style={} }) => {
+const CustomTable = ({ actions = { filter: {} }, columns = {}, data = [], domain, isLoadingData = false, pageSize = 10, style = {} }) => {
     const [showAddRow, setShowAddRow] = useState(false);
     const [showFilterRow, setShowFilterRow] = useState(false);
     const [isBatchEditing, setBatchEditing] = useState(false);
@@ -175,9 +175,13 @@ const CustomTable = ({ actions = { filter: {} }, columns = {}, data = [], domain
             ? sortDirection === 'ASC'
                 ? faSortAlphaDown
                 : faSortAlphaDownAlt
-            : sortDirection === 'ASC'
-                ? faSortAmountDownAlt
-                : faSortAmountDown
+            : type === 'number'
+                ? sortDirection === 'ASC'
+                    ? faSortAmountDownAlt
+                    : faSortAmountDown
+                : sortDirection === 'ASC'
+                    ? faSortAmountDown
+                    : faSortAmountDownAlt
 
     const toggleSortByColumn = key =>
         setSortDirection(key === sortProperty
