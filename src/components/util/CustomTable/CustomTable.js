@@ -176,8 +176,8 @@ const CustomTable = ({ actions = { filter: {} }, columns = {}, data = [], domain
                 ? faSortAlphaDown
                 : faSortAlphaDownAlt
             : sortDirection === 'ASC'
-                ? faSortAmountDown
-                : faSortAmountDownAlt
+                ? faSortAmountDownAlt
+                : faSortAmountDown
 
     const toggleSortByColumn = key =>
         setSortDirection(key === sortProperty
