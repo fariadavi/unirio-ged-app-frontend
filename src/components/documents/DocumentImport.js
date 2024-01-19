@@ -362,11 +362,11 @@ const DocumentImport = () => {
                                 onChange={() => setFileList(fl => fl.map(f => { return { ...f, selected: selectedFiles.length !== visibleFileList.length } }))}
                             />
                             {filesFromMultipleAccounts &&
-                                <span onClick={() => toggleSortByColumn('email')}>
+                                <span className="sort-header" onClick={() => toggleSortByColumn('email')}>
                                     {t('import.table.headers.account')} {sortProperty === 'email' && <Icon icon={getSortIcon()} />}
                                 </span>
                             }
-                            <span onClick={() => toggleSortByColumn('name')}>
+                            <span className="sort-header" onClick={() => toggleSortByColumn('name')}>
                                 {t('import.table.headers.name')} {sortProperty === 'name' && <Icon icon={getSortIcon()} />}
                             </span>
                             <div className="select">

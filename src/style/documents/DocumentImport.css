@@ -8,6 +8,11 @@
 
 .drive-items-list .list-group-item.header {
     border-width: 0 0 2px;
+    font-weight: bold;
+}
+
+.drive-items-list .list-group-item.header .sort-header {
+    cursor: pointer;
 }
 
 .drive-items-list .list-group-item.header .select{
